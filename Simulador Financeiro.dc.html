@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0f14;font-family:'IBM Plex Mono',monospace;}
+@keyframes piscar{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes surgir{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#1e2833;border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+
+<div data-screen-label="Simulador" style="min-height:100vh;background:#0b0f14;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
+
+  <sc-if value="{{ mostraIntro }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Intro" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;">
+      <div style="max-width:640px;width:100%;">
+        <div style="color:#22d47e;font-size:11px;letter-spacing:2px;margin-bottom:16px;">SIMULADOR FINANCEIRO // v1.0</div>
+        <h1 style="font-size:42px;font-weight:700;margin:0 0 8px;letter-spacing:-1px;color:#f2f7fb;">FALÊNCIA<span style="color:#3a4a5a;"> ou </span><span style="color:#22d47e;">LIBERDADE</span></h1>
+        <p style="color:#8fa1b2;margin:0 0 28px;max-width:520px;">Cada turno é um mês. Seu custo de vida drena a conta. Se o dinheiro acabar, <span style="color:#ff4d5e;font-weight:600;">FALIU</span>. Se a renda passiva superar o custo de vida, você está <span style="color:#22d47e;font-weight:600;">LIVRE</span>.</p>
+        <div style="border:1px solid #1e2833;background:#11161d;border-radius:6px;padding:20px 22px;margin-bottom:28px;display:grid;gap:10px;">
+          <div style="display:flex;gap:12px;"><span style="color:#22d47e;">01</span><span>Todo mês entra salário e sai custo de vida — e o custo sobe com a inflação.</span></div>
+          <div style="display:flex;gap:12px;"><span style="color:#22d47e;">02</span><span>Aloque o que sobra: reserva, renda fixa, FIIs, ações, cripto. Perfis de risco reais, retornos acelerados — uma vida financeira cabe numa sessão.</span></div>
+          <div style="display:flex;gap:12px;"><span style="color:#22d47e;">03</span><span>Eventos aleatórios ensinam na marra: crash, emergência médica, demissão. Quem tem reserva sobrevive.</span></div>
+          <div style="display:flex;gap:12px;"><span style="color:#22d47e;">04</span><span>Só FIIs, ações e renda fixa geram renda passiva. Cripto não paga aluguel.</span></div>
+        </div>
+        <button onClick="{{ comecar }}" style="background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:1px;padding:14px 32px;border-radius:4px;cursor:pointer;" style-hover="background:#3ee996;">INICIAR SIMULAÇÃO ▸</button>
+        <div style="color:#3a4a5a;font-size:11px;margin-top:14px;">capital inicial {{ caixaFmt }} · salário {{ salarioFmt }}/mês · custo de vida {{ custoFmt }}/mês</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ mostraJogo }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Jogo" style="max-width:1280px;margin:0 auto;padding:20px 24px 32px;">
+
+      <div style="display:flex;align-items:center;gap:20px;border-bottom:1px solid #1e2833;padding-bottom:14px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="font-weight:700;letter-spacing:1px;color:#f2f7fb;">FALÊNCIA <span style="color:#3a4a5a;">ou</span> <span style="color:#22d47e;">LIBERDADE</span></div>
+        <div style="color:#8fa1b2;">MÊS <span style="color:#f2f7fb;font-weight:600;">{{ mesFmt }}</span></div>
+        <div style="color:#8fa1b2;">⏱ <span style="color:{{ tempoCor }};font-weight:600;">{{ tempoFmt }}</span></div>
+        <svg width="180" height="34" viewBox="0 0 180 34" style="display:block;">
+          <polyline points="{{ sparkPoints }}" fill="none" stroke="{{ sparkCor }}" stroke-width="1.5"></polyline>
+        </svg>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">PATRIMÔNIO TOTAL</div>
+          <div style="font-size:20px;font-weight:700;color:#f2f7fb;">{{ patrimonioFmt }}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
+        <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:12px 14px;">
+          <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">SALDO EM CAIXA</div>
+          <div style="font-size:18px;font-weight:700;color:{{ caixaCor }};">{{ caixaFmt }}</div>
+        </div>
+        <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:12px 14px;">
+          <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">SALÁRIO / MÊS</div>
+          <div style="font-size:18px;font-weight:700;color:{{ salarioCor }};">{{ salarioStatus }}</div>
+        </div>
+        <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:12px 14px;">
+          <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">CUSTO DE VIDA / MÊS</div>
+          <div style="font-size:18px;font-weight:700;color:#ff4d5e;">−{{ custoFmt }}</div>
+        </div>
+        <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:12px 14px;">
+          <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">RENDA PASSIVA / MÊS</div>
+          <div style="font-size:18px;font-weight:700;color:#22d47e;">+{{ rpFmt }}</div>
+        </div>
+      </div>
+
+      <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:1px;color:#6b7c8c;margin-bottom:8px;">
+          <span>RUMO À INDEPENDÊNCIA — renda passiva vs. custo de vida</span>
+          <span style="color:{{ progCor }};font-weight:600;">{{ progFmt }}</span>
+        </div>
+        <div style="height:8px;background:#0b0f14;border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:{{ progPct }}%;background:{{ progCor }};transition:width .5s ease;"></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;">
+
+        <div style="display:grid;gap:10px;">
+          <sc-for list="{{ ativosLista }}" as="a" hint-placeholder-count="5">
+            <div style="background:#11161d;border:1px solid #1e2833;border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:center;">
+              <div>
+                <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+                  <span style="font-weight:700;color:#f2f7fb;letter-spacing:.5px;">{{ a.nome }}</span>
+                  <span style="color:#3a4a5a;font-size:11px;">{{ a.ticker }}</span>
+                  <span style="font-size:10px;letter-spacing:1px;color:{{ a.riscoCor }};border:1px solid {{ a.riscoCor }};border-radius:3px;padding:1px 6px;">{{ a.riscoLabel }}</span>
+                </div>
+                <div style="color:#6b7c8c;font-size:11px;margin-top:2px;max-width:460px;">{{ a.dica }}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:17px;font-weight:700;color:#f2f7fb;">{{ a.valorFmt }}</div>
+                <div style="font-size:11px;font-weight:600;color:{{ a.varCor }};">{{ a.varFmt }}</div>
+              </div>
+              <div style="grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid #1a222c;padding-top:9px;">
+                <span style="color:#3a4a5a;font-size:10px;letter-spacing:1px;">APORTE</span>
+                <button onClick="{{ a.mais500 }}" style="background:#0e1a14;border:1px solid #1e4a34;color:#22d47e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#123322;">+500</button>
+                <button onClick="{{ a.mais1k }}" style="background:#0e1a14;border:1px solid #1e4a34;color:#22d47e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#123322;">+1.000</button>
+                <button onClick="{{ a.mais2k }}" style="background:#0e1a14;border:1px solid #1e4a34;color:#22d47e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#123322;">+2.000</button>
+                <button onClick="{{ a.tudo }}" style="background:#0e1a14;border:1px solid #1e4a34;color:#22d47e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#123322;">MAX</button>
+                <span style="color:#3a4a5a;font-size:10px;letter-spacing:1px;margin-left:10px;">RESGATE</span>
+                <button onClick="{{ a.menos500 }}" style="background:#1a1114;border:1px solid #4a1e28;color:#ff4d5e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#2a161c;">−500</button>
+                <button onClick="{{ a.menos1k }}" style="background:#1a1114;border:1px solid #4a1e28;color:#ff4d5e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#2a161c;">−1.000</button>
+                <button onClick="{{ a.menos2k }}" style="background:#1a1114;border:1px solid #4a1e28;color:#ff4d5e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#2a161c;">−2.000</button>
+                <button onClick="{{ a.zerar }}" style="background:#1a1114;border:1px solid #4a1e28;color:#ff4d5e;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="background:#2a161c;">ZERAR</button>
+              </div>
+            </div>
+          </sc-for>
+
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button onClick="{{ fecharMes }}" style="flex:1;background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;letter-spacing:2px;padding:16px;border-radius:5px;cursor:pointer;" style-hover="background:#3ee996;">FECHAR O MÊS ▸</button>
+            <button onClick="{{ toggleAuto }}" style="width:150px;background:{{ autoBg }};color:{{ autoCor }};border:1px solid {{ autoCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:16px 0;border-radius:5px;cursor:pointer;">{{ autoLabel }}</button>
+          </div>
+          <div style="color:#3a4a5a;font-size:10.5px;text-align:center;">[ESPAÇO] fecha o mês · [A] liga/desliga o auto — pausa sozinho quando um evento pede decisão</div>
+        </div>
+
+        <div style="display:grid;gap:12px;">
+          <div style="background:#0d1117;border:1px solid #1e2833;border-radius:6px;overflow:hidden;">
+            <div style="background:#11161d;border-bottom:1px solid #1e2833;padding:8px 14px;font-size:10px;letter-spacing:2px;color:#6b7c8c;">▮ TERMINAL DE EVENTOS</div>
+            <div style="padding:10px 14px;max-height:380px;overflow-y:auto;display:grid;gap:7px;font-size:11.5px;">
+              <sc-for list="{{ logLista }}" as="l" hint-placeholder-count="4">
+                <div style="display:flex;gap:8px;animation:surgir .3s ease;">
+                  <span style="color:#3a4a5a;flex:none;">{{ l.mes }}</span>
+                  <span style="color:{{ l.cor }};">{{ l.texto }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#0d1117;border:1px solid #1e2833;border-radius:6px;overflow:hidden;">
+            <div style="background:#11161d;border-bottom:1px solid #1e2833;padding:8px 14px;font-size:10px;letter-spacing:2px;color:#6b7c8c;">▮ LEADERBOARD</div>
+            <div style="padding:10px 14px;display:grid;gap:6px;font-size:11.5px;">
+              <sc-for list="{{ lbLista }}" as="p" hint-placeholder-count="5">
+                <div style="display:flex;gap:8px;align-items:baseline;background:{{ p.bg }};border-radius:3px;padding:2px 6px;">
+                  <span style="color:#3a4a5a;flex:none;width:20px;">{{ p.pos }}</span>
+                  <span style="color:#d7e1ea;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.nome }}</span>
+                  <span style="color:{{ p.cor }};font-weight:600;flex:none;">{{ p.status }}</span>
+                  <span style="color:#8fa1b2;flex:none;">{{ p.detalhe }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ mostraFim }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Fim de jogo" style="position:fixed;inset:0;background:rgba(5,8,11,.94);display:flex;align-items:center;justify-content:center;z-index:50;animation:surgir .4s ease;">
+      <div style="text-align:center;max-width:560px;padding:24px;">
+        <div style="font-size:11px;letter-spacing:3px;color:#6b7c8c;margin-bottom:10px;">SIMULAÇÃO ENCERRADA — MÊS {{ mesFmt }} — ⏱ {{ tempoFmt }}</div>
+        <div style="font-size:72px;font-weight:700;letter-spacing:-2px;color:{{ fimCor }};animation:piscar 1.2s step-end infinite;">{{ fimTitulo }}</div>
+        <p style="color:#d7e1ea;font-size:14px;margin:18px 0 6px;">{{ fimResumo }}</p>
+        <p style="color:#8fa1b2;font-size:12px;margin:0 0 28px;">{{ fimLicao }}</p>
+        <button onClick="{{ reiniciar }}" style="background:transparent;border:1px solid {{ fimCor }};color:{{ fimCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:1px;padding:12px 28px;border-radius:4px;cursor:pointer;">▸ JOGAR DE NOVO</button>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;dificuldade&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;normal&quot;,&quot;hardcore&quot;],&quot;default&quot;:&quot;hardcore&quot;,&quot;tsType&quot;:&quot;'normal'|'hardcore'&quot;,&quot;section&quot;:&quot;Jogo&quot;},&quot;salarioInicial&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4500,&quot;min&quot;:2000,&quot;max&quot;:15000,&quot;step&quot;:500,&quot;unit&quot;:&quot;R$&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Jogo&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.logId = 1;
+    this.state = this.novoJogo();
+  }
+
+  novoJogo() {
+    const hard = (this.props.dificuldade ?? 'normal') === 'hardcore';
+    const salario = this.props.salarioInicial ?? 4500;
+    return {
+      tela: 'intro',
+      mes: 0,
+      caixa: hard ? 1500 : 3000,
+      salario,
+      custo: hard ? Math.round(salario * 0.76) : Math.round(salario * 0.70),
+      semSalario: 0,
+      ativos: { reserva: 0, rendafixa: 0, fiis: 0, acoes: 0, cripto: 0 },
+      varMes: { reserva: 0, rendafixa: 0, fiis: 0, acoes: 0, cripto: 0 },
+      hist: [],
+      log: [{ id: 0, mes: 'M00', texto: 'Sistema iniciado. Sobreviva. Diversifique. Não conte com sorte.', cor: '#6b7c8c' }],
+      fim: null,
+      hard,
+      auto: false,
+      inicioTs: null,
+      fimTs: null,
+      agora: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.onKey = (e) => {
+      if (this.state.tela !== 'jogo' || this.state.fim) return;
+      if (e.code === 'Space') { e.preventDefault(); this.fecharMes(); }
+      if (e.code === 'KeyA') { e.preventDefault(); this.toggleAuto(); }
+    };
+    window.addEventListener('keydown', this.onKey);
+    this.tick = setInterval(() => {
+      const st = this.state;
+      if (st.tela === 'jogo' && !st.fim && st.inicioTs) {
+        this.setState({ agora: Date.now() });
+        if (st.auto) this.fecharMes();
+      }
+    }, 500);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey);
+    clearInterval(this.tick);
+  }
+
+  toggleAuto = () => this.setState(s => ({ auto: !s.auto }));
+
+  fmtTempo(ms) {
+    const t = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(t / 60), seg = t % 60;
+    if (m >= 60) return Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') + ':' + String(seg).padStart(2, '0');
+    return String(m).padStart(2, '0') + ':' + String(seg).padStart(2, '0');
+  }
+
+  DEF = [
+    { key: 'reserva', nome: 'RESERVA DE EMERGÊNCIA', ticker: 'CDI 100%', ret: 0.009, vol: 0, div: 0.009, risco: 'SEGURO', riscoCor: '#22d47e', dica: 'Rende pouco, mas é resgatada sem perda quando a vida cobra. Sem ela, emergência vira liquidação forçada.' },
+    { key: 'rendafixa', nome: 'RENDA FIXA', ticker: 'TESOURO/CDB', ret: 0.015, vol: 0.004, div: 0.015, risco: 'BAIXO', riscoCor: '#8fd47e', dica: 'Juros compostos previsíveis. Resgate de emergência tem pequeno deságio.' },
+    { key: 'fiis', nome: 'FUNDOS IMOBILIÁRIOS', ticker: 'IFIX', ret: 0.005, vol: 0.04, div: 0.028, risco: 'MÉDIO', riscoCor: '#ffc24b', dica: 'Pagam "aluguel" todo mês direto no caixa — a renda passiva mais forte do jogo. Cota oscila.' },
+    { key: 'acoes', nome: 'AÇÕES', ticker: 'IBOV', ret: 0.022, vol: 0.08, div: 0.01, risco: 'ALTO', riscoCor: '#ff9d4b', dica: 'Maior potencial de crescimento, quedas de 30% acontecem. Dividendos moderados.' },
+    { key: 'cripto', nome: 'CRIPTO', ticker: 'BTC/ETH', ret: 0.035, vol: 0.24, div: 0, risco: 'EXTREMO', riscoCor: '#ff4d5e', dica: 'Pode dobrar, pode derreter 45% num mês. Não gera renda passiva nenhuma.' },
+  ];
+
+  fmt(v) { return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
+
+  addLog(logs, texto, cor, mes) {
+    logs.unshift({ id: this.logId++, mes: 'M' + String(mes).padStart(2, '0'), texto, cor });
+  }
+
+  rendaPassiva(s) {
+    return this.DEF.reduce((t, d) => t + s.ativos[d.key] * d.div, 0);
+  }
+  patrimonio(s) {
+    return s.caixa + Object.values(s.ativos).reduce((a, b) => a + b, 0);
+  }
+
+  mover(key, valor) {
+    this.setState(s => {
+      const a = { ...s.ativos };
+      let v = valor;
+      if (v > 0) { v = Math.min(v, s.caixa); if (v < 1) return {}; a[key] += v; return { ativos: a, caixa: s.caixa - v }; }
+      v = Math.min(-v, a[key]); if (v < 1) return {};
+      a[key] -= v; return { ativos: a, caixa: s.caixa + v };
+    });
+  }
+
+  // Cobre déficit liquidando na ordem certa; retorna o que faltou
+  cobrir(s, deficit, logs) {
+    const ordem = [
+      ['reserva', 1, 'Reserva de emergência usada — sem perdas. Pra isso ela existe.'],
+      ['rendafixa', 0.98, 'Renda fixa resgatada com 2% de deságio.'],
+      ['fiis', 0.9, 'FIIs vendidos às pressas com 10% de perda.'],
+      ['acoes', 0.9, 'Ações liquidadas na marra com 10% de perda.'],
+      ['cripto', 0.85, 'Cripto vendida no desespero com 15% de perda.'],
+    ];
+    for (const [k, fator, msg] of ordem) {
+      if (deficit <= 0) break;
+      if (s.ativos[k] < 1) continue;
+      const bruto = Math.min(s.ativos[k], deficit / fator);
+      s.ativos[k] -= bruto;
+      const liquido = bruto * fator;
+      deficit -= liquido;
+      this.addLog(logs, '⚠ ' + msg + ' (−' + this.fmt(bruto) + ')', k === 'reserva' ? '#ffc24b' : '#ff9d4b', s.mes);
+    }
+    return deficit;
+  }
+
+  sortearEvento(s, logs) {
+    const chance = s.hard ? 0.55 : 0.42;
+    if (Math.random() > chance || s.mes < 3) return;
+    const eventos = [
+      { p: 16, run: () => { s.alerta = 1; s.ativos.acoes *= 0.7; s.ativos.fiis *= 0.88; this.addLog(logs, '▼ CRASH DA BOLSA. Ações −30%, FIIs −12%. Quem vende no pânico realiza o prejuízo.', '#ff4d5e', s.mes); } },
+      { p: 12, run: () => { s.alerta = 1; s.ativos.cripto *= 0.55; this.addLog(logs, '▼ INVERNO CRIPTO. −45% num mês. Era o dinheiro do aluguel?', '#ff4d5e', s.mes); } },
+      { p: 10, run: () => { s.ativos.cripto *= 1.6; this.addLog(logs, '▲ BULL RUN CRIPTO. +60%. Cuidado: euforia não é estratégia.', '#22d47e', s.mes); } },
+      { p: 16, run: () => { s.alerta = 1; const c = Math.round(s.custo * (0.8 + Math.random() * 1.4) * Math.min(1, s.mes / 12)); s.pendente = (s.pendente || 0) + c; this.addLog(logs, '✚ EMERGÊNCIA MÉDICA: −' + this.fmt(c) + '. É pra isso que existe reserva.', '#ff9d4b', s.mes); } },
+      { p: 12, run: () => { s.alerta = 1; const c = Math.round(s.custo * (0.35 + Math.random() * 0.55) * Math.min(1, s.mes / 12)); s.pendente = (s.pendente || 0) + c; this.addLog(logs, '✚ IMPREVISTO (carro/casa): −' + this.fmt(c) + '.', '#ff9d4b', s.mes); } },
+      { p: 12, run: () => { s.custo = Math.round(s.custo * 1.04); this.addLog(logs, '▲ INFLAÇÃO ALTA. Custo de vida +4%. Seu dinheiro parado vale menos.', '#ffc24b', s.mes); } },
+      { p: 8, run: () => { s.alerta = 1; s.semSalario = s.mes < 18 ? 1 : 2; this.addLog(logs, '✖ DEMISSÃO. ' + (s.mes < 18 ? '1 mês' : '2 meses') + ' sem salário. Renda passiva e reserva seguram as pontas?', '#ff4d5e', s.mes); } },
+      { p: 8, run: () => { s.salario = Math.round(s.salario * 1.08); this.addLog(logs, '▲ PROMOÇÃO. Salário +8%. Aumentar aporte > aumentar padrão de vida.', '#22d47e', s.mes); } },
+      { p: 6, run: () => { s.caixa += s.salario; this.addLog(logs, '▲ 13º / BÔNUS: +' + this.fmt(s.salario) + ' no caixa. Investe ou torra?', '#22d47e', s.mes); } },
+      { p: 5, run: () => { const g = Math.round(s.custo * (3 + Math.random() * 4)); s.caixa += g; this.addLog(logs, '▲ GRANA INESPERADA (herança/restituição): +' + this.fmt(g) + '. Torrar ou acelerar a liberdade?', '#22d47e', s.mes); } },
+    ];
+    const total = eventos.reduce((t, e) => t + e.p, 0);
+    let r = Math.random() * total;
+    for (const e of eventos) { r -= e.p; if (r <= 0) { e.run(); break; } }
+  }
+
+  fecharMes = () => {
+    this.setState(st => {
+      const s = { ...st, ativos: { ...st.ativos }, varMes: {}, log: [...st.log], hist: [...st.hist] };
+      const logs = s.log;
+      s.mes += 1;
+      s.pendente = 0;
+
+      // salário e custo
+      if (s.semSalario > 0) { s.semSalario -= 1; this.addLog(logs, '✖ Mês sem salário (' + (s.semSalario + 1) + ' restante).', '#ff9d4b', s.mes); }
+      else s.caixa += s.salario;
+      s.caixa -= s.custo;
+
+      // retornos de mercado
+      let divTotal = 0;
+      for (const d of this.DEF) {
+        const r = d.ret + d.vol * (Math.random() + Math.random() - 1);
+        s.ativos[d.key] *= (1 + r);
+        s.varMes[d.key] = r;
+        divTotal += s.ativos[d.key] * d.div;
+      }
+      if (divTotal >= 1) { s.caixa += divTotal; this.addLog(logs, '● Renda passiva recebida: +' + this.fmt(divTotal) + '.', '#22d47e', s.mes); }
+
+      // evento aleatório
+      this.sortearEvento(s, logs);
+      if (s.pendente) s.caixa -= s.pendente;
+      if (s.alerta) {
+        if (s.auto) { s.auto = false; this.addLog(logs, '⏸ AUTO pausado — o evento pede uma decisão sua.', '#ffc24b', s.mes); }
+        s.alerta = 0;
+      }
+
+      // inflação de base
+      s.custo = Math.round(s.custo * (s.hard ? 1.005 : 1.004));
+
+      // progressão de carreira anual
+      if (s.mes % 12 === 0 && s.semSalario === 0) {
+        s.salario = Math.round(s.salario * 1.10);
+        this.addLog(logs, '▲ PROGRESSÃO ANUAL. Salário agora ' + this.fmt(s.salario) + '. Aumente o aporte, não o padrão de vida.', '#22d47e', s.mes);
+      }
+
+      // caixa negativo → liquidação em cascata
+      if (s.caixa < 0) {
+        const falta = this.cobrir(s, -s.caixa, logs);
+        s.caixa = falta > 0 ? -falta : 0;
+      }
+
+      s.hist.push(this.patrimonio(s));
+      if (s.log.length > 60) s.log.length = 60;
+
+      // fim de jogo
+      const rp = this.rendaPassiva(s);
+      if (s.caixa < 0) {
+        s.fim = 'faliu';
+        s.fimTs = Date.now();
+        s.auto = false;
+        this.addLog(logs, '■ FALIU. As contas venceram e não sobrou nada pra vender.', '#ff4d5e', s.mes);
+        this.salvarPlacar(s);
+      } else if (rp >= s.custo) {
+        s.fim = 'livre';
+        s.fimTs = Date.now();
+        s.auto = false;
+        this.addLog(logs, '■ INDEPENDÊNCIA FINANCEIRA. Sua renda passiva paga sua vida.', '#22d47e', s.mes);
+        this.salvarPlacar(s);
+      }
+      return s;
+    });
+  };
+
+  salvarPlacar(s) {
+    try {
+      const key = 'simfin_lb_v1';
+      const lb = JSON.parse(localStorage.getItem(key) || '[]');
+      lb.push({ nome: 'VOCÊ · ' + new Date().toLocaleDateString('pt-BR'), status: s.fim, meses: s.mes, pat: Math.round(this.patrimonio(s)), tempo: Math.round(((s.fimTs || Date.now()) - (s.inicioTs || Date.now())) / 1000), voce: true, ts: Date.now() });
+      localStorage.setItem(key, JSON.stringify(lb.slice(-30)));
+    } catch (e) { /* sem storage */ }
+  }
+
+  lerPlacar() {
+    const seeds = [
+      { nome: 'ANA.DIVIDENDOS', status: 'livre', meses: 44, pat: 168000, tempo: 312 },
+      { nome: 'CARLOS_CDB', status: 'livre', meses: 61, pat: 121000, tempo: 495 },
+      { nome: 'JOAO.ALLIN.BTC', status: 'faliu', meses: 9, pat: 0, tempo: 84 },
+      { nome: 'MARI_SEM_RESERVA', status: 'faliu', meses: 14, pat: 0, tempo: 130 },
+    ];
+    let salvos = [];
+    try { salvos = JSON.parse(localStorage.getItem('simfin_lb_v1') || '[]'); } catch (e) {}
+    const todos = [...seeds, ...salvos];
+    todos.sort((a, b) => {
+      if (a.status !== b.status) return a.status === 'livre' ? -1 : 1;
+      if (a.status === 'livre') return (a.meses - b.meses) || ((a.tempo || 9e9) - (b.tempo || 9e9));
+      return b.meses - a.meses;
+    });
+    return todos.slice(0, 7);
+  }
+
+  comecar = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
+  reiniciar = () => { this.setState(this.novoJogo()); this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() }); };
+
+  renderVals() {
+    const s = this.state;
+    const rp = this.rendaPassiva(s);
+    const pat = this.patrimonio(s);
+    const prog = Math.min(100, (rp / s.custo) * 100);
+
+    const ativosLista = this.DEF.map(d => {
+      const v = s.ativos[d.key];
+      const r = s.varMes[d.key] || 0;
+      return {
+        key: d.key, nome: d.nome, ticker: d.ticker, dica: d.dica,
+        riscoLabel: d.risco, riscoCor: d.riscoCor,
+        valorFmt: this.fmt(v),
+        varFmt: v < 1 ? '—' : (r >= 0 ? '▲ +' : '▼ ') + (r * 100).toFixed(1) + '% no mês',
+        varCor: v < 1 ? '#3a4a5a' : (r >= 0 ? '#22d47e' : '#ff4d5e'),
+        mais500: () => this.mover(d.key, 500),
+        mais1k: () => this.mover(d.key, 1000),
+        mais2k: () => this.mover(d.key, 2000),
+        tudo: () => this.mover(d.key, s.caixa),
+        menos500: () => this.mover(d.key, -500),
+        menos1k: () => this.mover(d.key, -1000),
+        menos2k: () => this.mover(d.key, -2000),
+        zerar: () => this.mover(d.key, -s.ativos[d.key]),
+      };
+    });
+
+    // sparkline
+    const h = s.hist.length ? s.hist : [pat];
+    const min = Math.min(...h), max = Math.max(...h), range = Math.max(1, max - min);
+    const sparkPoints = h.map((v, i) => {
+      const x = h.length === 1 ? 90 : (i / (h.length - 1)) * 176 + 2;
+      const y = 30 - ((v - min) / range) * 26;
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+
+    const lbLista = this.lerPlacar().map((p, i) => ({
+      pos: '#' + (i + 1),
+      nome: p.nome,
+      status: p.status === 'livre' ? 'LIVRE' : 'FALIU',
+      cor: p.status === 'livre' ? '#22d47e' : '#ff4d5e',
+      detalhe: p.meses + 'm' + (p.tempo ? ' · ⏱' + this.fmtTempo(p.tempo * 1000) : ''),
+      bg: p.voce ? 'rgba(34,212,126,.08)' : 'transparent',
+    }));
+
+    const faliu = s.fim === 'faliu';
+    return {
+      mostraIntro: s.tela === 'intro',
+      mostraJogo: s.tela === 'jogo',
+      mostraFim: !!s.fim,
+      mesFmt: String(s.mes).padStart(2, '0'),
+      caixaFmt: this.fmt(s.caixa),
+      caixaCor: s.caixa < s.custo ? '#ff4d5e' : '#f2f7fb',
+      salarioFmt: this.fmt(s.salario),
+      salarioStatus: s.semSalario > 0 ? 'DESEMPREGADO' : '+' + this.fmt(s.salario),
+      salarioCor: s.semSalario > 0 ? '#ff4d5e' : '#8fd47e',
+      custoFmt: this.fmt(s.custo),
+      rpFmt: this.fmt(rp),
+      patrimonioFmt: this.fmt(pat),
+      progPct: prog.toFixed(1),
+      progFmt: prog.toFixed(1) + '%',
+      progCor: prog >= 100 ? '#22d47e' : prog >= 50 ? '#8fd47e' : prog >= 20 ? '#ffc24b' : '#ff9d4b',
+      sparkPoints,
+      sparkCor: h[h.length - 1] >= h[0] ? '#22d47e' : '#ff4d5e',
+      ativosLista,
+      logLista: s.log,
+      lbLista,
+      fimTitulo: faliu ? 'FALIU' : 'LIVRE',
+      fimCor: faliu ? '#ff4d5e' : '#22d47e',
+      fimResumo: faliu
+        ? 'Você sobreviveu ' + s.mes + ' meses antes de as contas engolirem tudo.'
+        : 'Em ' + s.mes + ' meses sua renda passiva (' + this.fmt(rp) + ') superou seu custo de vida (' + this.fmt(s.custo) + ').',
+      fimLicao: faliu
+        ? 'Lição: reserva de emergência primeiro, sempre. Concentração + azar = falência. Diversificar não é sobre ganhar mais, é sobre nunca quebrar.'
+        : 'Lição: quem venceu não acertou o timing do mercado — construiu renda passiva mês a mês e deixou os juros compostos trabalharem.',
+      tempoFmt: s.inicioTs ? this.fmtTempo((s.fimTs || s.agora || Date.now()) - s.inicioTs) : '00:00',
+      tempoCor: s.auto ? '#ffc24b' : '#f2f7fb',
+      autoLabel: s.auto ? '⏸ AUTO: ON' : '▶ AUTO: OFF',
+      autoBg: s.auto ? 'rgba(255,194,75,.1)' : 'transparent',
+      autoCor: s.auto ? '#ffc24b' : '#6b7c8c',
+      toggleAuto: this.toggleAuto,
+      comecar: this.comecar,
+      reiniciar: this.reiniciar,
+      fecharMes: this.fecharMes,
+    };
+  }
+}
+</script>
+</body>
+</html>
