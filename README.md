@@ -2,6 +2,14 @@
 
 Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir.
 
+## Propósito do jogo (nesta ordem)
+
+1. **Ensinar finanças** — prioritário. Cada mecânica e evento deve deixar uma lição real de finanças pessoais/investimentos.
+2. **Simulação** — secundário. A tendência é simular cada vez mais a realidade de investimentos, com decisões mais intricadas de tipos de investimento.
+3. **Speedrun** — diversão/monetização. Timer, leaderboard e, futuramente, modo ranqueado com seed compartilhada.
+
+Modos futuros planejados (já reservados no menu como "EM BREVE"): **Cenários** (crises/épocas reais pra atravessar, estilo Plague Inc) e **Speedrun ranqueado**.
+
 ## Como rodar
 
 Abra a pasta no VSCode e suba o **Live Server** (ou qualquer servidor estático) e acesse `Simulador Financeiro.dc.html`. Precisa ser via HTTP — os componentes de tela são carregados por `fetch`, então abrir com duplo clique (`file://`) não funciona.
@@ -64,6 +72,7 @@ Recebem tudo por props (strings prontas, cores e callbacks); não têm estado ne
 ## Receitas rápidas
 
 - **Mudar balanceamento** (dificuldade, inflação, deságios): `engine/config.js`.
+- **Adicionar um modo de jogo**: entre em `engine/config.js` (`modos`) com `disponivel: false` — ele já aparece no menu como "EM BREVE". Quando a mecânica existir, ligue `disponivel: true` e trate o `state.modo` no orquestrador/engine.
 - **Adicionar um ativo**: acrescente em `engine/ativos.js` (e na ordem de liquidação em `config.js` se quiser que ele cubra déficit). A UI o exibe automaticamente.
 - **Adicionar um evento aleatório**: acrescente um item com peso `p` e `run` em `engine/eventos.js`.
 - **Mexer no visual de uma tela**: edite o `*.dc.html` correspondente e abra-o isolado no Live Server.

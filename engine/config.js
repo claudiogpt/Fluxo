@@ -12,6 +12,14 @@
       hardcore: { caixaInicial: 1500, custoFator: 0.76, chanceEvento: 0.55, inflacaoBase: 1.005 },
     },
 
+    // Modos de jogo exibidos no menu. Novos modos entram aqui com disponivel: false
+    // até a mecânica existir — a tela inicial os mostra como "EM BREVE".
+    modos: [
+      { id: 'classico', nome: 'CLÁSSICO', descricao: 'Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.', disponivel: true },
+      { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Crises e épocas reais pra atravessar com as decisões certas de alocação.', disponivel: false },
+      { id: 'speedrun', nome: 'SPEEDRUN', descricao: 'Seed compartilhada, relógio global e placar ranqueado. Quão rápido você se liberta?', disponivel: false },
+    ],
+
     // Eventos aleatórios só começam a partir deste mês.
     mesMinimoEvento: 3,
 

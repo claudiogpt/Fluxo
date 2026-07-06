@@ -50,6 +50,17 @@ test('novoJogo sem props usa defaults do config', () => {
   assert.equal(s.fim, null);
 });
 
+test('novoJogo registra dificuldade e modo no estado', () => {
+  assert.equal(regras.novoJogo({ dificuldade: 'normal' }).dificuldade, 'normal');
+  assert.equal(regras.novoJogo({ dificuldade: 'hardcore' }).dificuldade, 'hardcore');
+  assert.equal(regras.novoJogo({}).modo, 'classico');
+});
+
+test('config.modos tem exatamente um modo disponível (clássico) por enquanto', () => {
+  const disponiveis = config.modos.filter(m => m.disponivel);
+  assert.deepEqual(disponiveis.map(m => m.id), ['classico']);
+});
+
 // ---------- mover ----------
 
 test('mover: aporte é limitado ao caixa', () => {
@@ -165,6 +176,19 @@ test('fecharMes: liberdade quando a renda passiva supera o custo de vida', () =>
   assert.ok(s.log.some(l => l.texto.includes('INDEPENDÊNCIA FINANCEIRA')));
 });
 
+test('fecharMes: AUTO continua ligado mesmo quando um evento acontece', () => {
+  const st = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
+  st.mes = 5;
+  st.auto = true;
+  st.caixa = 100000; // folga pra não terminar o jogo no turno
+  st.ativos.acoes = 1000;
+  // 10× 0.5 (retornos médios), depois 0 no sorteio e 0 na seleção → crash da bolsa
+  const s = regras.fecharMes(st, { rng: rngFixo(...Array(10).fill(0.5), 0, 0) });
+  assert.ok(s.log.some(l => l.texto.includes('CRASH')), 'o evento deveria ter acontecido');
+  assert.equal(s.auto, true);
+  assert.ok(!s.log.some(l => l.texto.includes('AUTO pausado')));
+});
+
 test('fecharMes: log não passa do limite configurado', () => {
   const st = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
   st.log = Array.from({ length: config.logMax + 40 }, (_, i) => ({ id: i, mes: 'M00', texto: 'x', cor: '#fff' }));
@@ -192,7 +216,6 @@ test('eventos: rng no primeiro peso sorteia o crash da bolsa', () => {
   eventos.sortear(s, logs, { rng: rngFixo(0, 0), addLog: regras.addLog });
   assert.equal(s.ativos.acoes, 700);
   assert.equal(s.ativos.fiis, 880);
-  assert.equal(s.alerta, 1);
   assert.ok(logs[0].texto.includes('CRASH'));
 });
 

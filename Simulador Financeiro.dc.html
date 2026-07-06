@@ -23,7 +23,11 @@
 <div data-screen-label="Simulador" style="min-height:100vh;background:#0b0f14;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
 
   <sc-if value="{{ mostraIntro }}" hint-placeholder-val="{{ true }}">
-    <dc-import name="Intro" comecar="{{ comecar }}" caixaFmt="{{ caixaFmt }}" salarioFmt="{{ salarioFmt }}" custoFmt="{{ custoFmt }}"></dc-import>
+    <dc-import name="Intro" comecar="{{ comecar }}" caixaFmt="{{ caixaFmt }}" salarioFmt="{{ salarioFmt }}" custoFmt="{{ custoFmt }}"
+      modosLista="{{ modosLista }}"
+      escolherNormal="{{ escolherNormal }}" escolherHardcore="{{ escolherHardcore }}"
+      normalBg="{{ normalBg }}" normalCor="{{ normalCor }}" hardBg="{{ hardBg }}" hardCor="{{ hardCor }}"
+      difDica="{{ difDica }}"></dc-import>
   </sc-if>
 
   <sc-if value="{{ mostraJogo }}" hint-placeholder-val="{{ false }}">
@@ -35,7 +39,8 @@
         caixaFmt="{{ caixaFmt }}" caixaCor="{{ caixaCor }}"
         salarioStatus="{{ salarioStatus }}" salarioCor="{{ salarioCor }}"
         custoFmt="{{ custoFmt }}" rpFmt="{{ rpFmt }}"
-        progPct="{{ progPct }}" progFmt="{{ progFmt }}" progCor="{{ progCor }}"></dc-import>
+        progPct="{{ progPct }}" progFmt="{{ progFmt }}" progCor="{{ progCor }}"
+        voltarMenu="{{ voltarMenu }}"></dc-import>
 
       <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;">
 
@@ -48,7 +53,7 @@
             <button onClick="{{ fecharMes }}" style="flex:1;background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;letter-spacing:2px;padding:16px;border-radius:5px;cursor:pointer;" style-hover="background:#3ee996;">FECHAR O MÊS ▸</button>
             <button onClick="{{ toggleAuto }}" style="width:150px;background:{{ autoBg }};color:{{ autoCor }};border:1px solid {{ autoCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:16px 0;border-radius:5px;cursor:pointer;">{{ autoLabel }}</button>
           </div>
-          <div style="color:#3a4a5a;font-size:10.5px;text-align:center;">[ESPAÇO] fecha o mês · [A] liga/desliga o auto — pausa sozinho quando um evento pede decisão</div>
+          <div style="color:#3a4a5a;font-size:10.5px;text-align:center;">[ESPAÇO] fecha o mês · [A] liga/desliga o auto — roda direto até o fim da simulação</div>
         </div>
 
         <div style="display:grid;gap:12px;">
@@ -60,7 +65,7 @@
   </sc-if>
 
   <sc-if value="{{ mostraFim }}" hint-placeholder-val="{{ false }}">
-    <dc-import name="FimDeJogo" mesFmt="{{ mesFmt }}" tempoFmt="{{ tempoFmt }}" fimTitulo="{{ fimTitulo }}" fimCor="{{ fimCor }}" fimResumo="{{ fimResumo }}" fimLicao="{{ fimLicao }}" reiniciar="{{ reiniciar }}"></dc-import>
+    <dc-import name="FimDeJogo" mesFmt="{{ mesFmt }}" tempoFmt="{{ tempoFmt }}" fimTitulo="{{ fimTitulo }}" fimCor="{{ fimCor }}" fimResumo="{{ fimResumo }}" fimLicao="{{ fimLicao }}" reiniciar="{{ reiniciar }}" voltarMenu="{{ voltarMenu }}"></dc-import>
   </sc-if>
 
 </div>
@@ -97,7 +102,19 @@ class Component extends DCLogic {
 
   toggleAuto = () => this.setState(s => ({ auto: !s.auto }));
   comecar = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
-  reiniciar = () => { this.setState(Fluxo.regras.novoJogo(this.props)); this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() }); };
+
+  // Recria o estado preservando as escolhas do menu (dificuldade e modo).
+  novoEstado(s, extras) {
+    return { ...Fluxo.regras.novoJogo({ ...this.props, dificuldade: s.dificuldade }), modo: s.modo, ...extras };
+  }
+  reiniciar = () => this.setState(s => this.novoEstado(s, { tela: 'jogo', inicioTs: Date.now(), agora: Date.now() }));
+  voltarMenu = () => this.setState(s => this.novoEstado(s, {}));
+  escolherDificuldade(d) {
+    this.setState(s => this.novoEstado({ ...s, dificuldade: d }, {}));
+  }
+  escolherModo(id) {
+    this.setState({ modo: id });
+  }
 
   mover(key, valor) {
     this.setState(s => Fluxo.regras.mover(s, key, valor));
@@ -150,9 +167,37 @@ class Component extends DCLogic {
       bg: p.voce ? 'rgba(34,212,126,.08)' : 'transparent',
     }));
 
+    const modosLista = Fluxo.config.modos.map(m => {
+      const selecionado = m.id === s.modo;
+      return {
+        id: m.id,
+        nome: m.nome,
+        descricao: m.descricao,
+        tag: m.disponivel ? (selecionado ? '▸ SELECIONADO' : '') : 'EM BREVE',
+        tagCor: m.disponivel ? '#22d47e' : '#3a4a5a',
+        borda: selecionado ? '#22d47e' : '#1e2833',
+        nomeCor: m.disponivel ? '#f2f7fb' : '#3a4a5a',
+        descCor: m.disponivel ? '#8fa1b2' : '#3a4a5a',
+        cursor: m.disponivel ? 'pointer' : 'default',
+        escolher: m.disponivel ? () => this.escolherModo(m.id) : () => {},
+      };
+    });
+
+    const normalSel = s.dificuldade === 'normal';
     const faliu = s.fim === 'faliu';
     return {
       mostraIntro: s.tela === 'intro',
+      modosLista,
+      normalBg: normalSel ? 'rgba(34,212,126,.12)' : 'transparent',
+      normalCor: normalSel ? '#22d47e' : '#6b7c8c',
+      hardBg: normalSel ? 'transparent' : 'rgba(255,77,94,.12)',
+      hardCor: normalSel ? '#6b7c8c' : '#ff4d5e',
+      difDica: normalSel
+        ? 'mais folga no caixa e menos acidentes — bom pra aprender as mecânicas'
+        : 'caixa inicial menor, custo de vida mais pesado e mais acidentes no caminho',
+      escolherNormal: () => this.escolherDificuldade('normal'),
+      escolherHardcore: () => this.escolherDificuldade('hardcore'),
+      voltarMenu: this.voltarMenu,
       mostraJogo: s.tela === 'jogo',
       mostraFim: !!s.fim,
       mesFmt: String(s.mes).padStart(2, '0'),
