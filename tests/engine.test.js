@@ -56,9 +56,265 @@ test('novoJogo registra dificuldade e modo no estado', () => {
   assert.equal(regras.novoJogo({}).modo, 'classico');
 });
 
-test('config.modos tem exatamente um modo disponível (clássico) por enquanto', () => {
+test('config.modos: clássico, sandbox, empresário e cenários disponíveis; speedrun em breve', () => {
   const disponiveis = config.modos.filter(m => m.disponivel);
-  assert.deepEqual(disponiveis.map(m => m.id), ['classico']);
+  assert.deepEqual(disponiveis.map(m => m.id), ['classico', 'sandbox', 'empresario', 'cenarios']);
+});
+
+// ---------- modo sandbox ----------
+
+test('sandbox: novoJogo aceita capital inicial customizado', () => {
+  const s = regras.novoJogo({ modo: 'sandbox', dificuldade: 'normal', capitalInicial: 100000 });
+  assert.equal(s.modo, 'sandbox');
+  assert.equal(s.caixa, 100000);
+  assert.equal(s.capitalInicial, 100000);
+  // sem capital custom, cai no default da dificuldade
+  assert.equal(regras.novoJogo({ modo: 'sandbox', dificuldade: 'normal' }).caixa, 3000);
+});
+
+test('sandbox: caixa negativo avisa uma vez e não encerra o jogo', () => {
+  const st = jogoEmAndamento({ modo: 'sandbox', dificuldade: 'normal', salarioInicial: 4500 });
+  st.caixa = 0;
+  st.salario = 0;
+  const s = regras.fecharMes(st, { rng: rngNeutro() });
+  assert.equal(s.fim, null);
+  assert.ok(s.caixa < 0);
+  assert.equal(s.log.filter(l => l.texto.includes('CAIXA NEGATIVO')).length, 1);
+  // segue negativo no mês seguinte: sem novo aviso e ainda sem fim
+  const s2 = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s2.fim, null);
+  assert.equal(s2.log.filter(l => l.texto.includes('CAIXA NEGATIVO')).length, 1);
+});
+
+test('sandbox: renda passiva ≥ custo vira marco no log, não vitória', () => {
+  const st = jogoEmAndamento({ modo: 'sandbox', dificuldade: 'normal', salarioInicial: 4500 });
+  st.ativos.fiis = 1e6;
+  const s = regras.fecharMes(st, { rng: rngNeutro() });
+  assert.equal(s.fim, null);
+  assert.equal(s.marcoLivre, true);
+  assert.equal(s.log.filter(l => l.texto.includes('MARCO')).length, 1);
+  // marco não repete
+  const s2 = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s2.log.filter(l => l.texto.includes('MARCO')).length, 1);
+});
+
+// ---------- modo empresário ----------
+
+// No modo empresário há 2 chamadas extras de rng (variância da receita) antes dos ativos.
+const rngNeutroEmp = () => rngFixo(...Array(12).fill(0.5), 0.99);
+
+test('empresário: novoJogo zera salário, mantém custo de vida e cria o negócio', () => {
+  const s = regras.novoJogo({ modo: 'empresario', dificuldade: 'normal', salarioInicial: 4500 });
+  assert.equal(s.salario, 0);
+  assert.equal(s.custo, 3150); // custo derivado do salário de referência, não do salário zerado
+  assert.equal(s.negocio.caixa, config.empresario.caixaInicial);
+  assert.equal(s.negocio.receitaBase, config.empresario.receitaBase);
+  assert.equal(s.negocio.falido, false);
+  assert.equal(regras.novoJogo({ dificuldade: 'normal' }).negocio, null);
+});
+
+test('empresário: mês neutro — receita entra na PJ e déficit pessoal força retirada da empresa', () => {
+  const st = jogoEmAndamento({ modo: 'empresario', dificuldade: 'normal', salarioInicial: 4500 });
+  const s = regras.fecharMes(st, { rng: rngNeutroEmp() });
+  assert.equal(s.negocio.receitaMes, config.empresario.receitaBase); // rng 0.5 → variância zero
+  // PJ: 4000 + 7500 − 3500 = 8000; pessoal: 3000 − 3150 = −150 → retirada forçada de 150
+  assert.equal(s.negocio.caixa, 8000 - 150);
+  assert.equal(s.caixa, 0);
+  assert.equal(s.fim, null);
+  assert.ok(s.log.some(l => l.texto.includes('Retirada forçada')));
+});
+
+test('empresário: patrimônio inclui o caixa da empresa', () => {
+  const s = regras.novoJogo({ modo: 'empresario', dificuldade: 'normal' });
+  assert.equal(regras.patrimonio(s), s.caixa + config.empresario.caixaInicial);
+});
+
+test('empresário: reinvestir tem retornos decrescentes e exige caixa na empresa', () => {
+  const s = regras.novoJogo({ modo: 'empresario' });
+  const u1 = regras.reinvestirNegocio(s);
+  assert.equal(u1.negocio.caixa, config.empresario.caixaInicial - 1000);
+  assert.equal(u1.negocio.receitaBase, config.empresario.receitaBase + 180);
+  assert.equal(u1.negocio.nivel, 1);
+  const u2 = regras.reinvestirNegocio({ ...s, ...u1 });
+  assert.equal(u2.negocio.receitaBase, u1.negocio.receitaBase + Math.round(180 / 1.35));
+  const pobre = { ...s, negocio: { ...s.negocio, caixa: 500 } };
+  assert.deepEqual(regras.reinvestirNegocio(pobre), {});
+});
+
+test('empresário: sacar limita ao caixa da empresa e aportar ao caixa pessoal', () => {
+  const s = regras.novoJogo({ modo: 'empresario', dificuldade: 'normal' }); // PF 3000, PJ 4000
+  const saque = regras.sacarNegocio(s, 10000);
+  assert.equal(saque.caixa, 3000 + 4000);
+  assert.equal(saque.negocio.caixa, 0);
+  const aporte = regras.aportarNegocio(s, 10000);
+  assert.equal(aporte.caixa, 0);
+  assert.equal(aporte.negocio.caixa, 4000 + 3000);
+  const falido = { ...s, negocio: { ...s.negocio, falido: true } };
+  assert.deepEqual(regras.sacarNegocio(falido, 500), {});
+  assert.deepEqual(regras.aportarNegocio(falido, 500), {});
+});
+
+test('empresário: N meses no vermelho quebram a empresa, mas não o jogador', () => {
+  let s = jogoEmAndamento({ modo: 'empresario', dificuldade: 'normal' });
+  s.caixa = 100000; // vida pessoal folgada
+  s.negocio.custoFixo = 50000; // sangria brutal na PJ
+  for (let i = 0; i < config.empresario.mesesFalencia; i++) {
+    assert.equal(s.negocio.falido, false);
+    s = regras.fecharMes(s, { rng: rngNeutroEmp() });
+  }
+  assert.equal(s.negocio.falido, true);
+  assert.equal(s.negocio.caixa, 0); // dívidas morrem com o CNPJ
+  assert.equal(s.negocio.receitaBase, 0);
+  assert.equal(s.fim, null); // falência da empresa ≠ FALIU pessoal
+  assert.ok(s.log.some(l => l.texto.includes('SEU NEGÓCIO FALIU')));
+  // com a empresa morta, o mês seguinte roda sem o bloco do negócio (sem crash)
+  const s2 = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s2.negocio.falido, true);
+});
+
+test('eventos por modo: empresário sem eventos de emprego; clássico sem eventos de empresa', () => {
+  const coleta = (props) => {
+    const textos = [];
+    for (let i = 0; i < 400; i++) {
+      const s = jogoEmAndamento(props);
+      s.mes = 10;
+      const logs = [];
+      eventos.sortear(s, logs, { rng: Math.random, addLog: regras.addLog });
+      for (const l of logs) textos.push(l.texto);
+    }
+    return textos;
+  };
+  const emp = coleta({ modo: 'empresario', dificuldade: 'normal' });
+  assert.ok(emp.length > 30, 'eventos deveriam ter acontecido no empresário');
+  assert.ok(!emp.some(t => /DEMISSÃO|PROMOÇÃO|13º/.test(t)));
+  assert.ok(emp.some(t => t.includes('empresa')));
+  const cls = coleta({ dificuldade: 'normal' });
+  assert.ok(cls.length > 30, 'eventos deveriam ter acontecido no clássico');
+  assert.ok(!cls.some(t => t.includes('empresa')));
+});
+
+test('empresário: sem progressão anual de salário (não há salário)', () => {
+  const st = jogoEmAndamento({ modo: 'empresario', dificuldade: 'normal' });
+  st.mes = 11;
+  st.caixa = 100000;
+  const s = regras.fecharMes(st, { rng: rngNeutroEmp() });
+  assert.equal(s.salario, 0);
+  assert.ok(!s.log.some(l => l.texto.includes('PROGRESSÃO ANUAL')));
+});
+
+// ---------- cenário aposentadoria ----------
+
+// Um mês de saque com a carteira toda em cripto (div=0, vol=0.24, ret=0.035).
+// Injeta um rng constante que faz a cripto render exatamente `retorno`.
+function mesCripto(s, retorno) {
+  const c = (1 + (retorno - 0.035) / 0.24) / 2;
+  return regras.fecharMes(s, { rng: rngFixo(...Array(10).fill(c)) });
+}
+
+function estadoSaque(overrides) {
+  const s = regras.novoJogo({ modo: 'cenarios', cenario: 'aposentadoria', dificuldade: 'normal' });
+  s.tela = 'jogo';
+  s.aposentadoria = { ...s.aposentadoria, fase: 'saque', ...(overrides && overrides.aposentadoria) };
+  s.custo = 6000;      // saque fixo mensal
+  s.caixa = 0;
+  s.ativos = { ...s.ativos, cripto: 10000 };
+  return s;
+}
+
+test('aposentadoria: novoJogo cria as duas fases e usa o capital do config', () => {
+  const s = regras.novoJogo({ modo: 'cenarios', cenario: 'aposentadoria', dificuldade: 'normal' });
+  assert.equal(s.cenario, 'aposentadoria');
+  assert.equal(s.caixa, config.aposentadoria.capitalInicial);
+  assert.equal(s.salario, config.aposentadoria.salario);
+  assert.equal(s.aposentadoria.fase, 'acumulacao');
+  assert.equal(s.aposentadoria.turnosSaque, config.aposentadoria.turnosSaque);
+  // fora do cenário, sem objeto de aposentadoria
+  assert.equal(regras.novoJogo({ dificuldade: 'normal' }).aposentadoria, null);
+});
+
+test('aposentadoria: acumulação vira saque após turnosAcumulacao e zera o salário', () => {
+  let s = regras.novoJogo({ modo: 'cenarios', cenario: 'aposentadoria', dificuldade: 'normal' });
+  s.tela = 'jogo';
+  s.aposentadoria = { ...s.aposentadoria, turnosAcumulacao: 2 };
+  s.caixa = 50000;
+  s = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s.aposentadoria.fase, 'acumulacao');
+  assert.equal(s.fim, null);
+  s = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s.aposentadoria.fase, 'saque');
+  assert.equal(s.salario, 0);
+  assert.equal(s.fim, null);
+});
+
+test('aposentadoria: acumulação não dispara livre nem faliu', () => {
+  let s = regras.novoJogo({ modo: 'cenarios', cenario: 'aposentadoria', dificuldade: 'normal' });
+  s.tela = 'jogo';
+  s.ativos = { ...s.ativos, fiis: 1e6 }; // renda passiva enorme
+  s = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s.fim, null);
+});
+
+test('aposentadoria: saque fixo vende a valor justo, sem deságio', () => {
+  let s = estadoSaque();
+  s = mesCripto(s, 0); // cripto fica 10000; saca 6000 a par → 4000
+  assert.ok(Math.abs(s.ativos.cripto - 4000) < 1, 'vendeu a valor justo, sem deságio');
+  assert.equal(s.aposentadoria.saquesFeitos, 1);
+  assert.equal(s.aposentadoria.saqueMes, 6000);
+});
+
+test('aposentadoria: modo % saca fração do patrimônio', () => {
+  let s = estadoSaque({ aposentadoria: { saqueModo: 'percentual', taxaSaque: 0.10 } });
+  s = mesCripto(s, 0); // patrimônio 10000 → saca 10% = 1000
+  assert.ok(Math.abs(s.ativos.cripto - 9000) < 1);
+  assert.equal(s.aposentadoria.saqueMes, 1000);
+});
+
+test('aposentadoria: sobreviver todos os turnosSaque meses vence', () => {
+  let s = estadoSaque({ aposentadoria: { turnosSaque: 2 } });
+  s.ativos = { ...s.ativos, cripto: 1e7 };
+  s = mesCripto(s, 0);
+  assert.equal(s.fim, null);
+  assert.equal(s.aposentadoria.saquesFeitos, 1);
+  s = mesCripto(s, 0);
+  assert.equal(s.fim, 'apos_sucesso');
+  assert.equal(s.aposentadoria.saquesFeitos, 2);
+});
+
+// O TESTE-CHAVE: prova que a mecânica ensina risco de SEQUÊNCIA, não só variância.
+test('aposentadoria: mesma média, ordem diferente dos retornos → sobrevivência diferente', () => {
+  // Ordem A: ano ruim primeiro
+  let a = mesCripto(estadoSaque(), -0.5);
+  assert.equal(a.fim, 'apos_faliu');
+  const sobrevA = a.aposentadoria.saquesFeitos;
+
+  // Ordem B: mesmos retornos (-0.5 e +0.5), invertidos → ano bom primeiro
+  let b = mesCripto(estadoSaque(), 0.5);
+  assert.equal(b.fim, null);
+  b = mesCripto(b, -0.5);
+  assert.equal(b.fim, 'apos_faliu');
+  const sobrevB = b.aposentadoria.saquesFeitos;
+
+  assert.notEqual(sobrevA, sobrevB); // a ORDEM decidiu o resultado
+  assert.equal(sobrevA, 0);
+  assert.equal(sobrevB, 1);
+});
+
+test('aposentadoria: eventos ficam desligados na fase de saque', () => {
+  let s = estadoSaque({ aposentadoria: { turnosSaque: 100 } });
+  s.ativos = { ...s.ativos, cripto: 1e7 };
+  for (let i = 0; i < 20; i++) s = mesCripto(s, 0.02);
+  const txt = s.log.map(l => l.texto).join(' ');
+  assert.ok(!/CRASH|EMERGÊNCIA|IMPREVISTO|INFLAÇÃO ALTA|BULL RUN|INVERNO|PROMOÇÃO|DEMISSÃO/.test(txt));
+});
+
+test('clássico continua com falência e liberdade intactas com os novos campos', () => {
+  const quebra = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
+  quebra.caixa = 0;
+  quebra.salario = 0;
+  assert.equal(regras.fecharMes(quebra, { rng: rngNeutro() }).fim, 'faliu');
+  const livre = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
+  livre.ativos.fiis = 1e6;
+  assert.equal(regras.fecharMes(livre, { rng: rngNeutro() }).fim, 'livre');
 });
 
 // ---------- mover ----------

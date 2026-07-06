@@ -16,9 +16,42 @@
     // até a mecânica existir — a tela inicial os mostra como "EM BREVE".
     modos: [
       { id: 'classico', nome: 'CLÁSSICO', descricao: 'Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.', disponivel: true },
-      { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Crises e épocas reais pra atravessar com as decisões certas de alocação.', disponivel: false },
+      { id: 'sandbox', nome: 'SANDBOX', descricao: 'Sem falência e sem pressa: escolha o capital inicial e teste estratégias à vontade.', disponivel: true },
+      { id: 'empresario', nome: 'EMPRESÁRIO', descricao: 'Sem salário: viva do seu negócio. Reinvestir pra crescer ou sacar pra investir? PJ não é seu bolso.', disponivel: true },
+      { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Situações da vida real pra atravessar com as decisões certas de alocação.', disponivel: true },
       { id: 'speedrun', nome: 'SPEEDRUN', descricao: 'Seed compartilhada, relógio global e placar ranqueado. Quão rápido você se liberta?', disponivel: false },
     ],
+
+    // Cenários dentro do modo CENÁRIOS. Novos entram aqui com disponivel: false até existir.
+    cenarios: [
+      { id: 'aposentadoria', nome: 'APOSENTADORIA', descricao: 'Acumule por alguns anos e depois viva só do patrimônio. A ORDEM dos anos bons e ruins decide se o dinheiro dura.', disponivel: true },
+      { id: 'imoveis', nome: 'IMÓVEIS', descricao: 'Comprar financiado ou alugar e investir a diferença? Descubra qual estratégia sobra mais no fim.', disponivel: false },
+    ],
+
+    // Presets de capital inicial oferecidos no modo sandbox.
+    sandbox: { capitais: [1000, 10000, 100000] },
+
+    // Cenário aposentadoria. Números pensados pra playtest — todos ajustáveis aqui.
+    aposentadoria: {
+      capitalInicial: 30000,   // caixa no começo da acumulação
+      salario: 6000,           // salário durante a acumulação (custo = salario * custoFator)
+      turnosAcumulacao: 36,    // X meses acumulando livremente
+      turnosSaque: 48,         // Y meses de saque a sobreviver (meta)
+      taxaSaque: 0.04,         // usado só no modo "% do patrimônio" (fração por mês)
+      // No modo FIXO (padrão) o saque mensal é o próprio custo de vida (que segue inflacionando).
+    },
+
+    // Modo empresário: o negócio que o jogador administra.
+    empresario: {
+      caixaInicial: 4000,      // capital de giro inicial (caixa da empresa)
+      receitaBase: 7500,       // receita média mensal
+      custoFixo: 3500,         // custos fixos mensais
+      volReceita: 0.35,        // variância da receita (mesmo padrão de ruído dos ativos)
+      reinvestimentoPasso: 1000, // custo de cada melhoria no negócio
+      impulsoReceita: 180,     // ganho de receita/mês da 1ª melhoria…
+      decaimento: 0.35,        // …decaindo: impulso / (1 + nivel * decaimento)
+      mesesFalencia: 3,        // meses consecutivos no vermelho até a empresa falir
+    },
 
     // Eventos aleatórios só começam a partir deste mês.
     mesMinimoEvento: 3,

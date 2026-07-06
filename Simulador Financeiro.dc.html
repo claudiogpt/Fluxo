@@ -27,7 +27,13 @@
       modosLista="{{ modosLista }}"
       escolherNormal="{{ escolherNormal }}" escolherHardcore="{{ escolherHardcore }}"
       normalBg="{{ normalBg }}" normalCor="{{ normalCor }}" hardBg="{{ hardBg }}" hardCor="{{ hardCor }}"
-      difDica="{{ difDica }}"></dc-import>
+      difDica="{{ difDica }}"
+      mostraCapitais="{{ mostraCapitais }}" capitaisLista="{{ capitaisLista }}"
+      mostraCenarios="{{ mostraCenarios }}" cenariosLista="{{ cenariosLista }}"
+      mostraSaqueConfig="{{ mostraSaqueConfig }}" saqueDica="{{ saqueDica }}"
+      fixoBg="{{ fixoBg }}" fixoCor="{{ fixoCor }}" pctBg="{{ pctBg }}" pctCor="{{ pctCor }}"
+      escolherSaqueFixo="{{ escolherSaqueFixo }}" escolherSaquePct="{{ escolherSaquePct }}"
+      rendaResumo="{{ rendaResumo }}"></dc-import>
   </sc-if>
 
   <sc-if value="{{ mostraJogo }}" hint-placeholder-val="{{ false }}">
@@ -37,20 +43,26 @@
         mesFmt="{{ mesFmt }}" tempoFmt="{{ tempoFmt }}" tempoCor="{{ tempoCor }}"
         sparkPoints="{{ sparkPoints }}" sparkCor="{{ sparkCor }}" patrimonioFmt="{{ patrimonioFmt }}"
         caixaFmt="{{ caixaFmt }}" caixaCor="{{ caixaCor }}"
-        salarioStatus="{{ salarioStatus }}" salarioCor="{{ salarioCor }}"
+        salarioStatus="{{ salarioStatus }}" salarioCor="{{ salarioCor }}" salarioLabel="{{ salarioLabel }}"
         custoFmt="{{ custoFmt }}" rpFmt="{{ rpFmt }}"
-        progPct="{{ progPct }}" progFmt="{{ progFmt }}" progCor="{{ progCor }}"
-        voltarMenu="{{ voltarMenu }}"></dc-import>
+        progPct="{{ progPct }}" progFmt="{{ progFmt }}" progCor="{{ progCor }}" progLabel="{{ progLabel }}"
+        voltarMenu="{{ voltarMenu }}" modoTag="{{ modoTag }}"></dc-import>
 
       <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start;">
 
         <div style="display:grid;gap:10px;">
+          <sc-if value="{{ mostraNegocio }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="NegocioCard" dcProps="{{ negocioCard }}"></dc-import>
+          </sc-if>
           <sc-for list="{{ ativosLista }}" as="a" hint-placeholder-count="5">
             <dc-import name="AtivoCard" dcProps="{{ a }}"></dc-import>
           </sc-for>
 
           <div style="display:flex;gap:8px;margin-top:4px;">
             <button onClick="{{ fecharMes }}" style="flex:1;background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:16px;letter-spacing:2px;padding:16px;border-radius:5px;cursor:pointer;" style-hover="background:#3ee996;">FECHAR O MÊS ▸</button>
+            <sc-if value="{{ ehSandbox }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ reiniciar }}" style="width:150px;background:transparent;color:#6b7c8c;border:1px solid #3a4a5a;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:16px 0;border-radius:5px;cursor:pointer;" style-hover="color:#d7e1ea;border-color:#6b7c8c;">↺ RESETAR</button>
+            </sc-if>
             <button onClick="{{ toggleAuto }}" style="width:150px;background:{{ autoBg }};color:{{ autoCor }};border:1px solid {{ autoCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:16px 0;border-radius:5px;cursor:pointer;">{{ autoLabel }}</button>
           </div>
           <div style="color:#3a4a5a;font-size:10.5px;text-align:center;">[ESPAÇO] fecha o mês · [A] liga/desliga o auto — roda direto até o fim da simulação</div>
@@ -103,9 +115,19 @@ class Component extends DCLogic {
   toggleAuto = () => this.setState(s => ({ auto: !s.auto }));
   comecar = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
 
-  // Recria o estado preservando as escolhas do menu (dificuldade e modo).
+  // Recria o estado preservando as escolhas do menu (dificuldade, modo e capital).
   novoEstado(s, extras) {
-    return { ...Fluxo.regras.novoJogo({ ...this.props, dificuldade: s.dificuldade }), modo: s.modo, ...extras };
+    return {
+      ...Fluxo.regras.novoJogo({
+        ...this.props,
+        dificuldade: s.dificuldade,
+        modo: s.modo,
+        capitalInicial: s.modo === 'sandbox' ? s.capitalInicial : null,
+        cenario: s.cenario,
+        saqueModo: s.aposentadoria ? s.aposentadoria.saqueModo : undefined,
+      }),
+      ...extras,
+    };
   }
   reiniciar = () => this.setState(s => this.novoEstado(s, { tela: 'jogo', inicioTs: Date.now(), agora: Date.now() }));
   voltarMenu = () => this.setState(s => this.novoEstado(s, {}));
@@ -113,17 +135,33 @@ class Component extends DCLogic {
     this.setState(s => this.novoEstado({ ...s, dificuldade: d }, {}));
   }
   escolherModo(id) {
-    this.setState({ modo: id });
+    this.setState(s => this.novoEstado({ ...s, modo: id }, {}));
+  }
+  escolherCapital(v) {
+    this.setState(s => this.novoEstado({ ...s, capitalInicial: v }, {}));
+  }
+  escolherCenario(id) {
+    this.setState(s => this.novoEstado({ ...s, cenario: id }, {}));
+  }
+  escolherSaqueModo(m) {
+    this.setState(s => this.novoEstado({ ...s, cenario: s.cenario, aposentadoria: { ...s.aposentadoria, saqueModo: m } }, {}));
   }
 
   mover(key, valor) {
     this.setState(s => Fluxo.regras.mover(s, key, valor));
   }
 
+  aportarNegocio(v) { this.setState(s => Fluxo.regras.aportarNegocio(s, v)); }
+  sacarNegocio(v) { this.setState(s => Fluxo.regras.sacarNegocio(s, v)); }
+  reinvestirNegocio = () => this.setState(s => Fluxo.regras.reinvestirNegocio(s));
+
   fecharMes = () => {
     this.setState(st => {
       const s = Fluxo.regras.fecharMes(st);
-      if (s.fim && !st.fim) Fluxo.placar.salvar(s, Fluxo.regras.patrimonio(s));
+      // Leaderboard só registra os modos que terminam em livre/faliu.
+      if (s.fim && !st.fim && (s.fim === 'faliu' || s.fim === 'livre')) {
+        Fluxo.placar.salvar(s, Fluxo.regras.patrimonio(s));
+      }
       return s;
     });
   };
@@ -183,11 +221,154 @@ class Component extends DCLogic {
       };
     });
 
+    const capitaisLista = Fluxo.config.sandbox.capitais.map(v => {
+      const sel = s.capitalInicial === v;
+      return {
+        rotulo: fmt(v),
+        bg: sel ? 'rgba(34,212,126,.12)' : 'transparent',
+        cor: sel ? '#22d47e' : '#6b7c8c',
+        escolher: () => this.escolherCapital(v),
+      };
+    });
+
+    const cenariosLista = Fluxo.config.cenarios.map(c => {
+      const selecionado = c.id === s.cenario;
+      return {
+        nome: c.nome,
+        descricao: c.descricao,
+        tag: c.disponivel ? (selecionado ? '▸ SELECIONADO' : '') : 'EM BREVE',
+        tagCor: c.disponivel ? '#22d47e' : '#3a4a5a',
+        borda: selecionado ? '#22d47e' : '#1e2833',
+        nomeCor: c.disponivel ? '#f2f7fb' : '#3a4a5a',
+        descCor: c.disponivel ? '#8fa1b2' : '#3a4a5a',
+        cursor: c.disponivel ? 'pointer' : 'default',
+        escolher: c.disponivel ? () => this.escolherCenario(c.id) : () => {},
+      };
+    });
+
+    const ap = s.aposentadoria;
+    const saqueFixo = ap && ap.saqueModo === 'fixo';
+    const saqueConfig = {
+      fixoBg: saqueFixo ? 'rgba(34,212,126,.12)' : 'transparent',
+      fixoCor: saqueFixo ? '#22d47e' : '#6b7c8c',
+      pctBg: !saqueFixo ? 'rgba(34,212,126,.12)' : 'transparent',
+      pctCor: !saqueFixo ? '#22d47e' : '#6b7c8c',
+      dica: saqueFixo
+        ? 'saque fixo = seu custo de vida (inflaciona). É o que cria o risco de sequência.'
+        : 'saque de ' + (ap ? (ap.taxaSaque * 100).toFixed(0) : '4') + '% do patrimônio/mês — se ajusta sozinho e quase nunca zera.',
+      escolherFixo: () => this.escolherSaqueModo('fixo'),
+      escolherPct: () => this.escolherSaqueModo('percentual'),
+    };
+
+    const negocioCard = s.negocio ? (() => {
+      const n = s.negocio;
+      const cfgE = Fluxo.config.empresario;
+      const vermelho = n.caixa < 0;
+      return {
+        falido: n.falido,
+        operando: !n.falido,
+        statusLabel: n.falido ? 'FALIDO' : vermelho ? 'VERMELHO ' + n.mesesNoVermelho + '/' + cfgE.mesesFalencia : 'OPERANDO',
+        statusCor: n.falido ? '#ff4d5e' : vermelho ? '#ff9d4b' : '#22d47e',
+        caixaFmt: fmt(n.caixa),
+        caixaCor: vermelho ? '#ff4d5e' : '#f2f7fb',
+        receitaFmt: n.receitaMes == null ? '—' : '+' + fmt(n.receitaMes) + ' no mês',
+        receitaCor: n.receitaMes == null ? '#3a4a5a' : n.varReceitaMes >= 0 ? '#22d47e' : '#ff9d4b',
+        receitaBaseFmt: fmt(n.receitaBase),
+        custoFixoFmt: fmt(n.custoFixo),
+        dica: 'A empresa tem caixa próprio: reinvestir cresce a receita (com retorno decrescente), sacar leva o lucro pro seu bolso. Não deixe o giro secar.',
+        reinvestirLabel: 'REINVESTIR ' + fmt(cfgE.reinvestimentoPasso) + ' ▸ +' + fmt(Fluxo.regras.ganhoReinvestimento(n.nivel)) + '/MÊS',
+        reinvestir: this.reinvestirNegocio,
+        sacar500: () => this.sacarNegocio(500),
+        sacar1k: () => this.sacarNegocio(1000),
+        sacar2k: () => this.sacarNegocio(2000),
+        sacarMax: () => this.sacarNegocio(s.negocio.caixa),
+        aportar500: () => this.aportarNegocio(500),
+        aportar1k: () => this.aportarNegocio(1000),
+        aportar2k: () => this.aportarNegocio(2000),
+      };
+    })() : null;
+
+    const modoDef = Fluxo.config.modos.find(m => m.id === s.modo);
+    const ehSandbox = s.modo === 'sandbox';
+    const ehCenarios = s.modo === 'cenarios';
     const normalSel = s.dificuldade === 'normal';
-    const faliu = s.fim === 'faliu';
+
+    // Fase do cenário aposentadoria define rótulos, barra de progresso e badge.
+    const emSaque = !!(ap && ap.fase === 'saque');
+    let progLabel, progVal, salarioLabel, salarioStatus, salarioCor, modoTag;
+    if (ap) {
+      if (emSaque) {
+        progLabel = 'SOBREVIVÊNCIA — meses de saque aguentados';
+        progVal = Math.min(100, (ap.saquesFeitos / ap.turnosSaque) * 100);
+        salarioLabel = 'SAQUE / MÊS';
+        salarioStatus = '−' + fmt(ap.saqueMes);
+        salarioCor = '#ff9d4b';
+        modoTag = 'SAQUE ' + ap.saquesFeitos + '/' + ap.turnosSaque;
+      } else {
+        progLabel = 'ACUMULAÇÃO — meses até aposentar';
+        progVal = Math.min(100, (s.mes / ap.turnosAcumulacao) * 100);
+        salarioLabel = 'SALÁRIO / MÊS';
+        salarioStatus = '+' + fmt(s.salario);
+        salarioCor = '#8fd47e';
+        modoTag = 'ACUMULAÇÃO ' + s.mes + '/' + ap.turnosAcumulacao;
+      }
+    } else {
+      progLabel = 'RUMO À INDEPENDÊNCIA — renda passiva vs. custo de vida';
+      progVal = prog;
+      salarioLabel = s.negocio ? 'LUCRO MÉDIO DO NEGÓCIO' : 'SALÁRIO / MÊS';
+      salarioStatus = s.negocio
+        ? (s.negocio.falido ? 'SEM RENDA' : '+' + fmt(s.negocio.receitaBase - s.negocio.custoFixo))
+        : (s.semSalario > 0 ? 'DESEMPREGADO' : '+' + fmt(s.salario));
+      salarioCor = s.negocio
+        ? (s.negocio.falido ? '#ff4d5e' : '#8fd47e')
+        : (s.semSalario > 0 ? '#ff4d5e' : '#8fd47e');
+      modoTag = s.modo === 'classico' ? '' : (modoDef ? modoDef.nome : s.modo.toUpperCase());
+    }
+    const progCor = progVal >= 100 ? '#22d47e' : progVal >= 50 ? '#8fd47e' : progVal >= 20 ? '#ffc24b' : '#ff9d4b';
+
+    // Tela de fim: 5 desfechos possíveis (livre/faliu do clássico + 2 da aposentadoria).
+    let fimTitulo, fimCor, fimResumo, fimLicao;
+    if (s.fim === 'apos_sucesso') {
+      fimTitulo = 'APOSENTADORIA OK'; fimCor = '#22d47e';
+      fimResumo = 'Seu patrimônio sustentou todos os ' + (ap ? ap.turnosSaque : '') + ' meses de saque sem zerar.';
+      fimLicao = 'Lição: acumular o suficiente e diversificar amortece o "risco de sequência de retornos" — uma sequência de anos ruins logo no início da aposentadoria é o que mais quebra quem para de trabalhar.';
+    } else if (s.fim === 'apos_faliu') {
+      fimTitulo = 'ACABOU'; fimCor = '#ff4d5e';
+      fimResumo = 'Seu patrimônio durou ' + (ap ? ap.saquesFeitos : 0) + ' de ' + (ap ? ap.turnosSaque : '') + ' meses de saque antes de zerar.';
+      fimLicao = 'Lição: mesma média de retorno, ordem diferente = resultado diferente. Anos ruins no começo forçam vender na baixa e derrubam tudo. Sacar menos e ter reserva protege os primeiros anos — é o risco de sequência de retornos.';
+    } else if (s.fim === 'faliu') {
+      fimTitulo = 'FALIU'; fimCor = '#ff4d5e';
+      fimResumo = 'Você sobreviveu ' + s.mes + ' meses antes de as contas engolirem tudo.';
+      fimLicao = 'Lição: reserva de emergência primeiro, sempre. Concentração + azar = falência. Diversificar não é sobre ganhar mais, é sobre nunca quebrar.';
+    } else {
+      fimTitulo = 'LIVRE'; fimCor = '#22d47e';
+      fimResumo = 'Em ' + s.mes + ' meses sua renda passiva (' + fmt(rp) + ') superou seu custo de vida (' + fmt(s.custo) + ').';
+      fimLicao = 'Lição: quem venceu não acertou o timing do mercado — construiu renda passiva mês a mês e deixou os juros compostos trabalharem.';
+    }
     return {
       mostraIntro: s.tela === 'intro',
       modosLista,
+      ehSandbox,
+      modoTag,
+      mostraCapitais: ehSandbox,
+      capitaisLista,
+      mostraCenarios: ehCenarios,
+      cenariosLista,
+      mostraSaqueConfig: !!ap,
+      fixoBg: saqueConfig.fixoBg, fixoCor: saqueConfig.fixoCor,
+      pctBg: saqueConfig.pctBg, pctCor: saqueConfig.pctCor,
+      saqueDica: saqueConfig.dica,
+      escolherSaqueFixo: saqueConfig.escolherFixo,
+      escolherSaquePct: saqueConfig.escolherPct,
+      mostraNegocio: !!s.negocio,
+      negocioCard,
+      rendaResumo: ap
+        ? 'acumula ' + ap.turnosAcumulacao + ' meses, depois saca por ' + ap.turnosSaque + ' meses'
+        : s.negocio
+          ? 'negócio: giro ' + fmt(s.negocio.caixa) + ' · receita ~' + fmt(s.negocio.receitaBase) + ' − custos ' + fmt(s.negocio.custoFixo) + '/mês'
+          : 'salário ' + fmt(s.salario) + '/mês',
+      salarioLabel,
+      progLabel,
       normalBg: normalSel ? 'rgba(34,212,126,.12)' : 'transparent',
       normalCor: normalSel ? '#22d47e' : '#6b7c8c',
       hardBg: normalSel ? 'transparent' : 'rgba(255,77,94,.12)',
@@ -204,27 +385,20 @@ class Component extends DCLogic {
       caixaFmt: fmt(s.caixa),
       caixaCor: s.caixa < s.custo ? '#ff4d5e' : '#f2f7fb',
       salarioFmt: fmt(s.salario),
-      salarioStatus: s.semSalario > 0 ? 'DESEMPREGADO' : '+' + fmt(s.salario),
-      salarioCor: s.semSalario > 0 ? '#ff4d5e' : '#8fd47e',
+      salarioStatus,
+      salarioCor,
       custoFmt: fmt(s.custo),
       rpFmt: fmt(rp),
       patrimonioFmt: fmt(pat),
-      progPct: prog.toFixed(1),
-      progFmt: prog.toFixed(1) + '%',
-      progCor: prog >= 100 ? '#22d47e' : prog >= 50 ? '#8fd47e' : prog >= 20 ? '#ffc24b' : '#ff9d4b',
+      progPct: progVal.toFixed(1),
+      progFmt: progVal.toFixed(1) + '%',
+      progCor,
       sparkPoints: spark.points,
       sparkCor: spark.positivo ? '#22d47e' : '#ff4d5e',
       ativosLista,
       logLista: s.log,
       lbLista,
-      fimTitulo: faliu ? 'FALIU' : 'LIVRE',
-      fimCor: faliu ? '#ff4d5e' : '#22d47e',
-      fimResumo: faliu
-        ? 'Você sobreviveu ' + s.mes + ' meses antes de as contas engolirem tudo.'
-        : 'Em ' + s.mes + ' meses sua renda passiva (' + fmt(rp) + ') superou seu custo de vida (' + fmt(s.custo) + ').',
-      fimLicao: faliu
-        ? 'Lição: reserva de emergência primeiro, sempre. Concentração + azar = falência. Diversificar não é sobre ganhar mais, é sobre nunca quebrar.'
-        : 'Lição: quem venceu não acertou o timing do mercado — construiu renda passiva mês a mês e deixou os juros compostos trabalharem.',
+      fimTitulo, fimCor, fimResumo, fimLicao,
       tempoFmt: s.inicioTs ? fmtTempo((s.fimTs || s.agora || Date.now()) - s.inicioTs) : '00:00',
       tempoCor: s.auto ? '#ffc24b' : '#f2f7fb',
       autoLabel: s.auto ? '⏸ AUTO: ON' : '▶ AUTO: OFF',
