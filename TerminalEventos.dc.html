@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tema.css">
+<script src="./support.js"></script>
+</head>
+<body>
+<!-- Terminal de eventos (log do jogo). Só template.
+     Props: logLista = [{ id, mes, texto, cor }] -->
+<x-dc>
+<div style="background:#0d1117;border:1px solid #1e2833;border-radius:6px;overflow:hidden;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;line-height:1.5;">
+  <div style="background:#11161d;border-bottom:1px solid #1e2833;padding:8px 14px;font-size:10px;letter-spacing:2px;color:#6b7c8c;">▮ TERMINAL DE EVENTOS</div>
+  <div style="padding:10px 14px;max-height:380px;overflow-y:auto;display:grid;gap:7px;font-size:11.5px;">
+    <sc-for list="{{ logLista }}" as="l" hint-placeholder-count="4">
+      <div style="display:flex;gap:8px;animation:surgir .3s ease;">
+        <span style="color:#3a4a5a;flex:none;">{{ l.mes }}</span>
+        <span style="color:{{ l.cor }};">{{ l.texto }}</span>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"logLista":{"default":[{"id":2,"mes":"M05","texto":"● Renda passiva recebida: +R$ 180.","cor":"#22d47e"},{"id":1,"mes":"M04","texto":"▲ INFLAÇÃO ALTA. Custo de vida +4%. Seu dinheiro parado vale menos.","cor":"#ffc24b"},{"id":0,"mes":"M00","texto":"Sistema iniciado. Sobreviva. Diversifique. Não conte com sorte.","cor":"#6b7c8c"}]}}'></script>
+</body>
+</html>

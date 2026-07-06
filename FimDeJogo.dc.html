@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tema.css">
+<script src="./support.js"></script>
+</head>
+<body>
+<!-- Overlay de fim de jogo (FALIU / LIVRE). Só template.
+     Props: mesFmt, tempoFmt, fimTitulo, fimCor, fimResumo, fimLicao, reiniciar (fn) -->
+<x-dc>
+<div data-screen-label="Fim de jogo" style="position:fixed;inset:0;background:rgba(5,8,11,.94);display:flex;align-items:center;justify-content:center;z-index:50;animation:surgir .4s ease;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;line-height:1.5;">
+  <div style="text-align:center;max-width:560px;padding:24px;">
+    <div style="font-size:11px;letter-spacing:3px;color:#6b7c8c;margin-bottom:10px;">SIMULAÇÃO ENCERRADA — MÊS {{ mesFmt }} — ⏱ {{ tempoFmt }}</div>
+    <div style="font-size:72px;font-weight:700;letter-spacing:-2px;color:{{ fimCor }};animation:piscar 1.2s step-end infinite;">{{ fimTitulo }}</div>
+    <p style="color:#d7e1ea;font-size:14px;margin:18px 0 6px;">{{ fimResumo }}</p>
+    <p style="color:#8fa1b2;font-size:12px;margin:0 0 28px;">{{ fimLicao }}</p>
+    <button onClick="{{ reiniciar }}" style="background:transparent;border:1px solid {{ fimCor }};color:{{ fimCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;letter-spacing:1px;padding:12px 28px;border-radius:4px;cursor:pointer;">▸ JOGAR DE NOVO</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mesFmt":{"default":"42"},"tempoFmt":{"default":"07:31"},"fimTitulo":{"default":"LIVRE"},"fimCor":{"default":"#22d47e"},"fimResumo":{"default":"Em 42 meses sua renda passiva (R$ 3.400) superou seu custo de vida (R$ 3.310)."},"fimLicao":{"default":"Lição: quem venceu não acertou o timing do mercado — construiu renda passiva mês a mês e deixou os juros compostos trabalharem."}}'></script>
+</body>
+</html>

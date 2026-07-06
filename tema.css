@@ -1,0 +1,8 @@
+/* Tema global compartilhado: usado pelo jogo (via helmet do componente raiz)
+   e por cada componente aberto isoladamente no Live Server. */
+body{margin:0;background:#0b0f14;font-family:'IBM Plex Mono',monospace;}
+@keyframes piscar{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes surgir{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#1e2833;border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}

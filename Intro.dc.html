@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tema.css">
+<script src="./support.js"></script>
+</head>
+<body>
+<!-- Tela de introdução. Só template: renderiza direto contra as props.
+     Props: comecar (fn), caixaFmt, salarioFmt, custoFmt -->
+<x-dc>
+<div data-screen-label="Intro" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
+  <div style="max-width:640px;width:100%;">
+    <div style="color:#22d47e;font-size:11px;letter-spacing:2px;margin-bottom:16px;">SIMULADOR FINANCEIRO // v1.0</div>
+    <h1 style="font-size:42px;font-weight:700;margin:0 0 8px;letter-spacing:-1px;color:#f2f7fb;">FALÊNCIA<span style="color:#3a4a5a;"> ou </span><span style="color:#22d47e;">LIBERDADE</span></h1>
+    <p style="color:#8fa1b2;margin:0 0 28px;max-width:520px;">Cada turno é um mês. Seu custo de vida drena a conta. Se o dinheiro acabar, <span style="color:#ff4d5e;font-weight:600;">FALIU</span>. Se a renda passiva superar o custo de vida, você está <span style="color:#22d47e;font-weight:600;">LIVRE</span>.</p>
+    <div style="border:1px solid #1e2833;background:#11161d;border-radius:6px;padding:20px 22px;margin-bottom:28px;display:grid;gap:10px;">
+      <div style="display:flex;gap:12px;"><span style="color:#22d47e;">01</span><span>Todo mês entra salário e sai custo de vida — e o custo sobe com a inflação.</span></div>
+      <div style="display:flex;gap:12px;"><span style="color:#22d47e;">02</span><span>Aloque o que sobra: reserva, renda fixa, FIIs, ações, cripto. Perfis de risco reais, retornos acelerados — uma vida financeira cabe numa sessão.</span></div>
+      <div style="display:flex;gap:12px;"><span style="color:#22d47e;">03</span><span>Eventos aleatórios ensinam na marra: crash, emergência médica, demissão. Quem tem reserva sobrevive.</span></div>
+      <div style="display:flex;gap:12px;"><span style="color:#22d47e;">04</span><span>Só FIIs, ações e renda fixa geram renda passiva. Cripto não paga aluguel.</span></div>
+    </div>
+    <button onClick="{{ comecar }}" style="background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:1px;padding:14px 32px;border-radius:4px;cursor:pointer;" style-hover="background:#3ee996;">INICIAR SIMULAÇÃO ▸</button>
+    <div style="color:#3a4a5a;font-size:11px;margin-top:14px;">capital inicial {{ caixaFmt }} · salário {{ salarioFmt }}/mês · custo de vida {{ custoFmt }}/mês</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"caixaFmt":{"default":"R$ 1.500"},"salarioFmt":{"default":"R$ 4.500"},"custoFmt":{"default":"R$ 3.420"}}'></script>
+</body>
+</html>
