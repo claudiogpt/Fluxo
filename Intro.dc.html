@@ -15,7 +15,9 @@
      escolherNormal/escolherHardcore (fns), normalBg/normalCor/hardBg/hardCor, difDica,
      mostraCapitais (bool, só no sandbox), capitaisLista = [{ rotulo, bg, cor, escolher }],
      mostraCenarios (bool), cenariosLista = [{ nome, descricao, tag, tagCor, borda, nomeCor, descCor, cursor, escolher }],
-     mostraSaqueConfig (bool), saqueDica, fixoBg/fixoCor/pctBg/pctCor, escolherSaqueFixo/escolherSaquePct (fns) -->
+     mostraSaqueConfig (bool), saqueDica, fixoBg/fixoCor/pctBg/pctCor, escolherSaqueFixo/escolherSaquePct (fns),
+     mostraEstrategia (bool, cenário imóveis), estrategiaDica, comprarBg/comprarCor/alugarBg/alugarCor,
+     escolherComprar/escolherAlugar (fns) -->
 <x-dc>
 <div data-screen-label="Intro" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
   <div style="max-width:640px;width:100%;">
@@ -88,6 +90,17 @@
           <button onClick="{{ escolherSaqueFixo }}" style="background:{{ fixoBg }};border:1px solid {{ fixoCor }};color:{{ fixoCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">FIXO</button>
           <button onClick="{{ escolherSaquePct }}" style="background:{{ pctBg }};border:1px solid {{ pctCor }};color:{{ pctCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">% PATRIMÔNIO</button>
           <span style="color:#3a4a5a;font-size:11px;">{{ saqueDica }}</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ mostraEstrategia }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:18px;">
+        <div style="color:#6b7c8c;font-size:10px;letter-spacing:2px;margin-bottom:8px;">ESTRATÉGIA DE MORADIA</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button onClick="{{ escolherComprar }}" style="background:{{ comprarBg }};border:1px solid {{ comprarCor }};color:{{ comprarCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">🏠 COMPRAR FINANCIADO</button>
+          <button onClick="{{ escolherAlugar }}" style="background:{{ alugarBg }};border:1px solid {{ alugarCor }};color:{{ alugarCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">📈 ALUGAR + INVESTIR</button>
+          <span style="color:#3a4a5a;font-size:11px;">{{ estrategiaDica }}</span>
         </div>
       </div>
     </sc-if>

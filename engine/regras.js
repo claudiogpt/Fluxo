@@ -30,13 +30,20 @@
     const ehEmpresario = modo === 'empresario';
     const cenario = modo === 'cenarios' ? ((props && props.cenario) || 'aposentadoria') : null;
     const ehAposentadoria = cenario === 'aposentadoria';
+    const ehImoveis = cenario === 'imoveis';
     const cfgAp = config.aposentadoria;
+    const cfgI = config.imoveis;
+    const imoveisEscolha = (props && props.imoveisEscolha) || 'comprar';
+    const entradaImovel = Math.round(cfgI.valorImovel * cfgI.entradaPct);
     // No modo empresário não há salário: a renda vem das retiradas do negócio.
     // O custo de vida continua derivado do salário de referência.
-    const salarioRef = ehAposentadoria ? cfgAp.salario : ((props && props.salarioInicial) ?? config.salarioDefault);
+    const salarioRef = ehAposentadoria ? cfgAp.salario
+      : ehImoveis ? cfgI.salario
+      : ((props && props.salarioInicial) ?? config.salarioDefault);
     const salario = ehEmpresario ? 0 : salarioRef;
     const capitalInicial = (props && props.capitalInicial) ?? null;
     const caixaBase = ehAposentadoria ? cfgAp.capitalInicial
+      : ehImoveis ? cfgI.capitalInicial - (imoveisEscolha === 'comprar' ? entradaImovel : 0)
       : capitalInicial != null ? capitalInicial : dif.caixaInicial;
     return {
       tela: 'intro',
@@ -55,6 +62,18 @@
         saqueMes: 0,       // valor sacado no último mês (pra UI)
         esgotou: false,
       } : null,
+      // Cenário imóveis: a "corrida" — o comprador acumula patrimônio no imóvel,
+      // a carteira-fantasma mostra a estratégia oposta com os MESMOS retornos.
+      imoveis: ehImoveis ? {
+        escolha: imoveisEscolha,
+        prazo: cfgI.prazoMeses,
+        pagas: 0,
+        parcela: parcelaFinanciamento(cfgI.valorImovel - entradaImovel, cfgI.jurosMes, cfgI.prazoMeses),
+        aluguel: cfgI.aluguel,
+        valorImovel: cfgI.valorImovel,
+        carteiraAluguel: entradaImovel, // fantasma começa com a entrada investida
+        varImovelMes: 0,
+      } : null,
       negocio: ehEmpresario ? {
         caixa: config.empresario.caixaInicial,
         receitaBase: config.empresario.receitaBase,
@@ -68,7 +87,8 @@
       mes: 0,
       caixa: caixaBase,
       salario,
-      custo: Math.round(salarioRef * dif.custoFator),
+      // No cenário imóveis o custo de vida EXCLUI moradia (a moradia é a decisão do cenário).
+      custo: Math.round(salarioRef * (ehImoveis ? cfgI.custoFator : dif.custoFator)),
       semSalario: 0,
       ativos: chavesZeradas(),
       varMes: chavesZeradas(),
@@ -92,8 +112,25 @@
     return ativos.reduce((t, d) => t + s.ativos[d.key] * d.div, 0);
   }
 
+  // Parcela fixa (tabela Price): principal financiado, juros mensais, nº de parcelas.
+  function parcelaFinanciamento(principal, jurosMes, prazo) {
+    return Math.round(principal * jurosMes / (1 - Math.pow(1 + jurosMes, -prazo)));
+  }
+
+  // Saldo devedor restante do financiamento (independe da escolha — serve pro fantasma).
+  function saldoDevedor(im) {
+    const rest = im.prazo - im.pagas;
+    if (rest <= 0) return 0;
+    const i = config.imoveis.jurosMes;
+    return im.parcela * (1 - Math.pow(1 + i, -rest)) / i;
+  }
+
   function patrimonio(s) {
-    return s.caixa + Object.values(s.ativos).reduce((a, b) => a + b, 0) + (s.negocio ? s.negocio.caixa : 0);
+    // No cenário imóveis, o comprador tem patrimônio no imóvel = valor − saldo devedor.
+    const imovel = s.imoveis && s.imoveis.escolha === 'comprar'
+      ? s.imoveis.valorImovel - saldoDevedor(s.imoveis) : 0;
+    return s.caixa + Object.values(s.ativos).reduce((a, b) => a + b, 0)
+      + (s.negocio ? s.negocio.caixa : 0) + imovel;
   }
 
   function ganhoReinvestimento(nivel) {
@@ -186,6 +223,7 @@
     const s = { ...st, ativos: { ...st.ativos }, varMes: {}, log: [...st.log], hist: [...st.hist] };
     if (st.negocio) s.negocio = { ...st.negocio };
     if (st.aposentadoria) s.aposentadoria = { ...st.aposentadoria };
+    if (st.imoveis) s.imoveis = { ...st.imoveis };
     const logs = s.log;
     s.mes += 1;
     s.pendente = 0;
@@ -198,6 +236,17 @@
       if (s.semSalario > 0) { s.semSalario -= 1; addLog(s, logs, '✖ Mês sem salário (' + (s.semSalario + 1) + ' restante).', '#ff9d4b', s.mes); }
       else s.caixa += s.salario;
       s.caixa -= s.custo;
+    }
+
+    // moradia (cenário imóveis): parcela do financiamento OU aluguel sai do caixa;
+    // `pagas` avança sempre — serve de cronograma pro comprador real ou fantasma.
+    if (s.imoveis) {
+      const im = s.imoveis;
+      if (im.pagas < im.prazo) {
+        im.pagas += 1;
+        if (im.escolha === 'comprar') s.caixa -= im.parcela;
+      }
+      if (im.escolha === 'alugar') s.caixa -= im.aluguel;
     }
 
     // negócio (modo empresário): receita com variância, custos fixos e risco próprio
@@ -224,6 +273,14 @@
       }
     }
 
+    // valorização do imóvel (cenário imóveis) — taxa própria, fora do mercado de ativos
+    if (s.imoveis) {
+      const cfgI = config.imoveis;
+      const vi = cfgI.valorizacaoMes + cfgI.volImovel * (rng() + rng() - 1);
+      s.imoveis.valorImovel *= (1 + vi);
+      s.imoveis.varImovelMes = vi;
+    }
+
     // retornos de mercado
     let divTotal = 0;
     for (const d of ativos) {
@@ -233,6 +290,15 @@
       divTotal += s.ativos[d.key] * d.div;
     }
     if (divTotal >= 1) { s.caixa += divTotal; addLog(s, logs, '● Renda passiva recebida: +' + fmt(divTotal) + '.', '#22d47e', s.mes); }
+
+    // carteira-fantasma do cenário imóveis: rende como FIIs (dividendos reinvestidos)
+    // com os MESMOS retornos deste mês, e aporta a diferença parcela−aluguel.
+    if (s.imoveis) {
+      const fii = ativos.find(a => a.key === 'fiis');
+      const im = s.imoveis;
+      im.carteiraAluguel *= (1 + (s.varMes.fiis || 0) + fii.div);
+      if (s.mes <= im.prazo) im.carteiraAluguel += Math.max(0, im.parcela - im.aluguel);
+    }
 
     // saque de aposentadoria (depois dos retornos do mês): vive-se o mês, então saca-se.
     // Eventos ficam desligados nesta fase pra isolar a lição do risco de sequência de retornos.
@@ -299,6 +365,19 @@
         const desc = ap.saqueModo === 'percentual' ? (ap.taxaSaque * 100).toFixed(0) + '% do patrimônio/mês' : 'seu custo de vida (' + fmt(s.custo) + '/mês)';
         addLog(s, logs, '◆ FIM DA ACUMULAÇÃO (' + ap.turnosAcumulacao + ' meses). Agora você vive só do patrimônio, sacando ' + desc + '. Aguente ' + ap.turnosSaque + ' meses — a ORDEM dos retornos vai decidir.', '#ffc24b', s.mes);
       }
+    } else if (s.imoveis) {
+      // Falência pessoal continua valendo (parcela aperta!); "livre" espera o cenário acabar.
+      if (s.caixa < 0) {
+        s.fim = 'faliu';
+        s.fimTs = Date.now();
+        s.auto = false;
+        addLog(s, logs, '■ FALIU. A moradia engoliu seu caixa e não sobrou nada pra vender.', '#ff4d5e', s.mes);
+      } else if (s.mes >= s.imoveis.prazo) {
+        s.fim = 'imoveis_fim';
+        s.fimTs = Date.now();
+        s.auto = false;
+        addLog(s, logs, '■ FIM DO CENÁRIO: ' + s.imoveis.prazo + ' meses. Hora de comparar as duas estratégias lado a lado.', '#ffc24b', s.mes);
+      }
     } else if (s.modo === 'sandbox') {
       if (s.caixa < 0 && st.caixa >= 0) {
         addLog(s, logs, '⚠ CAIXA NEGATIVO. No modo clássico isso seria FALIU — aqui a simulação segue. Volte pro azul.', '#ff4d5e', s.mes);
@@ -324,6 +403,6 @@
   return {
     novoJogo, addLog, rendaPassiva, patrimonio, mover, cobrir, fecharMes,
     aportarNegocio, sacarNegocio, reinvestirNegocio, ganhoReinvestimento,
-    sacarPortfolio,
+    sacarPortfolio, parcelaFinanciamento, saldoDevedor,
   };
 });
