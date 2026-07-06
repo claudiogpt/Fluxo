@@ -9,9 +9,9 @@
 <script src="./support.js"></script>
 </head>
 <body>
-<!-- Painel de status do jogo: cabeçalho (mês, tempo, sparkline, patrimônio),
-     4 cards de indicadores e barra de progresso rumo à independência.
-     Só template: renderiza direto contra as props. -->
+<!-- Painel de status do jogo: cabeçalho (mês, tempo, sparkline, botão de menu,
+     patrimônio), 4 cards de indicadores e barra de progresso rumo à independência.
+     Só template: renderiza direto contra as props (voltarMenu é callback). -->
 <x-dc>
 <div style="color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
 
@@ -22,6 +22,7 @@
     <svg width="180" height="34" viewBox="0 0 180 34" style="display:block;">
       <polyline points="{{ sparkPoints }}" fill="none" stroke="{{ sparkCor }}" stroke-width="1.5"></polyline>
     </svg>
+    <button onClick="{{ voltarMenu }}" style="background:transparent;border:1px solid #1e2833;color:#6b7c8c;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:3px;cursor:pointer;" style-hover="border-color:#6b7c8c;color:#d7e1ea;">◂ MENU</button>
     <div style="margin-left:auto;text-align:right;">
       <div style="color:#6b7c8c;font-size:10px;letter-spacing:1px;">PATRIMÔNIO TOTAL</div>
       <div style="font-size:20px;font-weight:700;color:#f2f7fb;">{{ patrimonioFmt }}</div>

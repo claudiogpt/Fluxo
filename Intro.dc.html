@@ -9,8 +9,10 @@
 <script src="./support.js"></script>
 </head>
 <body>
-<!-- Tela de introdução. Só template: renderiza direto contra as props.
-     Props: comecar (fn), caixaFmt, salarioFmt, custoFmt -->
+<!-- Tela de introdução / menu principal. Só template: renderiza direto contra as props.
+     Props: comecar (fn), caixaFmt, salarioFmt, custoFmt,
+     modosLista = [{ nome, descricao, tag, tagCor, borda, nomeCor, descCor, cursor, escolher }],
+     escolherNormal/escolherHardcore (fns), normalBg/normalCor/hardBg/hardCor, difDica -->
 <x-dc>
 <div data-screen-label="Intro" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
   <div style="max-width:640px;width:100%;">
@@ -23,11 +25,35 @@
       <div style="display:flex;gap:12px;"><span style="color:#22d47e;">03</span><span>Eventos aleatórios ensinam na marra: crash, emergência médica, demissão. Quem tem reserva sobrevive.</span></div>
       <div style="display:flex;gap:12px;"><span style="color:#22d47e;">04</span><span>Só FIIs, ações e renda fixa geram renda passiva. Cripto não paga aluguel.</span></div>
     </div>
+    <div style="margin-bottom:18px;">
+      <div style="color:#6b7c8c;font-size:10px;letter-spacing:2px;margin-bottom:8px;">MODO DE JOGO</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <sc-for list="{{ modosLista }}" as="m" hint-placeholder-count="3">
+          <div onClick="{{ m.escolher }}" style="border:1px solid {{ m.borda }};background:#11161d;border-radius:6px;padding:12px 14px;cursor:{{ m.cursor }};">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+              <span style="font-weight:700;font-size:12px;letter-spacing:.5px;color:{{ m.nomeCor }};">{{ m.nome }}</span>
+              <span style="font-size:9px;letter-spacing:1px;color:{{ m.tagCor }};flex:none;">{{ m.tag }}</span>
+            </div>
+            <div style="color:{{ m.descCor }};font-size:10.5px;margin-top:4px;">{{ m.descricao }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="margin-bottom:26px;">
+      <div style="color:#6b7c8c;font-size:10px;letter-spacing:2px;margin-bottom:8px;">DIFICULDADE</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button onClick="{{ escolherNormal }}" style="background:{{ normalBg }};border:1px solid {{ normalCor }};color:{{ normalCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">NORMAL</button>
+        <button onClick="{{ escolherHardcore }}" style="background:{{ hardBg }};border:1px solid {{ hardCor }};color:{{ hardCor }};font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 18px;border-radius:4px;cursor:pointer;">HARDCORE</button>
+        <span style="color:#3a4a5a;font-size:11px;">{{ difDica }}</span>
+      </div>
+    </div>
+
     <button onClick="{{ comecar }}" style="background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:1px;padding:14px 32px;border-radius:4px;cursor:pointer;" style-hover="background:#3ee996;">INICIAR SIMULAÇÃO ▸</button>
     <div style="color:#3a4a5a;font-size:11px;margin-top:14px;">capital inicial {{ caixaFmt }} · salário {{ salarioFmt }}/mês · custo de vida {{ custoFmt }}/mês</div>
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"caixaFmt":{"default":"R$ 1.500"},"salarioFmt":{"default":"R$ 4.500"},"custoFmt":{"default":"R$ 3.420"}}'></script>
+<script type="text/x-dc" data-dc-script data-props='{"caixaFmt":{"default":"R$ 1.500"},"salarioFmt":{"default":"R$ 4.500"},"custoFmt":{"default":"R$ 3.420"},"normalBg":{"default":"transparent"},"normalCor":{"default":"#6b7c8c"},"hardBg":{"default":"rgba(255,77,94,.12)"},"hardCor":{"default":"#ff4d5e"},"difDica":{"default":"caixa inicial menor, custo de vida mais pesado e mais acidentes no caminho"},"modosLista":{"default":[{"nome":"CLÁSSICO","descricao":"Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.","tag":"▸ SELECIONADO","tagCor":"#22d47e","borda":"#22d47e","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"},{"nome":"CENÁRIOS","descricao":"Crises e épocas reais pra atravessar com as decisões certas de alocação.","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"},{"nome":"SPEEDRUN","descricao":"Seed compartilhada, relógio global e placar ranqueado. Quão rápido você se liberta?","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"}]}}'></script>
 </body>
 </html>

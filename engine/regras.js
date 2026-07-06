@@ -29,6 +29,8 @@
     const salario = (props && props.salarioInicial) ?? config.salarioDefault;
     return {
       tela: 'intro',
+      dificuldade: hard ? 'hardcore' : 'normal',
+      modo: 'classico',
       mes: 0,
       caixa: dif.caixaInicial,
       salario,
@@ -117,10 +119,6 @@
     // evento aleatório
     eventos.sortear(s, logs, { rng, addLog });
     if (s.pendente) s.caixa -= s.pendente;
-    if (s.alerta) {
-      if (s.auto) { s.auto = false; addLog(s, logs, '⏸ AUTO pausado — o evento pede uma decisão sua.', '#ffc24b', s.mes); }
-      s.alerta = 0;
-    }
 
     // inflação de base
     const dif = config.dificuldades[s.hard ? 'hardcore' : 'normal'];
