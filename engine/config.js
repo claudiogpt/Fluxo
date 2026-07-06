@@ -25,7 +25,7 @@
     // Cenários dentro do modo CENÁRIOS. Novos entram aqui com disponivel: false até existir.
     cenarios: [
       { id: 'aposentadoria', nome: 'APOSENTADORIA', descricao: 'Acumule por alguns anos e depois viva só do patrimônio. A ORDEM dos anos bons e ruins decide se o dinheiro dura.', disponivel: true },
-      { id: 'imoveis', nome: 'IMÓVEIS', descricao: 'Comprar financiado ou alugar e investir a diferença? Descubra qual estratégia sobra mais no fim.', disponivel: false },
+      { id: 'imoveis', nome: 'IMÓVEIS', descricao: 'Comprar financiado ou alugar e investir a diferença? Descubra qual estratégia sobra mais no fim.', disponivel: true },
     ],
 
     // Presets de capital inicial oferecidos no modo sandbox.
@@ -51,6 +51,21 @@
       impulsoReceita: 180,     // ganho de receita/mês da 1ª melhoria…
       decaimento: 0.35,        // …decaindo: impulso / (1 + nivel * decaimento)
       mesesFalencia: 3,        // meses consecutivos no vermelho até a empresa falir
+    },
+
+    // Cenário imóveis: comprar financiado vs alugar e investir a diferença.
+    // O custo de vida aqui EXCLUI moradia — a moradia é a decisão do cenário.
+    imoveis: {
+      salario: 8000,
+      custoFator: 0.45,        // custo de vida sem moradia
+      capitalInicial: 30000,   // dá pra entrada sobrar reserva
+      valorImovel: 120000,
+      entradaPct: 0.20,        // entrada de 20% (R$ 24.000)
+      jurosMes: 0.01,          // juros mensais do financiamento (tabela Price)
+      prazoMeses: 48,          // prazo do financiamento = duração do cenário
+      aluguel: 1200,           // aluguel do imóvel equivalente (1% do valor)
+      valorizacaoMes: 0.015,   // valorização média mensal do imóvel (taxa própria)
+      volImovel: 0.01,         // ruído da valorização
     },
 
     // Eventos aleatórios só começam a partir deste mês.

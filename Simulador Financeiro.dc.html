@@ -33,6 +33,9 @@
       mostraSaqueConfig="{{ mostraSaqueConfig }}" saqueDica="{{ saqueDica }}"
       fixoBg="{{ fixoBg }}" fixoCor="{{ fixoCor }}" pctBg="{{ pctBg }}" pctCor="{{ pctCor }}"
       escolherSaqueFixo="{{ escolherSaqueFixo }}" escolherSaquePct="{{ escolherSaquePct }}"
+      mostraEstrategia="{{ mostraEstrategia }}" estrategiaDica="{{ estrategiaDica }}"
+      comprarBg="{{ comprarBg }}" comprarCor="{{ comprarCor }}" alugarBg="{{ alugarBg }}" alugarCor="{{ alugarCor }}"
+      escolherComprar="{{ escolherComprar }}" escolherAlugar="{{ escolherAlugar }}"
       rendaResumo="{{ rendaResumo }}"></dc-import>
   </sc-if>
 
@@ -53,6 +56,9 @@
         <div style="display:grid;gap:10px;">
           <sc-if value="{{ mostraNegocio }}" hint-placeholder-val="{{ false }}">
             <dc-import name="NegocioCard" dcProps="{{ negocioCard }}"></dc-import>
+          </sc-if>
+          <sc-if value="{{ mostraImovel }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="ImovelCard" dcProps="{{ imovelCard }}"></dc-import>
           </sc-if>
           <sc-for list="{{ ativosLista }}" as="a" hint-placeholder-count="5">
             <dc-import name="AtivoCard" dcProps="{{ a }}"></dc-import>
@@ -125,6 +131,7 @@ class Component extends DCLogic {
         capitalInicial: s.modo === 'sandbox' ? s.capitalInicial : null,
         cenario: s.cenario,
         saqueModo: s.aposentadoria ? s.aposentadoria.saqueModo : undefined,
+        imoveisEscolha: s.imoveis ? s.imoveis.escolha : undefined,
       }),
       ...extras,
     };
@@ -146,6 +153,9 @@ class Component extends DCLogic {
   escolherSaqueModo(m) {
     this.setState(s => this.novoEstado({ ...s, cenario: s.cenario, aposentadoria: { ...s.aposentadoria, saqueModo: m } }, {}));
   }
+  escolherEstrategia(e) {
+    this.setState(s => this.novoEstado({ ...s, imoveis: { ...s.imoveis, escolha: e } }, {}));
+  }
 
   mover(key, valor) {
     this.setState(s => Fluxo.regras.mover(s, key, valor));
@@ -157,6 +167,7 @@ class Component extends DCLogic {
 
   fecharMes = () => {
     this.setState(st => {
+      if (st.fim) return st; // partida encerrada: nada mais a fechar
       const s = Fluxo.regras.fecharMes(st);
       // Leaderboard só registra os modos que terminam em livre/faliu.
       if (s.fim && !st.fim && (s.fim === 'faliu' || s.fim === 'livre')) {
@@ -246,6 +257,45 @@ class Component extends DCLogic {
       };
     });
 
+    const im = s.imoveis;
+    const cfgI = Fluxo.config.imoveis;
+    const comprando = im && im.escolha === 'comprar';
+    const estrategiaConfig = {
+      comprarBg: comprando ? 'rgba(75,183,255,.12)' : 'transparent',
+      comprarCor: comprando ? '#4bb7ff' : '#6b7c8c',
+      alugarBg: !comprando ? 'rgba(75,183,255,.12)' : 'transparent',
+      alugarCor: !comprando ? '#4bb7ff' : '#6b7c8c',
+      dica: im
+        ? (comprando
+          ? 'entrada ' + fmt(Math.round(cfgI.valorImovel * cfgI.entradaPct)) + ' + ' + im.prazo + ' parcelas de ' + fmt(im.parcela) + ' — o imóvel é seu e valoriza'
+          : 'aluguel ' + fmt(im.aluguel) + '/mês — sobra mais no bolso; disciplina decide se rende mais que o tijolo')
+        : '',
+      escolherComprar: () => this.escolherEstrategia('comprar'),
+      escolherAlugar: () => this.escolherEstrategia('alugar'),
+    };
+
+    const imovelCard = im ? (() => {
+      const equityTijolo = im.valorImovel - Fluxo.regras.saldoDevedor(im);
+      const tijoloLidera = equityTijolo >= im.carteiraAluguel;
+      return {
+        escolhaLabel: comprando ? 'COMPRANDO ' + im.pagas + '/' + im.prazo : 'ALUGANDO',
+        mensalFmt: comprando
+          ? (im.pagas < im.prazo ? '−' + fmt(im.parcela) + '/mês · parcela' : 'QUITADO ✓')
+          : '−' + fmt(im.aluguel) + '/mês · aluguel',
+        dica: comprando
+          ? 'Seu dinheiro vira tijolo: o imóvel valoriza, mas a parcela aperta o caixa. A corrida abaixo compara com quem alugou e investiu a diferença em FIIs.'
+          : 'Você paga aluguel e a diferença sobra no SEU caixa — invista com disciplina. A corrida abaixo assume que cada real da diferença foi pra FIIs.',
+        varImovelFmt: (im.varImovelMes >= 0 ? '▲ +' : '▼ ') + (im.varImovelMes * 100).toFixed(1) + '% no mês',
+        varImovelCor: im.varImovelMes >= 0 ? '#22d47e' : '#ff4d5e',
+        tijoloTag: 'TIJOLO' + (comprando ? ' (VOCÊ)' : ' (FANTASMA)'),
+        tijoloFmt: fmt(equityTijolo),
+        tijoloCor: tijoloLidera ? '#22d47e' : '#8fa1b2',
+        carteiraTag: 'ALUGAR+INVESTIR' + (comprando ? ' (FANTASMA)' : ' (SUA META)'),
+        carteiraFmt: fmt(im.carteiraAluguel),
+        carteiraCor: !tijoloLidera ? '#22d47e' : '#8fa1b2',
+      };
+    })() : null;
+
     const ap = s.aposentadoria;
     const saqueFixo = ap && ap.saqueModo === 'fixo';
     const saqueConfig = {
@@ -312,6 +362,13 @@ class Component extends DCLogic {
         salarioCor = '#8fd47e';
         modoTag = 'ACUMULAÇÃO ' + s.mes + '/' + ap.turnosAcumulacao;
       }
+    } else if (im) {
+      progLabel = 'CENÁRIO IMÓVEIS — meses do financiamento';
+      progVal = Math.min(100, (s.mes / im.prazo) * 100);
+      salarioLabel = 'SALÁRIO / MÊS';
+      salarioStatus = s.semSalario > 0 ? 'DESEMPREGADO' : '+' + fmt(s.salario);
+      salarioCor = s.semSalario > 0 ? '#ff4d5e' : '#8fd47e';
+      modoTag = comprando ? 'IMÓVEIS · COMPRANDO' : 'IMÓVEIS · ALUGANDO';
     } else {
       progLabel = 'RUMO À INDEPENDÊNCIA — renda passiva vs. custo de vida';
       progVal = prog;
@@ -336,6 +393,14 @@ class Component extends DCLogic {
       fimTitulo = 'ACABOU'; fimCor = '#ff4d5e';
       fimResumo = 'Seu patrimônio durou ' + (ap ? ap.saquesFeitos : 0) + ' de ' + (ap ? ap.turnosSaque : '') + ' meses de saque antes de zerar.';
       fimLicao = 'Lição: mesma média de retorno, ordem diferente = resultado diferente. Anos ruins no começo forçam vender na baixa e derrubam tudo. Sacar menos e ter reserva protege os primeiros anos — é o risco de sequência de retornos.';
+    } else if (s.fim === 'imoveis_fim') {
+      const tijolo = im.valorImovel; // quitado ao fim do prazo
+      const carteira = im.carteiraAluguel;
+      const tijoloVenceu = tijolo >= carteira;
+      fimTitulo = tijoloVenceu ? 'TIJOLO VENCEU' : 'ALUGUEL VENCEU';
+      fimCor = (tijoloVenceu === comprando) ? '#22d47e' : '#ffc24b';
+      fimResumo = '🏠 COMPRAR: imóvel quitado valendo ' + fmt(tijolo) + '  ·  📈 ALUGAR+INVESTIR: carteira em ' + fmt(carteira) + '. Você escolheu ' + (comprando ? 'COMPRAR' : 'ALUGAR') + ' e fechou com patrimônio total de ' + fmt(pat) + '.';
+      fimLicao = 'Lição: custo de oportunidade — cada real na entrada e nas parcelas é um real que não compôs juros na carteira (e vice-versa). Não há resposta universal: juros do financiamento, valorização do imóvel e disciplina de investir a diferença decidem a corrida.';
     } else if (s.fim === 'faliu') {
       fimTitulo = 'FALIU'; fimCor = '#ff4d5e';
       fimResumo = 'Você sobreviveu ' + s.mes + ' meses antes de as contas engolirem tudo.';
@@ -360,13 +425,25 @@ class Component extends DCLogic {
       saqueDica: saqueConfig.dica,
       escolherSaqueFixo: saqueConfig.escolherFixo,
       escolherSaquePct: saqueConfig.escolherPct,
+      mostraEstrategia: !!im,
+      comprarBg: estrategiaConfig.comprarBg, comprarCor: estrategiaConfig.comprarCor,
+      alugarBg: estrategiaConfig.alugarBg, alugarCor: estrategiaConfig.alugarCor,
+      estrategiaDica: estrategiaConfig.dica,
+      escolherComprar: estrategiaConfig.escolherComprar,
+      escolherAlugar: estrategiaConfig.escolherAlugar,
+      mostraImovel: !!im,
+      imovelCard,
       mostraNegocio: !!s.negocio,
       negocioCard,
       rendaResumo: ap
         ? 'acumula ' + ap.turnosAcumulacao + ' meses, depois saca por ' + ap.turnosSaque + ' meses'
-        : s.negocio
-          ? 'negócio: giro ' + fmt(s.negocio.caixa) + ' · receita ~' + fmt(s.negocio.receitaBase) + ' − custos ' + fmt(s.negocio.custoFixo) + '/mês'
-          : 'salário ' + fmt(s.salario) + '/mês',
+        : im
+          ? (comprando
+            ? 'parcela ' + fmt(im.parcela) + '/mês por ' + im.prazo + ' meses'
+            : 'aluguel ' + fmt(im.aluguel) + '/mês · diferença sobra pra investir')
+          : s.negocio
+            ? 'negócio: giro ' + fmt(s.negocio.caixa) + ' · receita ~' + fmt(s.negocio.receitaBase) + ' − custos ' + fmt(s.negocio.custoFixo) + '/mês'
+            : 'salário ' + fmt(s.salario) + '/mês',
       salarioLabel,
       progLabel,
       normalBg: normalSel ? 'rgba(34,212,126,.12)' : 'transparent',

@@ -307,6 +307,78 @@ test('aposentadoria: eventos ficam desligados na fase de saque', () => {
   assert.ok(!/CRASH|EMERGÊNCIA|IMPREVISTO|INFLAÇÃO ALTA|BULL RUN|INVERNO|PROMOÇÃO|DEMISSÃO/.test(txt));
 });
 
+// ---------- cenário imóveis ----------
+
+// 2 chamadas extras de rng (valorização do imóvel) antes dos ativos.
+const rngNeutroImv = () => rngFixo(...Array(12).fill(0.5), 0.99);
+
+test('imóveis: parcela pela tabela Price e estado inicial equilibrado', () => {
+  const cfgI = config.imoveis;
+  const financiado = cfgI.valorImovel * (1 - cfgI.entradaPct); // 96.000
+  const parcela = regras.parcelaFinanciamento(financiado, cfgI.jurosMes, cfgI.prazoMeses);
+  assert.equal(parcela, 2528);
+
+  const comprador = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'comprar', dificuldade: 'normal' });
+  const locatario = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'alugar', dificuldade: 'normal' });
+  assert.equal(comprador.caixa, cfgI.capitalInicial - 24000); // pagou a entrada
+  assert.equal(locatario.caixa, cfgI.capitalInicial);
+  assert.equal(comprador.imoveis.carteiraAluguel, 24000); // fantasma começa com a entrada
+  // A corrida começa empatada: equity do comprador ≈ entrada ≈ carteira do fantasma,
+  // então o patrimônio inicial dos dois é praticamente o mesmo.
+  assert.ok(Math.abs(regras.patrimonio(comprador) - regras.patrimonio(locatario)) < 5);
+});
+
+test('imóveis: mês neutro do comprador — parcela sai, imóvel valoriza, fantasma compõe', () => {
+  const st = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'comprar', dificuldade: 'normal' });
+  st.tela = 'jogo';
+  const s = regras.fecharMes(st, { rng: rngNeutroImv() });
+  // caixa: 6000 + 8000 (salário) − 3600 (custo sem moradia) − 2528 (parcela)
+  assert.equal(s.caixa, 6000 + 8000 - 3600 - 2528);
+  assert.equal(s.imoveis.pagas, 1);
+  assert.ok(Math.abs(s.imoveis.valorImovel - 120000 * 1.015) < 1); // valorização própria
+  // fantasma: 24000 × (1 + retFIIs 0.005 + div 0.028) + diferença (2528 − 1200)
+  assert.ok(Math.abs(s.imoveis.carteiraAluguel - (24000 * 1.033 + 1328)) < 1);
+  assert.equal(s.fim, null);
+});
+
+test('imóveis: mês neutro do locatário — só o aluguel sai do caixa real', () => {
+  const st = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'alugar', dificuldade: 'normal' });
+  st.tela = 'jogo';
+  const s = regras.fecharMes(st, { rng: rngNeutroImv() });
+  assert.equal(s.caixa, 30000 + 8000 - 3600 - 1200);
+  // patrimônio do locatário NÃO inclui o imóvel nem a carteira-fantasma (é contrafactual)
+  assert.ok(Math.abs(regras.patrimonio(s) - s.caixa) < 0.01);
+  assert.equal(s.fim, null);
+});
+
+test('imóveis: cenário termina no prazo com comparação, e livre fica suprimido', () => {
+  let s = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'comprar', dificuldade: 'normal' });
+  s.tela = 'jogo';
+  s.imoveis = { ...s.imoveis, prazo: 2 };
+  s.ativos = { ...s.ativos, fiis: 1e6 }; // renda passiva > custo, mas não pode dar 'livre'
+  s = regras.fecharMes(s, { rng: rngNeutroImv() });
+  assert.equal(s.fim, null);
+  s = regras.fecharMes(s, { rng: rngNeutroImv() });
+  assert.equal(s.fim, 'imoveis_fim');
+  assert.ok(s.log.some(l => l.texto.includes('FIM DO CENÁRIO')));
+});
+
+test('imóveis: a parcela pode te quebrar — faliu continua valendo no cenário', () => {
+  const st = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'comprar', dificuldade: 'normal' });
+  st.tela = 'jogo';
+  st.caixa = 0;
+  st.salario = 0;
+  const s = regras.fecharMes(st, { rng: rngNeutroImv() });
+  assert.equal(s.fim, 'faliu');
+});
+
+test('imóveis: saldo devedor zera ao quitar e o patrimônio do comprador vira o imóvel inteiro', () => {
+  const s = regras.novoJogo({ modo: 'cenarios', cenario: 'imoveis', imoveisEscolha: 'comprar', dificuldade: 'normal' });
+  assert.ok(Math.abs(regras.saldoDevedor(s.imoveis) - 96000) < 5); // início ≈ valor financiado
+  const quitado = { ...s.imoveis, pagas: s.imoveis.prazo };
+  assert.equal(regras.saldoDevedor(quitado), 0);
+});
+
 test('clássico continua com falência e liberdade intactas com os novos campos', () => {
   const quebra = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
   quebra.caixa = 0;
