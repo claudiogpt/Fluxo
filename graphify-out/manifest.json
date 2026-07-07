@@ -1,0 +1,112 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1783318249.3448813,
+    "ast_hash": "b8f7764c29d3d5eac03f3ddbf54813c7",
+    "semantic_hash": "b8f7764c29d3d5eac03f3ddbf54813c7"
+  },
+  "engine/ativos.js": {
+    "mtime": 1783317945.7373874,
+    "ast_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6",
+    "semantic_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6"
+  },
+  "engine/conceitos.js": {
+    "mtime": 1783396258.7845106,
+    "ast_hash": "13d06e58f7d6ef8371dd6281f419808c",
+    "semantic_hash": "13d06e58f7d6ef8371dd6281f419808c"
+  },
+  "engine/config.js": {
+    "mtime": 1783378626.5740066,
+    "ast_hash": "6cf2cec14bbe86e13b277e11c59a4a95",
+    "semantic_hash": "6cf2cec14bbe86e13b277e11c59a4a95"
+  },
+  "engine/eventos.js": {
+    "mtime": 1783359013.5305095,
+    "ast_hash": "58f04869dd93c802364636e67e4bd1ed",
+    "semantic_hash": "58f04869dd93c802364636e67e4bd1ed"
+  },
+  "engine/formato.js": {
+    "mtime": 1783317951.4574862,
+    "ast_hash": "94e21d8ce45736754f10018c2e80c379",
+    "semantic_hash": "94e21d8ce45736754f10018c2e80c379"
+  },
+  "engine/placar.js": {
+    "mtime": 1783360860.1637015,
+    "ast_hash": "be1d7880f6e44c382ea180d127a19457",
+    "semantic_hash": "be1d7880f6e44c382ea180d127a19457"
+  },
+  "engine/regras.js": {
+    "mtime": 1783396263.202696,
+    "ast_hash": "9c6cb743dcd821479dec413571fc433b",
+    "semantic_hash": "9c6cb743dcd821479dec413571fc433b"
+  },
+  "support.js": {
+    "mtime": 1783060547.0,
+    "ast_hash": "5d03065df5441f0c24f990fac9a018dd",
+    "semantic_hash": "5d03065df5441f0c24f990fac9a018dd"
+  },
+  "tests/engine.test.js": {
+    "mtime": 1783398532.9314516,
+    "ast_hash": "1b29fd52fd646cd5a9f3aeb8b2ae368c",
+    "semantic_hash": "1b29fd52fd646cd5a9f3aeb8b2ae368c"
+  },
+  "AtivoCard.dc.html": {
+    "mtime": 1783318053.8002868,
+    "ast_hash": "b7ce862519579c40e2ddfdc9bd7a21dc",
+    "semantic_hash": "b7ce862519579c40e2ddfdc9bd7a21dc"
+  },
+  "ConceitoModal.dc.html": {
+    "mtime": 1783396282.175481,
+    "ast_hash": "e6bb7e99054911758b93f6550ce8addf",
+    "semantic_hash": "e6bb7e99054911758b93f6550ce8addf"
+  },
+  "FimDeJogo.dc.html": {
+    "mtime": 1783322048.014418,
+    "ast_hash": "31a57b54f1988305e698b46416c80187",
+    "semantic_hash": "31a57b54f1988305e698b46416c80187"
+  },
+  "Glossario.dc.html": {
+    "mtime": 1783398495.2943625,
+    "ast_hash": "ba5725b8755ebfd74d035bad03991336",
+    "semantic_hash": "ba5725b8755ebfd74d035bad03991336"
+  },
+  "ImovelCard.dc.html": {
+    "mtime": 1783378728.7834692,
+    "ast_hash": "44ddd2a5af25ab8e96d50cb0e1bb6a90",
+    "semantic_hash": "44ddd2a5af25ab8e96d50cb0e1bb6a90"
+  },
+  "Intro.dc.html": {
+    "mtime": 1783378828.3009453,
+    "ast_hash": "54fcdd027b937c0f33184476bbb59d48",
+    "semantic_hash": "54fcdd027b937c0f33184476bbb59d48"
+  },
+  "Leaderboard.dc.html": {
+    "mtime": 1783318071.1675985,
+    "ast_hash": "5a7ef926e8b82aea57e64354b95b400f",
+    "semantic_hash": "5a7ef926e8b82aea57e64354b95b400f"
+  },
+  "NegocioCard.dc.html": {
+    "mtime": 1783359110.6181602,
+    "ast_hash": "da96e5de1196be7f63100247ed535f4b",
+    "semantic_hash": "da96e5de1196be7f63100247ed535f4b"
+  },
+  "PainelStatus.dc.html": {
+    "mtime": 1783361588.9489455,
+    "ast_hash": "c184a77f12ce9cb2c7be2c7808f9e86a",
+    "semantic_hash": "c184a77f12ce9cb2c7be2c7808f9e86a"
+  },
+  "README.md": {
+    "mtime": 1783398539.702645,
+    "ast_hash": "ee15dc801839f54b24fe7c27852eff47",
+    "semantic_hash": "ee15dc801839f54b24fe7c27852eff47"
+  },
+  "Simulador Financeiro.dc.html": {
+    "mtime": 1783398520.5580962,
+    "ast_hash": "9ce16abf7f0c374b351148b02a37d8e9",
+    "semantic_hash": "9ce16abf7f0c374b351148b02a37d8e9"
+  },
+  "TerminalEventos.dc.html": {
+    "mtime": 1783318061.2334201,
+    "ast_hash": "44979e5d2908615e98bd536502e8e8b1",
+    "semantic_hash": "44979e5d2908615e98bd536502e8e8b1"
+  }
+}
