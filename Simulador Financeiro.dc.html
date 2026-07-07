@@ -10,6 +10,7 @@
 <script src="./engine/formato.js"></script>
 <script src="./engine/eventos.js"></script>
 <script src="./engine/placar.js"></script>
+<script src="./engine/conceitos.js"></script>
 <script src="./engine/regras.js"></script>
 </head>
 <body>
@@ -82,6 +83,18 @@
     </div>
   </sc-if>
 
+  <div style="position:fixed;right:16px;bottom:16px;z-index:70;">
+    <button onClick="{{ toggleGlossario }}" style="background:#0d1117;border:1px solid #1e2833;color:#8fa1b2;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.5px;padding:8px 14px;border-radius:20px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.5);" style-hover="border-color:#22d47e;color:#22d47e;">📖 {{ glossarioContador }} [G]</button>
+  </div>
+
+  <sc-if value="{{ mostraGlossario }}" hint-placeholder-val="{{ false }}">
+    <dc-import name="Glossario" contador="{{ glossarioContador }}" lista="{{ glossarioLista }}" fechar="{{ toggleGlossario }}"></dc-import>
+  </sc-if>
+
+  <sc-if value="{{ mostraModal }}" hint-placeholder-val="{{ false }}">
+    <dc-import name="ConceitoModal" dcProps="{{ modalConceito }}"></dc-import>
+  </sc-if>
+
   <sc-if value="{{ mostraFim }}" hint-placeholder-val="{{ false }}">
     <dc-import name="FimDeJogo" mesFmt="{{ mesFmt }}" tempoFmt="{{ tempoFmt }}" fimTitulo="{{ fimTitulo }}" fimCor="{{ fimCor }}" fimResumo="{{ fimResumo }}" fimLicao="{{ fimLicao }}" reiniciar="{{ reiniciar }}" voltarMenu="{{ voltarMenu }}"></dc-import>
   </sc-if>
@@ -99,6 +112,15 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.onKey = (e) => {
+      if (e.code === 'KeyG') { e.preventDefault(); this.toggleGlossario(); return; }
+      if (this.state.glossarioAberto) {
+        if (e.code === 'Escape') { e.preventDefault(); this.toggleGlossario(); }
+        return;
+      }
+      if (this.state.modal) {
+        if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); this.confirmarModal(); }
+        return;
+      }
       if (this.state.tela !== 'jogo' || this.state.fim) return;
       if (e.code === 'Space') { e.preventDefault(); this.fecharMes(); }
       if (e.code === 'KeyA') { e.preventDefault(); this.toggleAuto(); }
@@ -119,7 +141,45 @@ class Component extends DCLogic {
   }
 
   toggleAuto = () => this.setState(s => ({ auto: !s.auto }));
-  comecar = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
+  toggleGlossario = () => this.setState(s => ({ glossarioAberto: !s.glossarioAberto }));
+
+  comecar = () => {
+    const inicia = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
+    // Cenário imóveis: o conceito de custo de oportunidade vem ANTES da decisão.
+    if (this.state.imoveis) return this.executarComConceito('moradia', inicia);
+    inicia();
+  };
+
+  // Mostra o modal do conceito na 1ª vez; depois disso, executa direto.
+  // `acao` null = modal informativo (sem cancelar). Abrir modal pausa o AUTO.
+  executarComConceito(id, acao) {
+    if (Fluxo.conceitos.jaVisto(id)) { if (acao) acao(); return; }
+    this.modalAcao = acao || null;
+    this.setState({ modal: { id, temAcao: !!acao }, auto: false });
+  }
+  confirmarModal = () => {
+    const m = this.state.modal;
+    if (!m) return;
+    Fluxo.conceitos.marcarVisto(m.id);
+    const acao = this.modalAcao;
+    this.modalAcao = null;
+    this.setState({ modal: null }, () => { if (acao) acao(); });
+  };
+  cancelarModal = () => {
+    this.modalAcao = null;
+    this.setState({ modal: null });
+  };
+
+  // Gatilhos que dependem do estado (não de um clique): 1 modal por vez;
+  // condições persistentes disparam no turno seguinte se houver fila.
+  verificarConceitosDeEstado() {
+    const s = this.state;
+    if (s.modal || s.fim) return;
+    const nClasses = Fluxo.ativos.filter(d => s.ativos[d.key] >= 1).length;
+    if (nClasses >= 3 && !Fluxo.conceitos.jaVisto('diversificacao')) return this.executarComConceito('diversificacao', null);
+    if (s.aposentadoria && s.aposentadoria.fase === 'saque' && !Fluxo.conceitos.jaVisto('sequencia')) return this.executarComConceito('sequencia', null);
+    if (s.liquidacaoNoMes && !Fluxo.conceitos.jaVisto('liquidacaoForcada')) return this.executarComConceito('liquidacaoForcada', null);
+  }
 
   // Recria o estado preservando as escolhas do menu (dificuldade, modo e capital).
   novoEstado(s, extras) {
@@ -133,6 +193,7 @@ class Component extends DCLogic {
         saqueModo: s.aposentadoria ? s.aposentadoria.saqueModo : undefined,
         imoveisEscolha: s.imoveis ? s.imoveis.escolha : undefined,
       }),
+      modal: null,
       ...extras,
     };
   }
@@ -158,7 +219,12 @@ class Component extends DCLogic {
   }
 
   mover(key, valor) {
-    this.setState(s => Fluxo.regras.mover(s, key, valor));
+    const aplica = () => this.setState(s => Fluxo.regras.mover(s, key, valor), () => this.verificarConceitosDeEstado());
+    // 1º aporte em classes com conceito próprio pede o "entendi" antes.
+    if (valor > 0 && (key === 'reserva' || key === 'acoes' || key === 'cripto')) {
+      return this.executarComConceito(key, aplica);
+    }
+    aplica();
   }
 
   aportarNegocio(v) { this.setState(s => Fluxo.regras.aportarNegocio(s, v)); }
@@ -174,7 +240,7 @@ class Component extends DCLogic {
         Fluxo.placar.salvar(s, Fluxo.regras.patrimonio(s));
       }
       return s;
-    });
+    }, () => this.verificarConceitosDeEstado());
   };
 
   // View-model: converte o estado do engine em strings/cores prontas pros templates.
@@ -338,6 +404,34 @@ class Component extends DCLogic {
       };
     })() : null;
 
+    const termosIds = Object.keys(Fluxo.conceitos.termos);
+    const desbloqueados = Fluxo.conceitos.termosDesbloqueados();
+    const glossarioLista = termosIds.map(id => {
+      const desb = desbloqueados.includes(id);
+      const t = Fluxo.conceitos.termos[id];
+      return {
+        icone: desb ? '📖' : '🔒',
+        nome: desb ? t.nome : '???',
+        definicao: desb ? t.definicao : 'Continue jogando: este conceito aparece quando a decisão certa (ou errada) acontecer.',
+        nomeCor: desb ? '#f2f7fb' : '#3a4a5a',
+        defCor: desb ? '#8fa1b2' : '#3a4a5a',
+      };
+    });
+    const glossarioContador = desbloqueados.length + '/' + termosIds.length + ' termos desbloqueados';
+
+    const modalConceito = s.modal ? (() => {
+      const c = Fluxo.conceitos.tooltips[s.modal.id];
+      return {
+        titulo: c.titulo,
+        explicacao: c.explicacao,
+        termosFmt: (c.termos || []).map(t => Fluxo.conceitos.termos[t].nome).join(' · '),
+        confirmarLabel: s.modal.temAcao ? 'ENTENDI, CONFIRMAR ▸' : 'ENTENDI ▸',
+        mostraCancelar: !!s.modal.temAcao,
+        confirmar: this.confirmarModal,
+        cancelar: this.cancelarModal,
+      };
+    })() : null;
+
     const modoDef = Fluxo.config.modos.find(m => m.id === s.modo);
     const ehSandbox = s.modo === 'sandbox';
     const ehCenarios = s.modo === 'cenarios';
@@ -435,6 +529,12 @@ class Component extends DCLogic {
       imovelCard,
       mostraNegocio: !!s.negocio,
       negocioCard,
+      mostraModal: !!s.modal,
+      modalConceito,
+      mostraGlossario: !!s.glossarioAberto,
+      glossarioLista,
+      glossarioContador,
+      toggleGlossario: this.toggleGlossario,
       rendaResumo: ap
         ? 'acumula ' + ap.turnosAcumulacao + ' meses, depois saca por ' + ap.turnosSaque + ' meses'
         : im

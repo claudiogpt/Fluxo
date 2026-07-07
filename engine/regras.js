@@ -227,6 +227,7 @@
     const logs = s.log;
     s.mes += 1;
     s.pendente = 0;
+    s.liquidacaoNoMes = false;
 
     // Na fase de saque não há salário nem custo mensal: o saque É o custo de vida.
     const emSaque = !!(st.aposentadoria && st.aposentadoria.fase === 'saque');
@@ -327,7 +328,9 @@
 
     // caixa negativo → liquidação em cascata; empresário ainda pode raspar o caixa da empresa
     if (s.caixa < 0) {
-      let falta = cobrir(s, -s.caixa, logs);
+      const deficit = -s.caixa;
+      let falta = cobrir(s, deficit, logs);
+      s.liquidacaoNoMes = falta < deficit - 0.5; // vendeu algo à força este mês
       if (falta > 0 && s.negocio && !s.negocio.falido && s.negocio.caixa > 0) {
         const retirada = Math.min(s.negocio.caixa, falta);
         s.negocio.caixa -= retirada;

@@ -8,6 +8,7 @@ const ativos = require('../engine/ativos.js');
 const formato = require('../engine/formato.js');
 const eventos = require('../engine/eventos.js');
 const placar = require('../engine/placar.js');
+const conceitos = require('../engine/conceitos.js');
 const regras = require('../engine/regras.js');
 
 // rng determinístico: devolve a sequência dada e repete o último valor.
@@ -377,6 +378,58 @@ test('imóveis: saldo devedor zera ao quitar e o patrimônio do comprador vira o
   assert.ok(Math.abs(regras.saldoDevedor(s.imoveis) - 96000) < 5); // início ≈ valor financiado
   const quitado = { ...s.imoveis, pagas: s.imoveis.prazo };
   assert.equal(regras.saldoDevedor(quitado), 0);
+});
+
+// ---------- conceitos educacionais ----------
+
+test('conceitos: todo tooltip referencia apenas termos que existem no glossário', () => {
+  for (const [id, t] of Object.entries(conceitos.tooltips)) {
+    assert.ok(t.titulo && t.explicacao, id + ' precisa de título e explicação');
+    assert.ok(t.termos.length > 0, id + ' precisa desbloquear pelo menos um termo');
+    for (const termo of t.termos) assert.ok(conceitos.termos[termo], id + ' referencia termo inexistente: ' + termo);
+  }
+});
+
+test('conceitos: os 8 termos mínimos do glossário existem, com nome e definição', () => {
+  const minimos = ['cdi', 'selic', 'diversificacao', 'correlacao', 'custoOportunidade', 'volatilidade', 'marginCall', 'sequenciaRetornos'];
+  for (const t of minimos) assert.ok(conceitos.termos[t], 'faltou o termo ' + t);
+  for (const [id, t] of Object.entries(conceitos.termos)) {
+    assert.ok(t.nome && t.definicao, 'termo ' + id + ' precisa de nome e definição');
+  }
+});
+
+test('conceitos: todo termo do glossário é desbloqueável por algum tooltip', () => {
+  const alcancaveis = new Set();
+  for (const t of Object.values(conceitos.tooltips)) for (const termo of t.termos) alcancaveis.add(termo);
+  for (const id of Object.keys(conceitos.termos)) {
+    assert.ok(alcancaveis.has(id), 'termo ' + id + ' ficaria trancado pra sempre — nenhum tooltip o desbloqueia');
+  }
+});
+
+test('conceitos: visto persiste, não duplica e desbloqueia os termos certos', () => {
+  const st = storageFake();
+  assert.equal(conceitos.jaVisto('acoes', st), false);
+  conceitos.marcarVisto('acoes', st);
+  conceitos.marcarVisto('acoes', st); // repetido não duplica
+  conceitos.marcarVisto('reserva', st);
+  assert.equal(conceitos.jaVisto('acoes', st), true);
+  assert.deepEqual(conceitos.vistos(st), ['acoes', 'reserva']);
+  assert.deepEqual(conceitos.termosDesbloqueados(st), ['volatilidade', 'cdi', 'selic']);
+});
+
+test('conceitos: fecharMes marca liquidacaoNoMes só quando vendeu algo à força', () => {
+  // com ativos pra liquidar → flag ligada
+  const aperto = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
+  aperto.caixa = 0;
+  aperto.salario = 0;
+  aperto.ativos.reserva = 10000;
+  const s1 = regras.fecharMes(aperto, { rng: rngNeutro() });
+  assert.equal(s1.liquidacaoNoMes, true);
+  assert.equal(s1.fim, null);
+  // mês tranquilo → flag desligada
+  const calmo = jogoEmAndamento({ dificuldade: 'normal', salarioInicial: 4500 });
+  const s2 = regras.fecharMes(calmo, { rng: rngNeutro() });
+  assert.equal(s2.liquidacaoNoMes, false);
 });
 
 test('clássico continua com falência e liberdade intactas com os novos campos', () => {
