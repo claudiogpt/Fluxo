@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tema.css">
+<script src="./support.js"></script>
+</head>
+<body>
+<!-- Painel do glossário. Só template.
+     Props: contador ("5/8 termos desbloqueados"), fechar (fn),
+     lista = [{ icone, nome, definicao, nomeCor, defCor }] -->
+<x-dc>
+<div style="position:fixed;inset:0;background:rgba(5,8,11,.88);display:flex;align-items:center;justify-content:center;z-index:65;animation:surgir .25s ease;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;line-height:1.5;">
+  <div style="max-width:640px;width:calc(100% - 48px);max-height:82vh;display:flex;flex-direction:column;background:#0d1117;border:1px solid #1e2833;border-radius:8px;overflow:hidden;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #1e2833;background:#11161d;">
+      <div>
+        <span style="font-weight:700;letter-spacing:1px;color:#f2f7fb;">📖 GLOSSÁRIO</span>
+        <span style="color:#22d47e;font-size:11px;margin-left:10px;">{{ contador }}</span>
+      </div>
+      <button onClick="{{ fechar }}" style="background:transparent;border:1px solid #3a4a5a;color:#8fa1b2;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;padding:5px 12px;border-radius:3px;cursor:pointer;" style-hover="border-color:#8fa1b2;color:#d7e1ea;">FECHAR [ESC]</button>
+    </div>
+    <div style="padding:14px 20px;overflow-y:auto;display:grid;gap:10px;">
+      <sc-for list="{{ lista }}" as="t" hint-placeholder-count="8">
+        <div style="border:1px solid #1a222c;background:#0b0f14;border-radius:6px;padding:10px 14px;display:flex;gap:12px;align-items:baseline;">
+          <span style="flex:none;">{{ t.icone }}</span>
+          <div>
+            <div style="font-weight:700;font-size:12px;letter-spacing:.5px;color:{{ t.nomeCor }};">{{ t.nome }}</div>
+            <div style="font-size:11.5px;color:{{ t.defCor }};margin-top:2px;">{{ t.definicao }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding:10px 20px;border-top:1px solid #1e2833;color:#3a4a5a;font-size:10.5px;">termos destravam quando o conceito aparece no jogo — jogue os modos e cenários pra completar</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"contador":{"default":"3/8 termos desbloqueados"},"lista":{"default":[{"icone":"📖","nome":"CDI","definicao":"A taxa que os bancos usam pra emprestar dinheiro entre si por um dia. É o piso da renda fixa brasileira.","nomeCor":"#f2f7fb","defCor":"#8fa1b2"},{"icone":"📖","nome":"Volatilidade","definicao":"O tamanho do sobe-e-desce de um ativo. Não é sinônimo de perda — vira perda quando você é forçado a vender na baixa.","nomeCor":"#f2f7fb","defCor":"#8fa1b2"},{"icone":"🔒","nome":"???","definicao":"Continue jogando: este conceito aparece quando a decisão certa (ou errada) acontecer.","nomeCor":"#3a4a5a","defCor":"#3a4a5a"}]}}'></script>
+</body>
+</html>

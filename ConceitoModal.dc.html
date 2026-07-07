@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tema.css">
+<script src="./support.js"></script>
+</head>
+<body>
+<!-- Modal educacional de primeira vez. Só template.
+     Props: titulo, explicacao, termosFmt (string "A · B" ou vazia),
+     confirmarLabel, mostraCancelar (bool), confirmar (fn), cancelar (fn). -->
+<x-dc>
+<div style="position:fixed;inset:0;background:rgba(5,8,11,.88);display:flex;align-items:center;justify-content:center;z-index:60;animation:surgir .25s ease;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;line-height:1.5;">
+  <div style="max-width:520px;width:calc(100% - 48px);background:#0d1117;border:1px solid #22d47e;border-radius:8px;padding:24px 26px;">
+    <div style="color:#22d47e;font-size:10px;letter-spacing:3px;margin-bottom:10px;">◆ CONCEITO NOVO DESBLOQUEADO</div>
+    <div style="font-size:20px;font-weight:700;letter-spacing:.5px;color:#f2f7fb;margin-bottom:10px;">{{ titulo }}</div>
+    <p style="color:#d7e1ea;font-size:13px;margin:0 0 14px;">{{ explicacao }}</p>
+    <sc-if value="{{ termosFmt }}" hint-placeholder-val="{{ true }}">
+      <div style="color:#6b7c8c;font-size:10.5px;letter-spacing:.5px;margin-bottom:18px;">📖 vai pro seu glossário: <span style="color:#8fd47e;">{{ termosFmt }}</span></div>
+    </sc-if>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button onClick="{{ confirmar }}" style="background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:11px 22px;border-radius:4px;cursor:pointer;" style-hover="background:#3ee996;">{{ confirmarLabel }}</button>
+      <sc-if value="{{ mostraCancelar }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ cancelar }}" style="background:transparent;border:1px solid #3a4a5a;color:#8fa1b2;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;padding:11px 22px;border-radius:4px;cursor:pointer;" style-hover="border-color:#8fa1b2;color:#d7e1ea;">CANCELAR</button>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"titulo":{"default":"AÇÕES = VOLATILIDADE"},"explicacao":{"default":"Ações têm o maior potencial de crescimento do jogo, mas caem 30% sem pedir licença. Volatilidade não é perda — vira perda quando você é FORÇADO a vender na baixa. Invista aqui o que pode esperar."},"termosFmt":{"default":"Volatilidade"},"confirmarLabel":{"default":"ENTENDI, CONFIRMAR ▸"},"mostraCancelar":{"default":true}}'></script>
+</body>
+</html>

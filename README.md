@@ -55,12 +55,16 @@ Recebem tudo por props (strings prontas, cores e callbacks); não têm estado ne
 
 | Componente | O que mostra |
 |---|---|
-| `Intro.dc.html` | Tela inicial com regras e botão de começar. |
-| `PainelStatus.dc.html` | Cabeçalho, cards de indicadores e barra de progresso. |
+| `Intro.dc.html` | Menu principal: modos, dificuldade, cenários e configurações. |
+| `PainelStatus.dc.html` | Cabeçalho, cards de indicadores e barra de progresso/fase. |
 | `AtivoCard.dc.html` | Um ativo com botões de aporte/resgate. |
+| `NegocioCard.dc.html` | A empresa do modo empresário (reinvestir/sacar/aportar giro). |
+| `ImovelCard.dc.html` | A moradia do cenário imóveis + corrida tijolo vs carteira. |
 | `TerminalEventos.dc.html` | Log de eventos do jogo. |
 | `Leaderboard.dc.html` | Placar. |
-| `FimDeJogo.dc.html` | Overlay de FALIU/LIVRE. |
+| `FimDeJogo.dc.html` | Overlay de fim (FALIU/LIVRE/cenários). |
+| `ConceitoModal.dc.html` | Modal educacional de primeira vez (conceitos). |
+| `Glossario.dc.html` | Glossário com termos bloqueados/desbloqueados e contador. |
 
 **Dica de desenvolvimento ágil:** cada tela pode ser aberta sozinha no Live Server (ex.: `AtivoCard.dc.html`) — ela renderiza com dados de exemplo definidos no `data-props` do próprio arquivo. Dá pra ajustar o visual de uma tela sem rodar o jogo inteiro.
 
@@ -73,6 +77,7 @@ Recebem tudo por props (strings prontas, cores e callbacks); não têm estado ne
 
 - **Mudar balanceamento** (dificuldade, inflação, deságios): `engine/config.js`.
 - **Adicionar um modo de jogo**: entre em `engine/config.js` (`modos`) com `disponivel: false` — ele já aparece no menu como "EM BREVE". Quando a mecânica existir, ligue `disponivel: true` e trate o `state.modo` no orquestrador/engine.
+- **Adicionar um conceito educacional**: nova entrada em `engine/conceitos.js` (`tooltips` para o modal de primeira vez, `termos` para o glossário) + o gatilho no orquestrador (interceptar ação com `executarComConceito(id, acao)` ou checar em `verificarConceitosDeEstado`).
 - **Adicionar um ativo**: acrescente em `engine/ativos.js` (e na ordem de liquidação em `config.js` se quiser que ele cubra déficit). A UI o exibe automaticamente.
 - **Adicionar um evento aleatório**: acrescente um item com peso `p` e `run` em `engine/eventos.js`.
 - **Mexer no visual de uma tela**: edite o `*.dc.html` correspondente e abra-o isolado no Live Server.
