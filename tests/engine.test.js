@@ -731,6 +731,26 @@ test('placar online: erro de rede não explode — resolve false/null', async ()
   assert.equal(await placar.lerRemoto('classico', cfg, fetchRuim), null);
 });
 
+test('placar: registro sanitiza o nome (controle fora, vazio vira ANÔNIMO) e prende meses ao limite do banco', () => {
+  const base = { modo: 'classico', dificuldade: 'normal', fim: 'livre', inicioTs: 0, fimTs: 60000 };
+  const comControle = placar.registro({ ...base, mes: 10 }, 0, 'A' + String.fromCharCode(7, 27) + 'B');
+  assert.equal(comControle.nome, 'AB');
+  const soControle = placar.registro({ ...base, mes: 10 }, 0, String.fromCharCode(0, 31));
+  assert.equal(soControle.nome, 'ANÔNIMO');
+  const mesesAbsurdo = placar.registro({ ...base, mes: 123456 }, 0, 'X');
+  assert.equal(mesesAbsurdo.meses, 9999); // CHECK do banco: meses <= 9999
+});
+
+test('aposentadoria: caixa negativo na ACUMULAÇÃO agora é FALIU (não fica devendo pra sempre)', () => {
+  const st = jogoEmAndamento({ modo: 'cenarios', cenario: 'aposentadoria', dificuldade: 'normal' });
+  st.caixa = 0;
+  st.salario = 0;
+  st.custo = 50000; // drena tudo num mês; sem ativos pra liquidar
+  const s = regras.fecharMes(st, { rng: rngNeutro() });
+  assert.equal(s.fim, 'faliu');
+  assert.ok(s.log.some(l => l.texto.includes('FALIU antes de se aposentar')));
+});
+
 test('placar: nickname persiste truncado em 16 caracteres', () => {
   const st = storageFake();
   assert.equal(placar.nick(st), '');

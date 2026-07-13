@@ -49,12 +49,20 @@
     return 1e12 - meses * 1e6 - Math.min(Math.max(0, tempo), 999999);
   }
 
+  // Nome apto pro placar: sem caracteres de controle, 1–16 chars, nunca vazio.
+  // Espelha os CHECKs do banco (supabase/hardening.sql) pra partida legítima
+  // nunca ser rejeitada no insert.
+  function nomeLimpo(nome) {
+    const limpo = String(nome || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 16);
+    return limpo || 'ANÔNIMO';
+  }
+
   // Monta o registro a partir do estado final. `resultado` sobrescreve s.fim
   // (o sandbox nunca "termina": registra quando cruza o marco da liberdade).
   function registro(s, patrimonio, nome, resultado) {
     const modo = boardDe(s);
     const res = resultado || s.fim;
-    const meses = s.mes;
+    const meses = Math.max(0, Math.min(9999, s.mes)); // limites do CHECK no banco
     const pat = Math.round(patrimonio);
     const ini = s.inicioTs == null ? Date.now() : s.inicioTs;
     const fimTs = s.fimTs == null ? Date.now() : s.fimTs;
@@ -64,7 +72,7 @@
       : modo === 'imoveis' ? (s.imoveis ? s.imoveis.escolha : '')
       : '';
     return {
-      nome: String(nome || 'ANÔNIMO').slice(0, 16),
+      nome: nomeLimpo(nome),
       modo, detalhe,
       dificuldade: s.dificuldade || 'normal',
       resultado: res, meses, pat, tempo,
