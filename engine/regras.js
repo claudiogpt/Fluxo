@@ -362,6 +362,12 @@
             addLog(s, logs, '■ APOSENTADORIA COMPLETA! Seu patrimônio sustentou todos os ' + ap.turnosSaque + ' meses de saque.', '#22d47e', s.mes);
           }
         }
+      } else if (s.caixa < 0) {
+        // Falência pessoal vale na acumulação: liquidou tudo e ainda deve.
+        s.fim = 'faliu';
+        s.fimTs = Date.now();
+        s.auto = false;
+        addLog(s, logs, '■ FALIU antes de se aposentar. As contas engoliram tudo na fase de acumulação.', '#ff4d5e', s.mes);
       } else if (s.mes >= ap.turnosAcumulacao) {
         ap.fase = 'saque';
         s.salario = 0;

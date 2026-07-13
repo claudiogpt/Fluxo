@@ -100,6 +100,7 @@ create policy "insercao publica" on placar for insert with check (true);
 ```
 
 3. Em **Project Settings → API**, copie a **URL** e a **anon key** e cole em `engine/config.js` → `placarOnline`. A anon key é pública por design — o RLS acima só permite ler e inserir, nunca editar/apagar.
+4. **Blindagem** (recomendado): rode também [`supabase/hardening.sql`](supabase/hardening.sql) no SQL Editor. Ele adiciona um trigger que recalcula o `score` no servidor e rejeita inserts forjados/inconsistentes, valida os pares (modo, resultado, detalhe) que o jogo realmente produz, bloqueia caracteres de controle no nome e revoga UPDATE/DELETE no nível de GRANT (além do RLS). Nota: SQL injection clássica não se aplica aqui — o PostgREST parametriza as queries; o risco real era insert forjado, e é isso que o trigger fecha.
 
 Como o ranking funciona: cada partida gera um `score` (maior = melhor) calculado no `placar.js` — vitória sempre vence derrota; clássico/empresário/sandbox premiam **menos meses** (tempo real desempata); aposentadoria/imóveis premiam **patrimônio final**. O board consulta `order=score.desc` direto no banco.
 

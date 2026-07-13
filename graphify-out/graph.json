@@ -30,42 +30,14 @@
         "source_file": "ConceitoModal.dc.html"
       },
       {
-        "id": "condicao_vitoria_renda_vs_custo",
-        "label": "Condi\u00e7\u00e3o de vit\u00f3ria: renda passiva supera custo de vida",
+        "id": "fluxo_placar_global_flow",
+        "label": "Fluxo do Placar Global (nick \u2192 jogo \u2192 score \u2192 ranking)",
         "nodes": [
-          "intro_dc_intro",
-          "fimdejogo_dc_fimdejogo",
-          "intro_dc_renda_passiva",
-          "intro_dc_custo_de_vida"
-        ],
-        "relation": "participate_in",
-        "confidence": "INFERRED",
-        "confidence_score": 0.8,
-        "source_file": "Intro.dc.html"
-      },
-      {
-        "id": "proposito_triplo_fluxo",
-        "label": "Prop\u00f3sito triplo do Fluxo (ensinar > simular > speedrun)",
-        "nodes": [
-          "readme_proposito_triplo",
-          "readme_ensinar_financas",
-          "readme_simulacao",
-          "readme_speedrun"
-        ],
-        "relation": "participate_in",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
-        "source_file": "README.md"
-      },
-      {
-        "id": "orquestrador_renderiza_telas",
-        "label": "Orquestrador converte estado em view-model e alimenta as telas",
-        "nodes": [
-          "simulador_financeiro_dc",
-          "painelstatus_dc",
-          "negociocard_dc",
-          "terminaleventos_dc",
-          "leaderboard_dc"
+          "intro_dc_nickname_input",
+          "simulador_financeiro_dc_registrarplacar",
+          "simulador_financeiro_dc_carregarplacar",
+          "leaderboard_dc",
+          "readme_placar_global"
         ],
         "relation": "participate_in",
         "confidence": "EXTRACTED",
@@ -73,16 +45,16 @@
         "source_file": "Simulador Financeiro.dc.html"
       },
       {
-        "id": "fluxo_dados_placar",
-        "label": "Fluxo de dados do placar: engine/placar \u2192 orquestrador \u2192 Leaderboard",
+        "id": "fluxo_camada_educacional",
+        "label": "Camada educacional de conceitos (modais de primeira vez)",
         "nodes": [
-          "engine_placar_ler",
-          "simulador_financeiro_dc",
-          "leaderboard_dc"
+          "readme_proposito_ensinar_financas",
+          "simulador_financeiro_dc_executarcomconceito",
+          "simulador_financeiro_dc_verificarconceitosdeestado"
         ],
-        "relation": "form",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
         "source_file": "Simulador Financeiro.dc.html"
       }
     ]
@@ -95,7 +67,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "engine_ativos",
-      "community": 0,
+      "community": 1,
       "norm_label": "ativos.js"
     },
     {
@@ -105,7 +77,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "engine_conceitos",
-      "community": 5,
+      "community": 2,
       "norm_label": "conceitos.js"
     },
     {
@@ -115,7 +87,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "engine_conceitos_storagepadrao",
-      "community": 5,
+      "community": 2,
       "norm_label": "storagepadrao()"
     },
     {
@@ -125,7 +97,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "engine_conceitos_vistos",
-      "community": 5,
+      "community": 2,
       "norm_label": "vistos()"
     },
     {
@@ -135,7 +107,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "engine_conceitos_javisto",
-      "community": 5,
+      "community": 2,
       "norm_label": "javisto()"
     },
     {
@@ -145,7 +117,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "engine_conceitos_marcarvisto",
-      "community": 5,
+      "community": 2,
       "norm_label": "marcarvisto()"
     },
     {
@@ -155,7 +127,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "engine_conceitos_termosdesbloqueados",
-      "community": 5,
+      "community": 2,
       "norm_label": "termosdesbloqueados()"
     },
     {
@@ -165,7 +137,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "engine_config",
-      "community": 0,
+      "community": 1,
       "norm_label": "config.js"
     },
     {
@@ -195,7 +167,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "engine_formato",
-      "community": 0,
+      "community": 16,
       "norm_label": "formato.js"
     },
     {
@@ -205,7 +177,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "engine_formato_fmt",
-      "community": 0,
+      "community": 16,
       "norm_label": "fmt()"
     },
     {
@@ -215,17 +187,27 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "engine_formato_fmttempo",
-      "community": 0,
+      "community": 16,
       "norm_label": "fmttempo()"
+    },
+    {
+      "label": "fmtCompacto()",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "engine_formato_fmtcompacto",
+      "community": 16,
+      "norm_label": "fmtcompacto()"
     },
     {
       "label": "sparkline()",
       "file_type": "code",
       "source_file": "engine/formato.js",
-      "source_location": "L19",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "engine_formato_sparkline",
-      "community": 0,
+      "community": 16,
       "norm_label": "sparkline()"
     },
     {
@@ -235,7 +217,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "engine_placar",
-      "community": 10,
+      "community": 4,
       "norm_label": "placar.js"
     },
     {
@@ -245,28 +227,168 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "engine_placar_storagepadrao",
-      "community": 10,
+      "community": 4,
       "norm_label": "storagepadrao()"
+    },
+    {
+      "label": "nick()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "engine_placar_nick",
+      "community": 4,
+      "norm_label": "nick()"
+    },
+    {
+      "label": "salvarNick()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "engine_placar_salvarnick",
+      "community": 4,
+      "norm_label": "salvarnick()"
+    },
+    {
+      "label": "boardDe()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "engine_placar_boardde",
+      "community": 4,
+      "norm_label": "boardde()"
+    },
+    {
+      "label": "scoreDe()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "engine_placar_scorede",
+      "community": 4,
+      "norm_label": "scorede()"
+    },
+    {
+      "label": "nomeLimpo()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "engine_placar_nomelimpo",
+      "community": 4,
+      "norm_label": "nomelimpo()"
+    },
+    {
+      "label": "registro()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "engine_placar_registro",
+      "community": 4,
+      "norm_label": "registro()"
+    },
+    {
+      "label": "vitoria()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "engine_placar_vitoria",
+      "community": 16,
+      "norm_label": "vitoria()"
+    },
+    {
+      "label": "ordenar()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "engine_placar_ordenar",
+      "community": 4,
+      "norm_label": "ordenar()"
     },
     {
       "label": "salvar()",
       "file_type": "code",
       "source_file": "engine/placar.js",
-      "source_location": "L21",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "engine_placar_salvar",
-      "community": 10,
+      "community": 4,
       "norm_label": "salvar()"
     },
     {
       "label": "ler()",
       "file_type": "code",
       "source_file": "engine/placar.js",
-      "source_location": "L40",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "engine_placar_ler",
-      "community": 10,
+      "community": 4,
       "norm_label": "ler()"
+    },
+    {
+      "label": "cfgPadrao()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L110",
+      "_origin": "ast",
+      "id": "engine_placar_cfgpadrao",
+      "community": 4,
+      "norm_label": "cfgpadrao()"
+    },
+    {
+      "label": "online()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "engine_placar_online",
+      "community": 4,
+      "norm_label": "online()"
+    },
+    {
+      "label": "cabecalhos()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L117",
+      "_origin": "ast",
+      "id": "engine_placar_cabecalhos",
+      "community": 4,
+      "norm_label": "cabecalhos()"
+    },
+    {
+      "label": "urlTabela()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L127",
+      "_origin": "ast",
+      "id": "engine_placar_urltabela",
+      "community": 4,
+      "norm_label": "urltabela()"
+    },
+    {
+      "label": "enviarRemoto()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "engine_placar_enviarremoto",
+      "community": 4,
+      "norm_label": "enviarremoto()"
+    },
+    {
+      "label": "lerRemoto()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L146",
+      "_origin": "ast",
+      "id": "engine_placar_lerremoto",
+      "community": 4,
+      "norm_label": "lerremoto()"
     },
     {
       "label": "regras.js",
@@ -395,7 +517,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "engine_regras_mover",
-      "community": 0,
+      "community": 2,
       "norm_label": "mover()"
     },
     {
@@ -435,7 +557,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "support",
-      "community": 2,
+      "community": 3,
       "norm_label": "support.js"
     },
     {
@@ -455,7 +577,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "support_getreactdom",
-      "community": 6,
+      "community": 7,
       "norm_label": "getreactdom()"
     },
     {
@@ -465,7 +587,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "support_parsedcdocument",
-      "community": 6,
+      "community": 7,
       "norm_label": "parsedcdocument()"
     },
     {
@@ -475,7 +597,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "support_parsedctext",
-      "community": 6,
+      "community": 7,
       "norm_label": "parsedctext()"
     },
     {
@@ -485,7 +607,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "support_parsedataprops",
-      "community": 6,
+      "community": 7,
       "norm_label": "parsedataprops()"
     },
     {
@@ -495,7 +617,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "support_dcnamefrompath",
-      "community": 12,
+      "community": 24,
       "norm_label": "dcnamefrompath()"
     },
     {
@@ -505,7 +627,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "support_rootnamefordocument",
-      "community": 12,
+      "community": 24,
       "norm_label": "rootnamefordocument()"
     },
     {
@@ -515,7 +637,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "support_safedecode",
-      "community": 12,
+      "community": 24,
       "norm_label": "safedecode()"
     },
     {
@@ -525,7 +647,7 @@
       "source_location": "L150",
       "_origin": "ast",
       "id": "support_boot",
-      "community": 6,
+      "community": 7,
       "norm_label": "boot()"
     },
     {
@@ -535,7 +657,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "support_resolve",
-      "community": 11,
+      "community": 10,
       "norm_label": "resolve()"
     },
     {
@@ -545,7 +667,7 @@
       "source_location": "L235",
       "_origin": "ast",
       "id": "support_parenswrapwhole",
-      "community": 11,
+      "community": 10,
       "norm_label": "parenswrapwhole()"
     },
     {
@@ -555,7 +677,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "support_findtoplevelequality",
-      "community": 11,
+      "community": 10,
       "norm_label": "findtoplevelequality()"
     },
     {
@@ -565,7 +687,7 @@
       "source_location": "L261",
       "_origin": "ast",
       "id": "support_resolvepath",
-      "community": 11,
+      "community": 10,
       "norm_label": "resolvepath()"
     },
     {
@@ -575,7 +697,7 @@
       "source_location": "L338",
       "_origin": "ast",
       "id": "support_encodecase",
-      "community": 2,
+      "community": 3,
       "norm_label": "encodecase()"
     },
     {
@@ -585,7 +707,7 @@
       "source_location": "L357",
       "_origin": "ast",
       "id": "support_kebabtocamel",
-      "community": 4,
+      "community": 5,
       "norm_label": "kebabtocamel()"
     },
     {
@@ -595,7 +717,7 @@
       "source_location": "L360",
       "_origin": "ast",
       "id": "support_csstoobj",
-      "community": 4,
+      "community": 5,
       "norm_label": "csstoobj()"
     },
     {
@@ -605,7 +727,7 @@
       "source_location": "L370",
       "_origin": "ast",
       "id": "support_compileattr",
-      "community": 4,
+      "community": 5,
       "norm_label": "compileattr()"
     },
     {
@@ -615,7 +737,7 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "support_collectprops",
-      "community": 4,
+      "community": 5,
       "norm_label": "collectprops()"
     },
     {
@@ -625,7 +747,7 @@
       "source_location": "L426",
       "_origin": "ast",
       "id": "support_hostpositionstyle",
-      "community": 4,
+      "community": 5,
       "norm_label": "hostpositionstyle()"
     },
     {
@@ -635,7 +757,7 @@
       "source_location": "L436",
       "_origin": "ast",
       "id": "support_compiletemplate",
-      "community": 2,
+      "community": 3,
       "norm_label": "compiletemplate()"
     },
     {
@@ -645,7 +767,7 @@
       "source_location": "L452",
       "_origin": "ast",
       "id": "support_walkchildren",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkchildren()"
     },
     {
@@ -655,7 +777,7 @@
       "source_location": "L455",
       "_origin": "ast",
       "id": "support_walk",
-      "community": 4,
+      "community": 5,
       "norm_label": "walk()"
     },
     {
@@ -685,7 +807,7 @@
       "source_location": "L516",
       "_origin": "ast",
       "id": "support_walkfor",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkfor()"
     },
     {
@@ -695,7 +817,7 @@
       "source_location": "L551",
       "_origin": "ast",
       "id": "support_walkif",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkif()"
     },
     {
@@ -705,7 +827,7 @@
       "source_location": "L566",
       "_origin": "ast",
       "id": "support_walkcomponent",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkcomponent()"
     },
     {
@@ -715,7 +837,7 @@
       "source_location": "L595",
       "_origin": "ast",
       "id": "support_walkximport",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkximport()"
     },
     {
@@ -725,7 +847,7 @@
       "source_location": "L672",
       "_origin": "ast",
       "id": "support_contentkey",
-      "community": 2,
+      "community": 5,
       "norm_label": "contentkey()"
     },
     {
@@ -735,7 +857,7 @@
       "source_location": "L688",
       "_origin": "ast",
       "id": "support_walkelement",
-      "community": 4,
+      "community": 5,
       "norm_label": "walkelement()"
     },
     {
@@ -745,7 +867,7 @@
       "source_location": "L717",
       "_origin": "ast",
       "id": "support_constructor",
-      "community": 2,
+      "community": 3,
       "norm_label": "constructor()"
     },
     {
@@ -755,7 +877,7 @@
       "source_location": "L724",
       "_origin": "ast",
       "id": "support_setstate",
-      "community": 2,
+      "community": 3,
       "norm_label": "setstate()"
     },
     {
@@ -765,7 +887,7 @@
       "source_location": "L727",
       "_origin": "ast",
       "id": "support_forceupdate",
-      "community": 2,
+      "community": 3,
       "norm_label": "forceupdate()"
     },
     {
@@ -775,7 +897,7 @@
       "source_location": "L730",
       "_origin": "ast",
       "id": "support_componentdidmount",
-      "community": 2,
+      "community": 3,
       "norm_label": "componentdidmount()"
     },
     {
@@ -785,7 +907,7 @@
       "source_location": "L732",
       "_origin": "ast",
       "id": "support_componentdidupdate",
-      "community": 2,
+      "community": 3,
       "norm_label": "componentdidupdate()"
     },
     {
@@ -795,7 +917,7 @@
       "source_location": "L734",
       "_origin": "ast",
       "id": "support_componentwillunmount",
-      "community": 2,
+      "community": 3,
       "norm_label": "componentwillunmount()"
     },
     {
@@ -805,7 +927,7 @@
       "source_location": "L737",
       "_origin": "ast",
       "id": "support_rendervals",
-      "community": 2,
+      "community": 3,
       "norm_label": "rendervals()"
     },
     {
@@ -825,7 +947,7 @@
       "source_location": "L753",
       "_origin": "ast",
       "id": "support_shallowequal",
-      "community": 2,
+      "community": 3,
       "norm_label": "shallowequal()"
     },
     {
@@ -835,7 +957,7 @@
       "source_location": "L761",
       "_origin": "ast",
       "id": "support_placeholder",
-      "community": 7,
+      "community": 8,
       "norm_label": "placeholder()"
     },
     {
@@ -845,7 +967,7 @@
       "source_location": "L782",
       "_origin": "ast",
       "id": "support_hinttomin",
-      "community": 2,
+      "community": 3,
       "norm_label": "hinttomin()"
     },
     {
@@ -865,7 +987,7 @@
       "source_location": "L1036",
       "_origin": "ast",
       "id": "support_isrenderabletype",
-      "community": 2,
+      "community": 3,
       "norm_label": "isrenderabletype()"
     },
     {
@@ -875,7 +997,7 @@
       "source_location": "L1040",
       "_origin": "ast",
       "id": "support_resolvedottedpath",
-      "community": 2,
+      "community": 3,
       "norm_label": "resolvedottedpath()"
     },
     {
@@ -885,7 +1007,7 @@
       "source_location": "L1052",
       "_origin": "ast",
       "id": "support_createexternalmodules",
-      "community": 7,
+      "community": 8,
       "norm_label": "createexternalmodules()"
     },
     {
@@ -895,7 +1017,7 @@
       "source_location": "L1222",
       "_origin": "ast",
       "id": "support_iselementclass",
-      "community": 2,
+      "community": 3,
       "norm_label": "iselementclass()"
     },
     {
@@ -905,7 +1027,7 @@
       "source_location": "L1240",
       "_origin": "ast",
       "id": "support_createhelmetmanager",
-      "community": 7,
+      "community": 8,
       "norm_label": "createhelmetmanager()"
     },
     {
@@ -915,7 +1037,7 @@
       "source_location": "L1351",
       "_origin": "ast",
       "id": "support_createpseudosheet",
-      "community": 7,
+      "community": 8,
       "norm_label": "createpseudosheet()"
     },
     {
@@ -925,7 +1047,7 @@
       "source_location": "L1372",
       "_origin": "ast",
       "id": "support_createregistry",
-      "community": 7,
+      "community": 8,
       "norm_label": "createregistry()"
     },
     {
@@ -935,7 +1057,7 @@
       "source_location": "L1403",
       "_origin": "ast",
       "id": "support_createruntime",
-      "community": 7,
+      "community": 8,
       "norm_label": "createruntime()"
     },
     {
@@ -945,7 +1067,7 @@
       "source_location": "L1572",
       "_origin": "ast",
       "id": "support_hiderawtemplate",
-      "community": 2,
+      "community": 3,
       "norm_label": "hiderawtemplate()"
     },
     {
@@ -955,7 +1077,7 @@
       "source_location": "L1577",
       "_origin": "ast",
       "id": "support_loadscript",
-      "community": 2,
+      "community": 3,
       "norm_label": "loadscript()"
     },
     {
@@ -965,7 +1087,7 @@
       "source_location": "L1590",
       "_origin": "ast",
       "id": "support_loadreactumd",
-      "community": 2,
+      "community": 3,
       "norm_label": "loadreactumd()"
     },
     {
@@ -975,7 +1097,7 @@
       "source_location": "L1598",
       "_origin": "ast",
       "id": "support_init",
-      "community": 6,
+      "community": 7,
       "norm_label": "init()"
     },
     {
@@ -1159,6 +1281,126 @@
       "norm_label": "storagefake()"
     },
     {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 15,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Fluxo \u2014 Simulador Financeiro \"FAL\u00caNCIA ou LIBERDADE\"",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "community": 15,
+      "norm_label": "fluxo \u2014 simulador financeiro \"falencia ou liberdade\""
+    },
+    {
+      "label": "Prop\u00f3sito do jogo (nesta ordem)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
+      "community": 15,
+      "norm_label": "proposito do jogo (nesta ordem)"
+    },
+    {
+      "label": "Como rodar",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "readme_como_rodar",
+      "community": 15,
+      "norm_label": "como rodar"
+    },
+    {
+      "label": "Como testar",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "readme_como_testar",
+      "community": 15,
+      "norm_label": "como testar"
+    },
+    {
+      "label": "Arquitetura",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "readme_arquitetura",
+      "community": 15,
+      "norm_label": "arquitetura"
+    },
+    {
+      "label": "`engine/` \u2014 regras do jogo, zero UI",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "readme_engine_regras_do_jogo_zero_ui",
+      "community": 15,
+      "norm_label": "`engine/` \u2014 regras do jogo, zero ui"
+    },
+    {
+      "label": "`Simulador Financeiro.dc.html` \u2014 orquestrador (entry point)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "readme_simulador_financeiro_dc_html_orquestrador_entry_point",
+      "community": 15,
+      "norm_label": "`simulador financeiro.dc.html` \u2014 orquestrador (entry point)"
+    },
+    {
+      "label": "Telas \u2014 componentes `*.dc.html` s\u00f3-template",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "readme_telas_componentes_dc_html_s\u00f3_template",
+      "community": 15,
+      "norm_label": "telas \u2014 componentes `*.dc.html` so-template"
+    },
+    {
+      "label": "Suporte",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "readme_suporte",
+      "community": 15,
+      "norm_label": "suporte"
+    },
+    {
+      "label": "Placar global (Supabase)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "readme_placar_global_supabase",
+      "community": 15,
+      "norm_label": "placar global (supabase)"
+    },
+    {
+      "label": "Receitas r\u00e1pidas",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L107",
+      "_origin": "ast",
+      "id": "readme_receitas_r\u00e1pidas",
+      "community": 15,
+      "norm_label": "receitas rapidas"
+    },
+    {
       "label": "AtivoCard (card de ativo com aporte/resgate)",
       "file_type": "code",
       "source_file": "AtivoCard.dc.html",
@@ -1167,9 +1409,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "ativocard_dc_ativocard",
-      "community": 3,
-      "norm_label": "ativocard (card de ativo com aporte/resgate)"
+      "community": 6,
+      "norm_label": "ativocard (card de ativo com aporte/resgate)",
+      "id": "ativocard_dc_ativocard"
     },
     {
       "label": "ConceitoModal (modal educacional de primeira vez)",
@@ -1180,9 +1422,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "conceitomodal_dc_conceitomodal",
-      "community": 3,
-      "norm_label": "conceitomodal (modal educacional de primeira vez)"
+      "community": 6,
+      "norm_label": "conceitomodal (modal educacional de primeira vez)",
+      "id": "conceitomodal_dc_conceitomodal"
     },
     {
       "label": "FimDeJogo (overlay FALIU / LIVRE)",
@@ -1193,90 +1435,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "fimdejogo_dc_fimdejogo",
-      "community": 3,
-      "norm_label": "fimdejogo (overlay faliu / livre)"
-    },
-    {
-      "label": "Glossario (painel de termos desbloque\u00e1veis)",
-      "file_type": "code",
-      "source_file": "Glossario.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "glossario_dc_glossario",
-      "community": 3,
-      "norm_label": "glossario (painel de termos desbloqueaveis)"
-    },
-    {
-      "label": "ImovelCard (card de moradia, cen\u00e1rio im\u00f3veis)",
-      "file_type": "code",
-      "source_file": "ImovelCard.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "imovelcard_dc_imovelcard",
-      "community": 3,
-      "norm_label": "imovelcard (card de moradia, cenario imoveis)"
-    },
-    {
-      "label": "Intro (tela de introdu\u00e7\u00e3o / menu principal)",
-      "file_type": "code",
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "intro_dc_intro",
-      "community": 3,
-      "norm_label": "intro (tela de introducao / menu principal)"
-    },
-    {
-      "label": "Volatilidade",
-      "file_type": "concept",
-      "source_file": "Glossario.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "O tamanho do sobe-e-desce de um ativo. N\u00e3o \u00e9 sin\u00f4nimo de perda \u2014 vira perda apenas quando voc\u00ea \u00e9 for\u00e7ado a vender na baixa.",
-      "id": "glossario_dc_volatilidade",
-      "community": 3,
-      "norm_label": "volatilidade"
-    },
-    {
-      "label": "CDI",
-      "file_type": "concept",
-      "source_file": "Glossario.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Taxa que os bancos usam pra emprestar entre si por um dia; \u00e9 o piso da renda fixa brasileira.",
-      "id": "glossario_dc_cdi",
-      "community": 3,
-      "norm_label": "cdi"
-    },
-    {
-      "label": "Renda Passiva",
-      "file_type": "concept",
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "S\u00f3 FIIs, a\u00e7\u00f5es e renda fixa geram renda passiva; cripto n\u00e3o paga aluguel. Super\u00e1-la sobre o custo de vida \u00e9 a condi\u00e7\u00e3o de liberdade.",
-      "id": "intro_dc_renda_passiva",
-      "community": 3,
-      "norm_label": "renda passiva"
+      "community": 11,
+      "norm_label": "fimdejogo (overlay faliu / livre)",
+      "id": "fimdejogo_dc_fimdejogo"
     },
     {
       "label": "Juros Compostos",
@@ -1288,65 +1449,63 @@
       "author": null,
       "contributor": null,
       "rationale": "Quem venceu n\u00e3o acertou o timing do mercado \u2014 construiu renda passiva m\u00eas a m\u00eas e deixou os juros compostos trabalharem.",
-      "id": "fimdejogo_dc_juros_compostos",
-      "community": 3,
-      "norm_label": "juros compostos"
+      "community": 11,
+      "norm_label": "juros compostos",
+      "id": "fimdejogo_dc_juros_compostos"
     },
     {
-      "label": "Custo de Vida",
+      "label": "Glossario (painel de termos desbloque\u00e1veis)",
+      "file_type": "code",
+      "source_file": "Glossario.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 6,
+      "norm_label": "glossario (painel de termos desbloqueaveis)",
+      "id": "glossario_dc_glossario"
+    },
+    {
+      "label": "Volatilidade",
       "file_type": "concept",
-      "source_file": "Intro.dc.html",
+      "source_file": "Glossario.dc.html",
       "source_location": null,
       "source_url": null,
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Drena a conta todo m\u00eas e sobe com a infla\u00e7\u00e3o; se o dinheiro acabar, FALIU.",
-      "id": "intro_dc_custo_de_vida",
-      "community": 3,
-      "norm_label": "custo de vida"
+      "rationale": "O tamanho do sobe-e-desce de um ativo. N\u00e3o \u00e9 sin\u00f4nimo de perda \u2014 vira perda apenas quando voc\u00ea \u00e9 for\u00e7ado a vender na baixa.",
+      "community": 6,
+      "norm_label": "volatilidade",
+      "id": "glossario_dc_volatilidade"
     },
     {
-      "label": "Infla\u00e7\u00e3o",
+      "label": "CDI",
       "file_type": "concept",
-      "source_file": "Intro.dc.html",
+      "source_file": "Glossario.dc.html",
       "source_location": null,
       "source_url": null,
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Faz o custo de vida subir m\u00eas a m\u00eas, apertando o caixa ao longo da simula\u00e7\u00e3o.",
-      "id": "intro_dc_inflacao",
-      "community": 3,
-      "norm_label": "inflacao"
+      "rationale": "Taxa que os bancos usam pra emprestar entre si por um dia; \u00e9 o piso da renda fixa brasileira.",
+      "community": 6,
+      "norm_label": "cdi",
+      "id": "glossario_dc_cdi"
     },
     {
-      "label": "Risco de Sequ\u00eancia",
-      "file_type": "rationale",
-      "source_file": "Intro.dc.html",
+      "label": "ImovelCard (card de moradia, cen\u00e1rio im\u00f3veis)",
+      "file_type": "code",
+      "source_file": "ImovelCard.dc.html",
       "source_location": null,
       "source_url": null,
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Saque fixo = custo de vida (que inflaciona). A ORDEM dos anos bons e ruins decide se o dinheiro dura \u2014 \u00e9 o que cria o risco de sequ\u00eancia no cen\u00e1rio de aposentadoria.",
-      "id": "intro_dc_risco_de_sequencia",
-      "community": 3,
-      "norm_label": "risco de sequencia"
-    },
-    {
-      "label": "Liberdade Financeira (condi\u00e7\u00e3o LIVRE)",
-      "file_type": "rationale",
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Se a renda passiva superar o custo de vida, o jogador est\u00e1 LIVRE; caso o dinheiro acabe, FALIU. Vit\u00f3ria vem de acumular renda passiva, n\u00e3o de acertar timing.",
-      "id": "intro_dc_liberdade_financeira",
-      "community": 3,
-      "norm_label": "liberdade financeira (condicao livre)"
+      "community": 6,
+      "norm_label": "imovelcard (card de moradia, cenario imoveis)",
+      "id": "imovelcard_dc_imovelcard"
     },
     {
       "label": "Comprar Financiado vs Alugar e Investir",
@@ -1358,9 +1517,9 @@
       "author": null,
       "contributor": null,
       "rationale": "Seu dinheiro vira tijolo: o im\u00f3vel valoriza mas a parcela aperta o caixa; a corrida compara com quem alugou e investiu a diferen\u00e7a pra ver qual estrat\u00e9gia sobra mais.",
-      "id": "imovelcard_dc_comprar_vs_alugar",
-      "community": 3,
-      "norm_label": "comprar financiado vs alugar e investir"
+      "community": 6,
+      "norm_label": "comprar financiado vs alugar e investir",
+      "id": "imovelcard_dc_comprar_vs_alugar"
     },
     {
       "label": "Fantasma (carteira alugar+investir comparativa)",
@@ -1372,48 +1531,9 @@
       "author": null,
       "contributor": null,
       "rationale": "Carteira invis\u00edvel (ALUGAR+INVESTIR) que corre em paralelo ao patrim\u00f4nio do jogador (TIJOLO) para contrastar as duas estrat\u00e9gias de moradia m\u00eas a m\u00eas.",
-      "id": "imovelcard_dc_fantasma",
-      "community": 3,
-      "norm_label": "fantasma (carteira alugar+investir comparativa)"
-    },
-    {
-      "label": "Simulador Financeiro (orquestrador)",
-      "file_type": "code",
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "simulador_financeiro_dc",
-      "community": 0,
-      "norm_label": "simulador financeiro (orquestrador)"
-    },
-    {
-      "label": "renderVals (view-model do estado)",
-      "file_type": "code",
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "simulador_financeiro_dc_rendervals",
-      "community": 0,
-      "norm_label": "rendervals (view-model do estado)"
-    },
-    {
-      "label": "PainelStatus (painel de status)",
-      "file_type": "code",
-      "source_file": "PainelStatus.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "painelstatus_dc",
-      "community": 0,
-      "norm_label": "painelstatus (painel de status)"
+      "community": 6,
+      "norm_label": "fantasma (carteira alugar+investir comparativa)",
+      "id": "imovelcard_dc_fantasma"
     },
     {
       "label": "NegocioCard (card do neg\u00f3cio)",
@@ -1424,9 +1544,22 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "negociocard_dc",
-      "community": 0,
-      "norm_label": "negociocard (card do negocio)"
+      "community": 12,
+      "norm_label": "negociocard (card do negocio)",
+      "id": "negociocard_dc"
+    },
+    {
+      "label": "PainelStatus (painel de status)",
+      "file_type": "code",
+      "source_file": "PainelStatus.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 13,
+      "norm_label": "painelstatus (painel de status)",
+      "id": "painelstatus_dc"
     },
     {
       "label": "TerminalEventos (log de eventos)",
@@ -1437,22 +1570,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "terminaleventos_dc",
-      "community": 0,
-      "norm_label": "terminaleventos (log de eventos)"
-    },
-    {
-      "label": "Leaderboard (placar)",
-      "file_type": "code",
-      "source_file": "Leaderboard.dc.html",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "leaderboard_dc",
-      "community": 0,
-      "norm_label": "leaderboard (placar)"
+      "community": 14,
+      "norm_label": "terminaleventos (log de eventos)",
+      "id": "terminaleventos_dc"
     },
     {
       "label": "Fluxo \u2014 Simulador Financeiro FAL\u00caNCIA ou LIBERDADE",
@@ -1463,12 +1583,12 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_fluxo",
-      "community": 0,
-      "norm_label": "fluxo \u2014 simulador financeiro falencia ou liberdade"
+      "community": 17,
+      "norm_label": "fluxo \u2014 simulador financeiro falencia ou liberdade",
+      "id": "readme_fluxo"
     },
     {
-      "label": "Prop\u00f3sito triplo do jogo",
+      "label": "Prop\u00f3sito: Ensinar Finan\u00e7as",
       "file_type": "rationale",
       "source_file": "README.md",
       "source_location": null,
@@ -1476,78 +1596,13 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "Ordem de prioridade deliberada: (1) ensinar finan\u00e7as \u00e9 priorit\u00e1rio \u2014 cada mec\u00e2nica/evento deve deixar uma li\u00e7\u00e3o real; (2) simula\u00e7\u00e3o \u00e9 secund\u00e1rio \u2014 tender a modelar a realidade de investimentos; (3) speedrun \u00e9 divers\u00e3o/monetiza\u00e7\u00e3o (timer, leaderboard, futuro ranqueado).",
-      "id": "readme_proposito_triplo",
-      "community": 8,
-      "norm_label": "proposito triplo do jogo"
+      "rationale": "Prioridade m\u00e1xima do produto (acima de simula\u00e7\u00e3o e speedrun): cada mec\u00e2nica e evento deve deixar uma li\u00e7\u00e3o real de finan\u00e7as pessoais/investimentos.",
+      "community": 19,
+      "norm_label": "proposito: ensinar financas",
+      "id": "readme_proposito_ensinar_financas"
     },
     {
-      "label": "Ensinar finan\u00e7as (prop\u00f3sito priorit\u00e1rio)",
-      "file_type": "concept",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "readme_ensinar_financas",
-      "community": 8,
-      "norm_label": "ensinar financas (proposito prioritario)"
-    },
-    {
-      "label": "Simula\u00e7\u00e3o da realidade de investimentos",
-      "file_type": "concept",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "readme_simulacao",
-      "community": 8,
-      "norm_label": "simulacao da realidade de investimentos"
-    },
-    {
-      "label": "Speedrun (timer, leaderboard, ranqueado)",
-      "file_type": "concept",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "readme_speedrun",
-      "community": 8,
-      "norm_label": "speedrun (timer, leaderboard, ranqueado)"
-    },
-    {
-      "label": "Modo Cen\u00e1rios (crises/\u00e9pocas reais, estilo Plague Inc)",
-      "file_type": "concept",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "readme_modo_cenarios",
-      "community": 0,
-      "norm_label": "modo cenarios (crises/epocas reais, estilo plague inc)"
-    },
-    {
-      "label": "Speedrun ranqueado (seed compartilhada)",
-      "file_type": "concept",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "id": "readme_speedrun_ranqueado",
-      "community": 8,
-      "norm_label": "speedrun ranqueado (seed compartilhada)"
-    },
-    {
-      "label": "Arquitetura de tr\u00eas camadas",
+      "label": "Speedrun (timer + placar em todos os modos)",
       "file_type": "rationale",
       "source_file": "README.md",
       "source_location": null,
@@ -1555,13 +1610,13 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "engine/ (regras puras, zero UI) \u2192 Simulador Financeiro.dc.html (orquestrador, \u00fanico componente com estado) \u2192 *.dc.html (telas s\u00f3-template). Camadas acopladas apenas por contratos simples, para que as regras sejam test\u00e1veis sem UI e cada tela seja desenvolv\u00edvel isolada no Live Server com seu pr\u00f3prio data-props.",
-      "id": "readme_arquitetura_tres_camadas",
-      "community": 0,
-      "norm_label": "arquitetura de tres camadas"
+      "rationale": "Divers\u00e3o/monetiza\u00e7\u00e3o. Sem seed compartilhada de prop\u00f3sito: o jogo \u00e9 n\u00e3o determin\u00edstico e a sorte (e jogar de novo) faz parte da corrida.",
+      "community": 22,
+      "norm_label": "speedrun (timer + placar em todos os modos)",
+      "id": "readme_speedrun"
     },
     {
-      "label": "Aleatoriedade injetada (rng determin\u00edstico)",
+      "label": "Arquitetura em Tr\u00eas Camadas",
       "file_type": "rationale",
       "source_file": "README.md",
       "source_location": null,
@@ -1569,23 +1624,232 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "rationale": "A aleatoriedade entra por par\u00e2metro (rng), nunca por Math.random fixo \u2014 \u00e9 isso que torna as regras do engine test\u00e1veis de forma determin\u00edstica (node --test, sem depend\u00eancias).",
-      "id": "readme_aleatoriedade_injetada",
-      "community": 0,
-      "norm_label": "aleatoriedade injetada (rng deterministico)"
+      "rationale": "engine/ (regras puras) \u2192 Simulador Financeiro.dc.html (orquestrador) \u2192 *.dc.html (telas). Camadas acopladas s\u00f3 por contratos simples; nenhuma regra de neg\u00f3cio na UI.",
+      "community": 2,
+      "norm_label": "arquitetura em tres camadas",
+      "id": "readme_arquitetura_tres_camadas"
+    },
+    {
+      "label": "Telas S\u00f3-Template (componentes *.dc.html)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Telas recebem tudo por props (strings prontas, cores, callbacks), sem estado nem l\u00f3gica. Isso permite abrir cada tela isolada no Live Server com dados de exemplo do data-props \u2014 desenvolvimento visual \u00e1gil sem rodar o jogo inteiro.",
+      "community": 23,
+      "norm_label": "telas so-template (componentes *.dc.html)",
+      "id": "readme_telas_so_template"
+    },
+    {
+      "label": "Placar Global (Supabase)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Sem configura\u00e7\u00e3o o placar \u00e9 local (localStorage); com um projeto Supabase free vira ranking mundial via REST. A anon key \u00e9 p\u00fablica por design \u2014 RLS s\u00f3 permite select e insert, nunca editar/apagar. Um board por modo, consulta order=score.desc direto no banco.",
+      "community": 18,
+      "norm_label": "placar global (supabase)",
+      "id": "readme_placar_global"
+    },
+    {
+      "label": "Aleatoriedade Injet\u00e1vel (rng por par\u00e2metro)",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A aleatoriedade entra por par\u00e2metro (rng), nunca por Math.random fixo \u2014 \u00e9 isso que torna as regras test\u00e1veis com node --test, sem depend\u00eancias.",
+      "community": 20,
+      "norm_label": "aleatoriedade injetavel (rng por parametro)",
+      "id": "readme_rng_injetavel"
+    },
+    {
+      "label": "C\u00e1lculo de Score do Ranking",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Cada partida gera um score (maior = melhor) em placar.js: vit\u00f3ria sempre vence derrota; cl\u00e1ssico/empres\u00e1rio/sandbox premiam menos meses (tempo real desempata); aposentadoria/im\u00f3veis premiam patrim\u00f4nio final.",
+      "community": 21,
+      "norm_label": "calculo de score do ranking",
+      "id": "readme_score"
+    },
+    {
+      "label": "Intro (menu principal)",
+      "file_type": "code",
+      "source_file": "Intro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 16,
+      "norm_label": "intro (menu principal)",
+      "id": "intro_dc"
+    },
+    {
+      "label": "Nickname Input (Placar Global)",
+      "file_type": "code",
+      "source_file": "Intro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 2,
+      "norm_label": "nickname input (placar global)",
+      "id": "intro_dc_nickname_input"
+    },
+    {
+      "label": "Sele\u00e7\u00e3o de Modo de Jogo",
+      "file_type": "code",
+      "source_file": "Intro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 16,
+      "norm_label": "selecao de modo de jogo",
+      "id": "intro_dc_selecao_modos"
+    },
+    {
+      "label": "Leaderboard (placar)",
+      "file_type": "code",
+      "source_file": "Leaderboard.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 16,
+      "norm_label": "leaderboard (placar)",
+      "id": "leaderboard_dc"
+    },
+    {
+      "label": "Simulador Financeiro (entry point)",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "community": 16,
+      "norm_label": "simulador financeiro (entry point)",
+      "id": "simulador_financeiro_dc"
+    },
+    {
+      "label": "Component (Orquestrador do jogo)",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "\u00danico componente com estado: guarda o estado do jogo, escuta teclado/timer e delega toda regra ao engine (window.Fluxo.*). Zero regra de neg\u00f3cio aqui. nick e lbRemoto vivem fora do estado de partida para sobreviver a reset/menu.",
+      "community": 2,
+      "norm_label": "component (orquestrador do jogo)",
+      "id": "simulador_financeiro_dc_orquestrador"
+    },
+    {
+      "label": "renderVals (view-model)",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Converte o estado do engine em strings/cores prontas para os templates \u2014 \u00e9 o contrato entre orquestrador e telas s\u00f3-template.",
+      "community": 16,
+      "norm_label": "rendervals (view-model)",
+      "id": "simulador_financeiro_dc_rendervals"
+    },
+    {
+      "label": "fecharMes (handler de turno)",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Todo desfecho pontua no board do modo; o sandbox (que nunca termina) pontua na hora em que a renda passiva cruza o custo de vida (marcoLivre).",
+      "community": 2,
+      "norm_label": "fecharmes (handler de turno)",
+      "id": "simulador_financeiro_dc_fecharmes"
+    },
+    {
+      "label": "registrarPlacar",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Toda partida pontua: salva local e envia pro global em fire-and-forget.",
+      "community": 4,
+      "norm_label": "registrarplacar",
+      "id": "simulador_financeiro_dc_registrarplacar"
+    },
+    {
+      "label": "carregarPlacar",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Busca o top 10 global do board atual; sem chaves/rede o placar local assume.",
+      "community": 4,
+      "norm_label": "carregarplacar",
+      "id": "simulador_financeiro_dc_carregarplacar"
+    },
+    {
+      "label": "executarComConceito",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Mostra o modal do conceito educacional na primeira vez; depois executa direto. Abrir modal pausa o AUTO para o jogador ler a li\u00e7\u00e3o.",
+      "community": 2,
+      "norm_label": "executarcomconceito",
+      "id": "simulador_financeiro_dc_executarcomconceito"
+    },
+    {
+      "label": "verificarConceitosDeEstado",
+      "file_type": "code",
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Gatilhos educacionais que dependem do estado (diversifica\u00e7\u00e3o, risco de sequ\u00eancia, liquida\u00e7\u00e3o for\u00e7ada), n\u00e3o de um clique: 1 modal por vez; condi\u00e7\u00f5es persistentes disparam no turno seguinte.",
+      "community": 2,
+      "norm_label": "verificarconceitosdeestado",
+      "id": "simulador_financeiro_dc_verificarconceitosdeestado"
     }
   ],
   "links": [
-    {
-      "relation": "shares_data_with",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_ativos"
-    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -1646,16 +1910,6 @@
       "source": "engine_conceitos",
       "target": "engine_conceitos_vistos",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_conceitos"
     },
     {
       "relation": "imports_from",
@@ -1730,7 +1984,7 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_executarcomconceito",
       "target": "engine_conceitos_javisto"
     },
     {
@@ -1740,18 +1994,18 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_conceitos_marcarvisto"
+      "source": "simulador_financeiro_dc_verificarconceitosdeestado",
+      "target": "engine_conceitos_javisto"
     },
     {
-      "relation": "shares_data_with",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_config"
+      "source": "simulador_financeiro_dc_orquestrador",
+      "target": "engine_conceitos_marcarvisto"
     },
     {
       "relation": "imports_from",
@@ -1799,6 +2053,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/formato.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "engine_formato",
+      "target": "engine_formato_fmtcompacto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/formato.js",
       "source_location": "L11",
       "weight": 1.0,
       "source": "engine_formato",
@@ -1809,7 +2073,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/formato.js",
-      "source_location": "L19",
+      "source_location": "L28",
       "weight": 1.0,
       "source": "engine_formato",
       "target": "engine_formato_sparkline",
@@ -1833,7 +2097,7 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_formato_fmt"
     },
     {
@@ -1843,24 +2107,54 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_formato_fmttempo"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_formato_sparkline"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/placar.js",
-      "source_location": "L40",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_boardde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_enviarremoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L101",
       "weight": 1.0,
       "source": "engine_placar",
       "target": "engine_placar_ler",
@@ -1870,10 +2164,90 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/placar.js",
-      "source_location": "L21",
+      "source_location": "L146",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_lerremoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_nick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_nomelimpo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_ordenar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_registro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L91",
       "weight": 1.0,
       "source": "engine_placar",
       "target": "engine_placar_salvar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_salvarnick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_scorede",
       "confidence_score": 1.0
     },
     {
@@ -1884,6 +2258,26 @@
       "weight": 1.0,
       "source": "engine_placar",
       "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_vitoria",
       "confidence_score": 1.0
     },
     {
@@ -1902,7 +2296,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/placar.js",
-      "source_location": "L41",
+      "source_location": "L102",
       "weight": 1.0,
       "source": "engine_placar_ler",
       "target": "engine_placar_storagepadrao",
@@ -1913,9 +2307,31 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/placar.js",
-      "source_location": "L22",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "engine_placar_nick",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L92",
       "weight": 1.0,
       "source": "engine_placar_salvar",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "engine_placar_salvarnick",
       "target": "engine_placar_storagepadrao",
       "confidence_score": 1.0
     },
@@ -1926,7 +2342,101 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_orquestrador",
+      "target": "engine_placar_nick"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_orquestrador",
+      "target": "engine_placar_salvarnick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_boardde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_carregarplacar",
+      "target": "engine_placar_boardde"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_scorede",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_nomelimpo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_registrarplacar",
+      "target": "engine_placar_registro"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_rendervals",
+      "target": "engine_placar_vitoria"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "engine_placar_ler",
+      "target": "engine_placar_ordenar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_registrarplacar",
       "target": "engine_placar_salvar"
     },
     {
@@ -1936,8 +2446,137 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_placar_ler"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "engine_placar_online",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_carregarplacar",
+      "target": "engine_placar_online"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_registrarplacar",
+      "target": "engine_placar_enviarremoto"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_carregarplacar",
+      "target": "engine_placar_lerremoto"
     },
     {
       "relation": "contains",
@@ -2123,23 +2762,13 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "engine_regras_novojogo"
-    },
-    {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_orquestrador",
       "target": "engine_regras_novojogo"
     },
     {
@@ -2176,23 +2805,13 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "engine_regras_rendapassiva"
-    },
-    {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_regras_rendapassiva"
     },
     {
@@ -2213,7 +2832,7 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_regras_saldodevedor"
     },
     {
@@ -2228,13 +2847,13 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "README.md",
+      "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "readme_fluxo",
+      "source": "simulador_financeiro_dc_registrarplacar",
       "target": "engine_regras_patrimonio"
     },
     {
@@ -2244,7 +2863,7 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_rendervals",
       "target": "engine_regras_patrimonio"
     },
     {
@@ -2265,57 +2884,7 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_regras_ganhoreinvestimento"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_regras_aportarnegocio"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_regras_sacarnegocio"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "engine_regras_reinvestirnegocio"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "engine_regras_mover"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_orquestrador",
       "target": "engine_regras_mover"
     },
     {
@@ -2330,16 +2899,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "engine_regras_cobrir"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2351,23 +2910,13 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "engine_regras_fecharmes"
-    },
-    {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
+      "source": "simulador_financeiro_dc_fecharmes",
       "target": "engine_regras_fecharmes"
     },
     {
@@ -3796,6 +4345,116 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_arquitetura",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_como_rodar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_como_testar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_placar_global_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "readme_fluxo_simulador_financeiro_fal\u00eancia_ou_liberdade",
+      "target": "readme_receitas_r\u00e1pidas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_engine_regras_do_jogo_zero_ui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_simulador_financeiro_dc_html_orquestrador_entry_point",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_suporte",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_telas_componentes_dc_html_s\u00f3_template",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.75,
@@ -3859,36 +4518,6 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "FimDeJogo.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "fimdejogo_dc_fimdejogo",
-      "target": "intro_dc_custo_de_vida"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "FimDeJogo.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "fimdejogo_dc_fimdejogo",
-      "target": "intro_dc_liberdade_financeira"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "FimDeJogo.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "fimdejogo_dc_fimdejogo",
-      "target": "intro_dc_renda_passiva"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "Glossario.dc.html",
       "source_location": null,
       "weight": 1.0,
@@ -3929,116 +4558,6 @@
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "imovelcard_dc_imovelcard"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "imovelcard_dc_comprar_vs_alugar"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "intro_dc_custo_de_vida"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "intro_dc_inflacao"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "intro_dc_liberdade_financeira"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "intro_dc_renda_passiva"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_intro",
-      "target": "intro_dc_risco_de_sequencia"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "FimDeJogo.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "fimdejogo_dc_juros_compostos",
-      "target": "intro_dc_renda_passiva"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_liberdade_financeira",
-      "target": "intro_dc_renda_passiva"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_custo_de_vida",
-      "target": "intro_dc_inflacao"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "Intro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "intro_dc_liberdade_financeira",
-      "target": "intro_dc_custo_de_vida"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
       "source_file": "ImovelCard.dc.html",
       "source_location": null,
       "weight": 1.0,
@@ -4046,24 +4565,74 @@
       "target": "imovelcard_dc_fantasma"
     },
     {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "readme_arquitetura_tres_camadas",
-      "target": "simulador_financeiro_dc"
+      "source": "simulador_financeiro_dc_orquestrador",
+      "target": "readme_arquitetura_tres_camadas"
     },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "README.md",
+      "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "simulador_financeiro_dc"
+      "source": "simulador_financeiro_dc",
+      "target": "intro_dc"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_rendervals",
+      "target": "intro_dc"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "intro_dc_nickname_input",
+      "target": "simulador_financeiro_dc_orquestrador"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "intro_dc_selecao_modos",
+      "target": "simulador_financeiro_dc_rendervals"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc",
+      "target": "leaderboard_dc"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "simulador_financeiro_dc_rendervals",
+      "target": "leaderboard_dc"
     },
     {
       "relation": "calls",
@@ -4072,178 +4641,48 @@
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc",
-      "target": "simulador_financeiro_dc_rendervals"
+      "source": "simulador_financeiro_dc_orquestrador",
+      "target": "simulador_financeiro_dc_executarcomconceito"
     },
     {
-      "relation": "shares_data_with",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc_rendervals",
-      "target": "leaderboard_dc"
+      "source": "simulador_financeiro_dc_fecharmes",
+      "target": "simulador_financeiro_dc_registrarplacar"
     },
     {
-      "relation": "shares_data_with",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc_rendervals",
-      "target": "negociocard_dc"
+      "source": "simulador_financeiro_dc_fecharmes",
+      "target": "simulador_financeiro_dc_verificarconceitosdeestado"
     },
     {
-      "relation": "shares_data_with",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc_rendervals",
-      "target": "painelstatus_dc"
+      "source": "simulador_financeiro_dc_registrarplacar",
+      "target": "simulador_financeiro_dc_carregarplacar"
     },
     {
-      "relation": "shares_data_with",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Simulador Financeiro.dc.html",
       "source_location": null,
       "weight": 1.0,
-      "source": "simulador_financeiro_dc_rendervals",
-      "target": "terminaleventos_dc"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "painelstatus_dc"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "negociocard_dc"
-    },
-    {
-      "relation": "semantically_similar_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "Leaderboard.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "leaderboard_dc",
-      "target": "terminaleventos_dc"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "terminaleventos_dc"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_fluxo",
-      "target": "leaderboard_dc"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_arquitetura_tres_camadas",
-      "target": "readme_fluxo"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_modo_cenarios",
-      "target": "readme_fluxo"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_proposito_triplo",
-      "target": "readme_fluxo"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_ensinar_financas",
-      "target": "readme_proposito_triplo"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_simulacao",
-      "target": "readme_proposito_triplo"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_speedrun",
-      "target": "readme_proposito_triplo"
-    },
-    {
-      "relation": "conceptually_related_to",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_speedrun_ranqueado",
-      "target": "readme_speedrun"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "readme_aleatoriedade_injetada",
-      "target": "readme_arquitetura_tres_camadas"
+      "source": "simulador_financeiro_dc_verificarconceitosdeestado",
+      "target": "simulador_financeiro_dc_executarcomconceito"
     }
   ],
   "hyperedges": [
@@ -4274,61 +4713,33 @@
       "source_file": "ConceitoModal.dc.html"
     },
     {
-      "id": "condicao_vitoria_renda_vs_custo",
-      "label": "Condi\u00e7\u00e3o de vit\u00f3ria: renda passiva supera custo de vida",
+      "id": "fluxo_placar_global_flow",
+      "label": "Fluxo do Placar Global (nick \u2192 jogo \u2192 score \u2192 ranking)",
       "nodes": [
-        "intro_dc_intro",
-        "fimdejogo_dc_fimdejogo",
-        "intro_dc_renda_passiva",
-        "intro_dc_custo_de_vida"
+        "intro_dc_nickname_input",
+        "simulador_financeiro_dc_registrarplacar",
+        "simulador_financeiro_dc_carregarplacar",
+        "leaderboard_dc",
+        "readme_placar_global"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Simulador Financeiro.dc.html"
+    },
+    {
+      "id": "fluxo_camada_educacional",
+      "label": "Camada educacional de conceitos (modais de primeira vez)",
+      "nodes": [
+        "readme_proposito_ensinar_financas",
+        "simulador_financeiro_dc_executarcomconceito",
+        "simulador_financeiro_dc_verificarconceitosdeestado"
       ],
       "relation": "participate_in",
       "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "Intro.dc.html"
-    },
-    {
-      "id": "proposito_triplo_fluxo",
-      "label": "Prop\u00f3sito triplo do Fluxo (ensinar > simular > speedrun)",
-      "nodes": [
-        "readme_proposito_triplo",
-        "readme_ensinar_financas",
-        "readme_simulacao",
-        "readme_speedrun"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md"
-    },
-    {
-      "id": "orquestrador_renderiza_telas",
-      "label": "Orquestrador converte estado em view-model e alimenta as telas",
-      "nodes": [
-        "simulador_financeiro_dc",
-        "painelstatus_dc",
-        "negociocard_dc",
-        "terminaleventos_dc",
-        "leaderboard_dc"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html"
-    },
-    {
-      "id": "fluxo_dados_placar",
-      "label": "Fluxo de dados do placar: engine/placar \u2192 orquestrador \u2192 Leaderboard",
-      "nodes": [
-        "engine_placar_ler",
-        "simulador_financeiro_dc",
-        "leaderboard_dc"
-      ],
-      "relation": "form",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
+      "confidence_score": 0.85,
       "source_file": "Simulador Financeiro.dc.html"
     }
   ],
-  "built_at_commit": "556e61460ba5fcb3ee6f0bcaa23d328bc11225da"
+  "built_at_commit": "d4eaa938f64b9a40f2cd6c2a0454a27d4ee074f5"
 }

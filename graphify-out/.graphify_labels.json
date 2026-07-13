@@ -1,1 +1,27 @@
-{"0": "Engine do Jogo (regras & estado)", "1": "Eventos & Testes do Engine", "2": "Runtime de Componentes (ciclo de vida)", "3": "Telas & Conceitos Financeiros", "4": "Compilador de Templates DC", "5": "Conceitos Desbloqueáveis", "6": "Bootstrap & Parsing DC", "7": "Fábrica de Runtime", "8": "Visão de Produto (propósito triplo)", "9": "Fábrica de Componentes & Lógica", "10": "Placar & Persistência", "11": "Resolução de Expressões & Caminhos", "12": "Utilitários de Nomes DC"}
+{
+  "0": "Regras do Jogo e Formatação",
+  "1": "Config, Ativos, Eventos e Testes",
+  "2": "Conceitos Educacionais e Menu",
+  "3": "Runtime DC: Componentes",
+  "4": "Placar Global (Supabase)",
+  "5": "Runtime DC: Compilador de Templates",
+  "6": "Telas de Cards e Glossário",
+  "7": "Runtime DC: Boot e Parsing",
+  "8": "Runtime DC: Registro e Módulos",
+  "9": "Runtime DC: Fábrica de Componentes",
+  "10": "Runtime DC: Resolução de Props",
+  "11": "Fim de Jogo",
+  "12": "Card do Negócio",
+  "13": "Painel de Status",
+  "14": "Terminal de Eventos",
+  "15": "Fluxo — Simulador Financeiro \"FALÊNCIA ou LIBERDADE\"",
+  "16": "rootNameForDocument",
+  "17": "Fluxo — Simulador Financeiro FALÊNCIA ou LIBERDADE",
+  "18": "Placar Global (Supabase)",
+  "19": "Propósito: Ensinar Finanças",
+  "20": "Aleatoriedade Injetável (rng por parâmetro)",
+  "21": "Cálculo de Score do Ranking",
+  "22": "Speedrun (timer + placar em todos os modos)",
+  "23": "Telas Só-Template (componentes *.dc.html)",
+  "24": "rootNameForDocument"
+}

@@ -15,9 +15,9 @@
     "semantic_hash": "13d06e58f7d6ef8371dd6281f419808c"
   },
   "engine/config.js": {
-    "mtime": 1783378626.5740066,
-    "ast_hash": "6cf2cec14bbe86e13b277e11c59a4a95",
-    "semantic_hash": "6cf2cec14bbe86e13b277e11c59a4a95"
+    "mtime": 1783918339.3528628,
+    "ast_hash": "06c516b6504bd004008e73b0686337f3",
+    "semantic_hash": "06c516b6504bd004008e73b0686337f3"
   },
   "engine/eventos.js": {
     "mtime": 1783359013.5305095,
@@ -25,19 +25,19 @@
     "semantic_hash": "58f04869dd93c802364636e67e4bd1ed"
   },
   "engine/formato.js": {
-    "mtime": 1783317951.4574862,
-    "ast_hash": "94e21d8ce45736754f10018c2e80c379",
-    "semantic_hash": "94e21d8ce45736754f10018c2e80c379"
+    "mtime": 1783916711.494111,
+    "ast_hash": "644e3e4d1dc96de43b44493e05fd52ae",
+    "semantic_hash": "644e3e4d1dc96de43b44493e05fd52ae"
   },
   "engine/placar.js": {
-    "mtime": 1783360860.1637015,
-    "ast_hash": "be1d7880f6e44c382ea180d127a19457",
-    "semantic_hash": "be1d7880f6e44c382ea180d127a19457"
+    "mtime": 1783968545.5954669,
+    "ast_hash": "3171aadec906a8d475203e445c94a657",
+    "semantic_hash": ""
   },
   "engine/regras.js": {
-    "mtime": 1783396263.202696,
-    "ast_hash": "9c6cb743dcd821479dec413571fc433b",
-    "semantic_hash": "9c6cb743dcd821479dec413571fc433b"
+    "mtime": 1783968454.0158982,
+    "ast_hash": "ad30a5371b863a1c90c2bd711e3530f3",
+    "semantic_hash": ""
   },
   "support.js": {
     "mtime": 1783060547.0,
@@ -45,9 +45,9 @@
     "semantic_hash": "5d03065df5441f0c24f990fac9a018dd"
   },
   "tests/engine.test.js": {
-    "mtime": 1783398532.9314516,
-    "ast_hash": "1b29fd52fd646cd5a9f3aeb8b2ae368c",
-    "semantic_hash": "1b29fd52fd646cd5a9f3aeb8b2ae368c"
+    "mtime": 1783968584.6886408,
+    "ast_hash": "5ee491379d885a52becbf91f7b26ad90",
+    "semantic_hash": ""
   },
   "AtivoCard.dc.html": {
     "mtime": 1783318053.8002868,
@@ -75,14 +75,14 @@
     "semantic_hash": "44ddd2a5af25ab8e96d50cb0e1bb6a90"
   },
   "Intro.dc.html": {
-    "mtime": 1783378828.3009453,
-    "ast_hash": "54fcdd027b937c0f33184476bbb59d48",
-    "semantic_hash": "54fcdd027b937c0f33184476bbb59d48"
+    "mtime": 1783916711.491111,
+    "ast_hash": "16c1e26df26527189a3e371b237ebeee",
+    "semantic_hash": "16c1e26df26527189a3e371b237ebeee"
   },
   "Leaderboard.dc.html": {
-    "mtime": 1783318071.1675985,
-    "ast_hash": "5a7ef926e8b82aea57e64354b95b400f",
-    "semantic_hash": "5a7ef926e8b82aea57e64354b95b400f"
+    "mtime": 1783916711.491111,
+    "ast_hash": "fd2fd72bb4bac07bd8b526aa2fc4ee67",
+    "semantic_hash": "fd2fd72bb4bac07bd8b526aa2fc4ee67"
   },
   "NegocioCard.dc.html": {
     "mtime": 1783359110.6181602,
@@ -95,18 +95,28 @@
     "semantic_hash": "c184a77f12ce9cb2c7be2c7808f9e86a"
   },
   "README.md": {
-    "mtime": 1783398539.702645,
-    "ast_hash": "ee15dc801839f54b24fe7c27852eff47",
-    "semantic_hash": "ee15dc801839f54b24fe7c27852eff47"
+    "mtime": 1783968606.0747964,
+    "ast_hash": "5db583f4ff635ee4525eae8e603ec71f",
+    "semantic_hash": ""
   },
   "Simulador Financeiro.dc.html": {
-    "mtime": 1783398520.5580962,
-    "ast_hash": "9ce16abf7f0c374b351148b02a37d8e9",
-    "semantic_hash": "9ce16abf7f0c374b351148b02a37d8e9"
+    "mtime": 1783916711.493111,
+    "ast_hash": "c916de411621e2824e837d1d590c39a2",
+    "semantic_hash": "c916de411621e2824e837d1d590c39a2"
   },
   "TerminalEventos.dc.html": {
     "mtime": 1783318061.2334201,
     "ast_hash": "44979e5d2908615e98bd536502e8e8b1",
     "semantic_hash": "44979e5d2908615e98bd536502e8e8b1"
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1783402317.5148194,
+    "ast_hash": "206940b8fcab0cd0c1987baaad8ee4bd",
+    "semantic_hash": "206940b8fcab0cd0c1987baaad8ee4bd"
+  },
+  "supabase/hardening.sql": {
+    "mtime": 1783968423.2978034,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
   }
 }
