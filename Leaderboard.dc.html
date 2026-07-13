@@ -10,10 +10,11 @@
 </head>
 <body>
 <!-- Leaderboard. Só template.
-     Props: lbLista = [{ pos, nome, status, cor, detalhe, bg }] -->
+     Props: lbTitulo ("▮ PLACAR GLOBAL · CLÁSSICO"), lbTituloCor,
+     lbLista = [{ pos, nome, status, cor, detalhe, bg }] -->
 <x-dc>
 <div style="background:#0d1117;border:1px solid #1e2833;border-radius:6px;overflow:hidden;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;line-height:1.5;">
-  <div style="background:#11161d;border-bottom:1px solid #1e2833;padding:8px 14px;font-size:10px;letter-spacing:2px;color:#6b7c8c;">▮ LEADERBOARD</div>
+  <div style="background:#11161d;border-bottom:1px solid #1e2833;padding:8px 14px;font-size:10px;letter-spacing:2px;color:{{ lbTituloCor }};">{{ lbTitulo }}</div>
   <div style="padding:10px 14px;display:grid;gap:6px;font-size:11.5px;">
     <sc-for list="{{ lbLista }}" as="p" hint-placeholder-count="5">
       <div style="display:flex;gap:8px;align-items:baseline;background:{{ p.bg }};border-radius:3px;padding:2px 6px;">
@@ -26,6 +27,6 @@
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"lbLista":{"default":[{"pos":"#1","nome":"ANA.DIVIDENDOS","status":"LIVRE","cor":"#22d47e","detalhe":"44m · ⏱05:12","bg":"transparent"},{"pos":"#2","nome":"VOCÊ · 01/07/2026","status":"LIVRE","cor":"#22d47e","detalhe":"52m · ⏱08:40","bg":"rgba(34,212,126,.08)"},{"pos":"#3","nome":"CARLOS_CDB","status":"LIVRE","cor":"#22d47e","detalhe":"61m · ⏱08:15","bg":"transparent"},{"pos":"#4","nome":"MARI_SEM_RESERVA","status":"FALIU","cor":"#ff4d5e","detalhe":"14m · ⏱02:10","bg":"transparent"},{"pos":"#5","nome":"JOAO.ALLIN.BTC","status":"FALIU","cor":"#ff4d5e","detalhe":"9m · ⏱01:24","bg":"transparent"}]}}'></script>
+<script type="text/x-dc" data-dc-script data-props='{"lbTitulo":{"default":"▮ PLACAR GLOBAL · CLÁSSICO"},"lbTituloCor":{"default":"#6b7c8c"},"lbLista":{"default":[{"pos":"#1","nome":"ANA.DIVIDENDOS","status":"LIVRE","cor":"#22d47e","detalhe":"44m · ⏱05:12","bg":"transparent"},{"pos":"#2","nome":"VOCÊ · 01/07/2026","status":"LIVRE","cor":"#22d47e","detalhe":"52m · ⏱08:40","bg":"rgba(34,212,126,.08)"},{"pos":"#3","nome":"CARLOS_CDB","status":"LIVRE","cor":"#22d47e","detalhe":"61m · ⏱08:15","bg":"transparent"},{"pos":"#4","nome":"MARI_SEM_RESERVA","status":"FALIU","cor":"#ff4d5e","detalhe":"14m · ⏱02:10","bg":"transparent"},{"pos":"#5","nome":"JOAO.ALLIN.BTC","status":"FALIU","cor":"#ff4d5e","detalhe":"9m · ⏱01:24","bg":"transparent"}]}}'></script>
 </body>
 </html>

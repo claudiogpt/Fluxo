@@ -17,7 +17,8 @@
      mostraCenarios (bool), cenariosLista = [{ nome, descricao, tag, tagCor, borda, nomeCor, descCor, cursor, escolher }],
      mostraSaqueConfig (bool), saqueDica, fixoBg/fixoCor/pctBg/pctCor, escolherSaqueFixo/escolherSaquePct (fns),
      mostraEstrategia (bool, cenário imóveis), estrategiaDica, comprarBg/comprarCor/alugarBg/alugarCor,
-     escolherComprar/escolherAlugar (fns) -->
+     escolherComprar/escolherAlugar (fns),
+     nick (string), setNick (fn de onInput), nickDica -->
 <x-dc>
 <div data-screen-label="Intro" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;color:#d7e1ea;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;">
   <div style="max-width:640px;width:100%;">
@@ -105,6 +106,15 @@
       </div>
     </sc-if>
 
+    <div style="margin-bottom:18px;">
+      <div style="color:#6b7c8c;font-size:10px;letter-spacing:2px;margin-bottom:8px;">PLACAR GLOBAL</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input value="{{ nick }}" onInput="{{ setNick }}" maxlength="16" placeholder="SEU.NICK" spellcheck="false"
+          style="background:#11161d;border:1px solid #1e2833;color:#f2f7fb;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:12px;letter-spacing:1px;padding:9px 14px;border-radius:4px;width:200px;outline:none;text-transform:uppercase;">
+        <span style="color:#3a4a5a;font-size:11px;">{{ nickDica }}</span>
+      </div>
+    </div>
+
     <div style="height:8px;"></div>
 
     <button onClick="{{ comecar }}" style="background:#22d47e;color:#08110c;border:none;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:1px;padding:14px 32px;border-radius:4px;cursor:pointer;" style-hover="background:#3ee996;">INICIAR SIMULAÇÃO ▸</button>
@@ -112,6 +122,6 @@
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"caixaFmt":{"default":"R$ 1.500"},"salarioFmt":{"default":"R$ 4.500"},"custoFmt":{"default":"R$ 3.420"},"rendaResumo":{"default":"salário R$ 4.500/mês"},"normalBg":{"default":"transparent"},"normalCor":{"default":"#6b7c8c"},"hardBg":{"default":"rgba(255,77,94,.12)"},"hardCor":{"default":"#ff4d5e"},"difDica":{"default":"caixa inicial menor, custo de vida mais pesado e mais acidentes no caminho"},"mostraCapitais":{"default":false},"capitaisLista":{"default":[]},"mostraCenarios":{"default":true},"cenariosLista":{"default":[{"nome":"APOSENTADORIA","descricao":"Acumule por alguns anos e depois viva só do patrimônio. A ORDEM dos anos bons e ruins decide se o dinheiro dura.","tag":"▸ SELECIONADO","tagCor":"#22d47e","borda":"#22d47e","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"},{"nome":"IMÓVEIS","descricao":"Comprar financiado ou alugar e investir a diferença? Descubra qual estratégia sobra mais no fim.","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"}]},"mostraSaqueConfig":{"default":true},"saqueDica":{"default":"saque fixo = seu custo de vida (inflaciona). É o que cria o risco de sequência."},"fixoBg":{"default":"rgba(34,212,126,.12)"},"fixoCor":{"default":"#22d47e"},"pctBg":{"default":"transparent"},"pctCor":{"default":"#6b7c8c"},"modosLista":{"default":[{"nome":"CLÁSSICO","descricao":"Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.","tag":"▸ SELECIONADO","tagCor":"#22d47e","borda":"#22d47e","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"},{"nome":"CENÁRIOS","descricao":"Crises e épocas reais pra atravessar com as decisões certas de alocação.","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"},{"nome":"SPEEDRUN","descricao":"Seed compartilhada, relógio global e placar ranqueado. Quão rápido você se liberta?","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"}]}}'></script>
+<script type="text/x-dc" data-dc-script data-props='{"nick":{"default":"SEU.NICK"},"nickDica":{"default":"seu nome no ranking mundial — recordes valem em todos os modos"},"caixaFmt":{"default":"R$ 1.500"},"salarioFmt":{"default":"R$ 4.500"},"custoFmt":{"default":"R$ 3.420"},"rendaResumo":{"default":"salário R$ 4.500/mês"},"normalBg":{"default":"transparent"},"normalCor":{"default":"#6b7c8c"},"hardBg":{"default":"rgba(255,77,94,.12)"},"hardCor":{"default":"#ff4d5e"},"difDica":{"default":"caixa inicial menor, custo de vida mais pesado e mais acidentes no caminho"},"mostraCapitais":{"default":false},"capitaisLista":{"default":[]},"mostraCenarios":{"default":true},"cenariosLista":{"default":[{"nome":"APOSENTADORIA","descricao":"Acumule por alguns anos e depois viva só do patrimônio. A ORDEM dos anos bons e ruins decide se o dinheiro dura.","tag":"▸ SELECIONADO","tagCor":"#22d47e","borda":"#22d47e","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"},{"nome":"IMÓVEIS","descricao":"Comprar financiado ou alugar e investir a diferença? Descubra qual estratégia sobra mais no fim.","tag":"EM BREVE","tagCor":"#3a4a5a","borda":"#1e2833","nomeCor":"#3a4a5a","descCor":"#3a4a5a","cursor":"default"}]},"mostraSaqueConfig":{"default":true},"saqueDica":{"default":"saque fixo = seu custo de vida (inflaciona). É o que cria o risco de sequência."},"fixoBg":{"default":"rgba(34,212,126,.12)"},"fixoCor":{"default":"#22d47e"},"pctBg":{"default":"transparent"},"pctCor":{"default":"#6b7c8c"},"modosLista":{"default":[{"nome":"CLÁSSICO","descricao":"Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.","tag":"▸ SELECIONADO","tagCor":"#22d47e","borda":"#22d47e","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"},{"nome":"CENÁRIOS","descricao":"Situações da vida real pra atravessar com as decisões certas de alocação.","tag":"","tagCor":"#22d47e","borda":"#1e2833","nomeCor":"#f2f7fb","descCor":"#8fa1b2","cursor":"pointer"}]}}'></script>
 </body>
 </html>

@@ -6,9 +6,7 @@ Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida
 
 1. **Ensinar finanças** — prioritário. Cada mecânica e evento deve deixar uma lição real de finanças pessoais/investimentos.
 2. **Simulação** — secundário. A tendência é simular cada vez mais a realidade de investimentos, com decisões mais intricadas de tipos de investimento.
-3. **Speedrun** — diversão/monetização. Timer, leaderboard e, futuramente, modo ranqueado com seed compartilhada.
-
-Modos futuros planejados (já reservados no menu como "EM BREVE"): **Cenários** (crises/épocas reais pra atravessar, estilo Plague Inc) e **Speedrun ranqueado**.
+3. **Speedrun** — diversão/monetização. Timer e placar global em **todos os modos**. Sem seed compartilhada, de propósito: o jogo é não determinístico e a sorte (e jogar de novo) faz parte da corrida.
 
 ## Como rodar
 
@@ -40,8 +38,8 @@ Funções puras sobre um objeto de estado plano. Cada arquivo expõe um módulo 
 | `ativos.js` | Definição dos 5 ativos (retorno, volatilidade, dividendo, risco, textos). |
 | `eventos.js` | Tabela de eventos aleatórios com pesos + sorteio. |
 | `regras.js` | O coração: `novoJogo`, `fecharMes` (resolve um turno), `mover` (aporte/resgate), `cobrir` (liquidação em cascata), `rendaPassiva`, `patrimonio`. |
-| `formato.js` | `fmt` (R$), `fmtTempo`, `sparkline`. |
-| `placar.js` | Leaderboard em `localStorage` (storage injetável nos testes). |
+| `formato.js` | `fmt` (R$), `fmtCompacto`, `fmtTempo`, `sparkline`. |
+| `placar.js` | Placar global: um board por modo, envio/leitura no Supabase via REST (`fetch` injetável) e fallback em `localStorage`. |
 
 A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo — é isso que torna as regras testáveis.
 
@@ -73,10 +71,42 @@ Recebem tudo por props (strings prontas, cores e callbacks); não têm estado ne
 - `support.js` — runtime DC (gerado, **não editar**).
 - `tema.css` — estilos globais compartilhados (fonte, fundo, animações `piscar`/`surgir`).
 
+## Placar global (Supabase)
+
+Todos os modos têm um placar. Sem configuração ele é **local** (localStorage do dispositivo); com um projeto Supabase gratuito ele vira **global** (ranking mundial). Como ligar:
+
+1. Crie um projeto em [supabase.com](https://supabase.com) (plano free).
+2. No **SQL Editor** do projeto, rode:
+
+```sql
+create table placar (
+  id uuid primary key default gen_random_uuid(),
+  criado_em timestamptz not null default now(),
+  nome text not null check (char_length(nome) between 1 and 16),
+  modo text not null check (modo in ('classico','sandbox','empresario','aposentadoria','imoveis')),
+  detalhe text not null default '',
+  dificuldade text not null check (dificuldade in ('normal','hardcore')),
+  resultado text not null,
+  meses int not null check (meses between 0 and 9999),
+  pat bigint not null,
+  tempo int not null check (tempo >= 0),
+  score bigint not null
+);
+create index placar_board on placar (modo, score desc);
+
+alter table placar enable row level security;
+create policy "leitura publica" on placar for select using (true);
+create policy "insercao publica" on placar for insert with check (true);
+```
+
+3. Em **Project Settings → API**, copie a **URL** e a **anon key** e cole em `engine/config.js` → `placarOnline`. A anon key é pública por design — o RLS acima só permite ler e inserir, nunca editar/apagar.
+
+Como o ranking funciona: cada partida gera um `score` (maior = melhor) calculado no `placar.js` — vitória sempre vence derrota; clássico/empresário/sandbox premiam **menos meses** (tempo real desempata); aposentadoria/imóveis premiam **patrimônio final**. O board consulta `order=score.desc` direto no banco.
+
 ## Receitas rápidas
 
 - **Mudar balanceamento** (dificuldade, inflação, deságios): `engine/config.js`.
-- **Adicionar um modo de jogo**: entre em `engine/config.js` (`modos`) com `disponivel: false` — ele já aparece no menu como "EM BREVE". Quando a mecânica existir, ligue `disponivel: true` e trate o `state.modo` no orquestrador/engine.
+- **Adicionar um modo de jogo**: entre em `engine/config.js` (`modos`) com `disponivel: false` — ele já aparece no menu como "EM BREVE". Quando a mecânica existir, ligue `disponivel: true` e trate o `state.modo` no orquestrador/engine. O placar do modo novo é automático se ele terminar com `s.fim`; ajuste o `scoreDe` em `engine/placar.js` se a métrica não for "menos meses".
 - **Adicionar um conceito educacional**: nova entrada em `engine/conceitos.js` (`tooltips` para o modal de primeira vez, `termos` para o glossário) + o gatilho no orquestrador (interceptar ação com `executarComConceito(id, acao)` ou checar em `verificarConceitosDeEstado`).
 - **Adicionar um ativo**: acrescente em `engine/ativos.js` (e na ordem de liquidação em `config.js` se quiser que ele cubra déficit). A UI o exibe automaticamente.
 - **Adicionar um evento aleatório**: acrescente um item com peso `p` e `run` em `engine/eventos.js`.
