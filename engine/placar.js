@@ -1,54 +1,149 @@
-// Leaderboard: persistência em localStorage + seeds de exemplo.
-// `storage` é injetável para testes; no browser cai no localStorage.
+// Placar global: um board por modo, com envio pro Supabase quando configurado
+// (config.placarOnline) e fallback em localStorage quando offline/sem chaves.
+// `storage` e `fetchFn` são injetáveis para testes.
 (function (root, factory) {
-  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
-  else { root.Fluxo = root.Fluxo || {}; root.Fluxo.placar = factory(); }
-})(typeof window !== 'undefined' ? window : globalThis, function () {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory(
+    typeof require !== 'undefined' ? require('./config.js') : (root.Fluxo || {}).config
+  );
+  else { root.Fluxo = root.Fluxo || {}; root.Fluxo.placar = factory(root.Fluxo.config); }
+})(typeof window !== 'undefined' ? window : globalThis, function (config) {
 
-  const CHAVE = 'simfin_lb_v1';
+  const CHAVE = 'fluxo_placar_v2';
+  const CHAVE_NICK = 'fluxo_nick';
 
-  const SEEDS = [
-    { nome: 'ANA.DIVIDENDOS', status: 'livre', meses: 44, pat: 168000, tempo: 312 },
-    { nome: 'CARLOS_CDB', status: 'livre', meses: 61, pat: 121000, tempo: 495 },
-    { nome: 'JOAO.ALLIN.BTC', status: 'faliu', meses: 9, pat: 0, tempo: 84 },
-    { nome: 'MARI_SEM_RESERVA', status: 'faliu', meses: 14, pat: 0, tempo: 130 },
-  ];
+  // Resultados que valem "vitória" — dominam o ranking do board.
+  const VITORIAS = ['livre', 'marco', 'apos_sucesso', 'imoveis_fim'];
 
   function storagePadrao() {
     try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch (e) { return null; }
   }
 
-  function salvar(s, patrimonio, storage) {
+  // ---------- nickname ----------
+
+  function nick(storage) {
+    const st = storage || storagePadrao();
+    try { return (st && st.getItem(CHAVE_NICK)) || ''; } catch (e) { return ''; }
+  }
+
+  function salvarNick(nome, storage) {
+    const st = storage || storagePadrao();
+    if (!st) return;
+    try { st.setItem(CHAVE_NICK, String(nome || '').slice(0, 16)); } catch (e) {}
+  }
+
+  // ---------- registro de partida ----------
+
+  // Board da partida: cenários viram boards próprios (aposentadoria, imoveis).
+  function boardDe(s) {
+    return s.modo === 'cenarios' ? s.cenario : s.modo;
+  }
+
+  // Score único, maior = melhor, comparável dentro de um mesmo board:
+  // vitórias partem de 1e12 (sempre acima de qualquer derrota);
+  // corrida contra o tempo (clássico/empresário/sandbox) premia menos meses,
+  // boards de patrimônio (aposentadoria/imóveis) premiam o patrimônio final;
+  // derrotas rankeiam por quem durou mais meses.
+  function scoreDe(modo, resultado, meses, pat, tempo) {
+    if (VITORIAS.indexOf(resultado) < 0) return meses;
+    if (modo === 'aposentadoria' || modo === 'imoveis') return 1e12 + Math.max(0, pat);
+    return 1e12 - meses * 1e6 - Math.min(Math.max(0, tempo), 999999);
+  }
+
+  // Monta o registro a partir do estado final. `resultado` sobrescreve s.fim
+  // (o sandbox nunca "termina": registra quando cruza o marco da liberdade).
+  function registro(s, patrimonio, nome, resultado) {
+    const modo = boardDe(s);
+    const res = resultado || s.fim;
+    const meses = s.mes;
+    const pat = Math.round(patrimonio);
+    const ini = s.inicioTs == null ? Date.now() : s.inicioTs;
+    const fimTs = s.fimTs == null ? Date.now() : s.fimTs;
+    const tempo = Math.max(0, Math.round((fimTs - ini) / 1000));
+    const detalhe = modo === 'sandbox' ? String(s.capitalInicial || '')
+      : modo === 'aposentadoria' ? (s.aposentadoria ? s.aposentadoria.saqueModo : '')
+      : modo === 'imoveis' ? (s.imoveis ? s.imoveis.escolha : '')
+      : '';
+    return {
+      nome: String(nome || 'ANÔNIMO').slice(0, 16),
+      modo, detalhe,
+      dificuldade: s.dificuldade || 'normal',
+      resultado: res, meses, pat, tempo,
+      score: scoreDe(modo, res, meses, pat, tempo),
+    };
+  }
+
+  function vitoria(resultado) { return VITORIAS.indexOf(resultado) >= 0; }
+
+  function ordenar(lista) {
+    return [...lista].sort((a, b) => (b.score - a.score) || ((a.ts || 0) - (b.ts || 0)));
+  }
+
+  // ---------- placar local (fallback e histórico próprio) ----------
+
+  function salvar(rec, storage) {
     const st = storage || storagePadrao();
     if (!st) return;
     try {
       const lb = JSON.parse(st.getItem(CHAVE) || '[]');
-      lb.push({
-        nome: 'VOCÊ · ' + new Date().toLocaleDateString('pt-BR'),
-        status: s.fim,
-        meses: s.mes,
-        pat: Math.round(patrimonio),
-        tempo: Math.round(((s.fimTs || Date.now()) - (s.inicioTs || Date.now())) / 1000),
-        voce: true,
-        ts: Date.now(),
-      });
-      st.setItem(CHAVE, JSON.stringify(lb.slice(-30)));
+      lb.push({ ...rec, voce: true, ts: Date.now() });
+      st.setItem(CHAVE, JSON.stringify(lb.slice(-100)));
     } catch (e) { /* sem storage */ }
   }
 
-  // Livres primeiro (menos meses ganha, tempo desempata); falidos por quem durou mais.
-  function ler(storage) {
+  function ler(modo, storage) {
     const st = storage || storagePadrao();
     let salvos = [];
     try { salvos = JSON.parse((st && st.getItem(CHAVE)) || '[]'); } catch (e) {}
-    const todos = [...SEEDS, ...salvos];
-    todos.sort((a, b) => {
-      if (a.status !== b.status) return a.status === 'livre' ? -1 : 1;
-      if (a.status === 'livre') return (a.meses - b.meses) || ((a.tempo || 9e9) - (b.tempo || 9e9));
-      return b.meses - a.meses;
-    });
-    return todos.slice(0, 7);
+    return ordenar(salvos.filter(r => r.modo === modo)).slice(0, 10);
   }
 
-  return { CHAVE, salvar, ler };
+  // ---------- placar online (Supabase REST) ----------
+
+  function cfgPadrao() { return (config && config.placarOnline) || {}; }
+
+  function online(cfg) {
+    const c = cfg || cfgPadrao();
+    return !!(c.url && c.anonKey);
+  }
+
+  function cabecalhos(c) {
+    return {
+      apikey: c.anonKey,
+      Authorization: 'Bearer ' + c.anonKey,
+      'Content-Type': 'application/json',
+    };
+  }
+
+  // Aceita a url tanto na forma base (https://x.supabase.co) quanto já com o
+  // sufixo /rest/v1 que o painel do Supabase às vezes mostra — sem duplicar.
+  function urlTabela(c) {
+    const base = c.url.replace(/\/+$/, '').replace(/\/rest\/v1$/, '');
+    return base + '/rest/v1/' + (c.tabela || 'placar');
+  }
+
+  // Envia um registro; resolve true/false, nunca rejeita (o jogo segue offline).
+  function enviarRemoto(rec, cfg, fetchFn) {
+    const c = cfg || cfgPadrao();
+    const f = fetchFn || (typeof fetch !== 'undefined' ? fetch : null);
+    if (!online(c) || !f) return Promise.resolve(false);
+    const { nome, modo, detalhe, dificuldade, resultado, meses, pat, tempo, score } = rec;
+    return f(urlTabela(c), {
+      method: 'POST',
+      headers: { ...cabecalhos(c), Prefer: 'return=minimal' },
+      body: JSON.stringify({ nome, modo, detalhe, dificuldade, resultado, meses, pat, tempo, score }),
+    }).then(r => r.ok).catch(() => false);
+  }
+
+  // Top 10 do board; resolve null quando offline/deu erro (caller cai no local).
+  function lerRemoto(modo, cfg, fetchFn) {
+    const c = cfg || cfgPadrao();
+    const f = fetchFn || (typeof fetch !== 'undefined' ? fetch : null);
+    if (!online(c) || !f) return Promise.resolve(null);
+    const q = '?modo=eq.' + encodeURIComponent(modo) + '&order=score.desc,criado_em.asc&limit=10';
+    return f(urlTabela(c) + q, { headers: cabecalhos(c) })
+      .then(r => (r.ok ? r.json() : null))
+      .catch(() => null);
+  }
+
+  return { CHAVE, CHAVE_NICK, nick, salvarNick, boardDe, registro, vitoria, ordenar, salvar, ler, online, enviarRemoto, lerRemoto };
 });

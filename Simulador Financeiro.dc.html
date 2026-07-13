@@ -37,6 +37,7 @@
       mostraEstrategia="{{ mostraEstrategia }}" estrategiaDica="{{ estrategiaDica }}"
       comprarBg="{{ comprarBg }}" comprarCor="{{ comprarCor }}" alugarBg="{{ alugarBg }}" alugarCor="{{ alugarCor }}"
       escolherComprar="{{ escolherComprar }}" escolherAlugar="{{ escolherAlugar }}"
+      nick="{{ nick }}" setNick="{{ setNick }}" nickDica="{{ nickDica }}"
       rendaResumo="{{ rendaResumo }}"></dc-import>
   </sc-if>
 
@@ -77,7 +78,7 @@
 
         <div style="display:grid;gap:12px;">
           <dc-import name="TerminalEventos" logLista="{{ logLista }}"></dc-import>
-          <dc-import name="Leaderboard" lbLista="{{ lbLista }}"></dc-import>
+          <dc-import name="Leaderboard" lbLista="{{ lbLista }}" lbTitulo="{{ lbTitulo }}" lbTituloCor="{{ lbTituloCor }}"></dc-import>
         </div>
       </div>
     </div>
@@ -107,11 +108,13 @@
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = Fluxo.regras.novoJogo(props);
+    // nick e lbRemoto vivem fora do estado de partida: sobrevivem a reset/menu.
+    this.state = { ...Fluxo.regras.novoJogo(props), nick: Fluxo.placar.nick(), lbRemoto: null };
   }
 
   componentDidMount() {
     this.onKey = (e) => {
+      if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return; // digitando o nick
       if (e.code === 'KeyG') { e.preventDefault(); this.toggleGlossario(); return; }
       if (this.state.glossarioAberto) {
         if (e.code === 'Escape') { e.preventDefault(); this.toggleGlossario(); }
@@ -126,6 +129,7 @@ class Component extends DCLogic {
       if (e.code === 'KeyA') { e.preventDefault(); this.toggleAuto(); }
     };
     window.addEventListener('keydown', this.onKey);
+    this.carregarPlacar();
     this.tick = setInterval(() => {
       const st = this.state;
       if (st.tela === 'jogo' && !st.fim && st.inicioTs) {
@@ -142,6 +146,28 @@ class Component extends DCLogic {
 
   toggleAuto = () => this.setState(s => ({ auto: !s.auto }));
   toggleGlossario = () => this.setState(s => ({ glossarioAberto: !s.glossarioAberto }));
+
+  setNick = (e) => {
+    const v = String((e && e.target && e.target.value) || '').toUpperCase().slice(0, 16);
+    Fluxo.placar.salvarNick(v);
+    this.setState({ nick: v });
+  };
+
+  // Busca o top 10 global do board atual; sem chaves/rede o placar local assume.
+  carregarPlacar = () => {
+    if (!Fluxo.placar.online()) return;
+    const board = Fluxo.placar.boardDe(this.state);
+    Fluxo.placar.lerRemoto(board).then(lista => {
+      if (lista) this.setState({ lbRemoto: { board, lista } });
+    });
+  };
+
+  // Toda partida pontua: salva local e envia pro global (fire-and-forget).
+  registrarPlacar(s, resultado) {
+    const rec = Fluxo.placar.registro(s, Fluxo.regras.patrimonio(s), s.nick || 'ANÔNIMO', resultado);
+    Fluxo.placar.salvar(rec);
+    Fluxo.placar.enviarRemoto(rec).then(ok => { if (ok) this.carregarPlacar(); });
+  }
 
   comecar = () => {
     const inicia = () => this.setState({ tela: 'jogo', inicioTs: Date.now(), agora: Date.now() });
@@ -194,6 +220,8 @@ class Component extends DCLogic {
         imoveisEscolha: s.imoveis ? s.imoveis.escolha : undefined,
       }),
       modal: null,
+      nick: s.nick,
+      lbRemoto: s.lbRemoto,
       ...extras,
     };
   }
@@ -203,13 +231,13 @@ class Component extends DCLogic {
     this.setState(s => this.novoEstado({ ...s, dificuldade: d }, {}));
   }
   escolherModo(id) {
-    this.setState(s => this.novoEstado({ ...s, modo: id }, {}));
+    this.setState(s => this.novoEstado({ ...s, modo: id }, {}), () => this.carregarPlacar());
   }
   escolherCapital(v) {
     this.setState(s => this.novoEstado({ ...s, capitalInicial: v }, {}));
   }
   escolherCenario(id) {
-    this.setState(s => this.novoEstado({ ...s, cenario: id }, {}));
+    this.setState(s => this.novoEstado({ ...s, cenario: id }, {}), () => this.carregarPlacar());
   }
   escolherSaqueModo(m) {
     this.setState(s => this.novoEstado({ ...s, cenario: s.cenario, aposentadoria: { ...s.aposentadoria, saqueModo: m } }, {}));
@@ -235,17 +263,17 @@ class Component extends DCLogic {
     this.setState(st => {
       if (st.fim) return st; // partida encerrada: nada mais a fechar
       const s = Fluxo.regras.fecharMes(st);
-      // Leaderboard só registra os modos que terminam em livre/faliu.
-      if (s.fim && !st.fim && (s.fim === 'faliu' || s.fim === 'livre')) {
-        Fluxo.placar.salvar(s, Fluxo.regras.patrimonio(s));
-      }
+      // Todo desfecho pontua no board do modo; o sandbox (que nunca termina)
+      // pontua na hora em que a renda passiva cruza o custo de vida.
+      if (s.fim && !st.fim) this.registrarPlacar(s);
+      else if (s.marcoLivre && !st.marcoLivre) this.registrarPlacar(s, 'marco');
       return s;
     }, () => this.verificarConceitosDeEstado());
   };
 
   // View-model: converte o estado do engine em strings/cores prontas pros templates.
   renderVals() {
-    const { fmt, fmtTempo, sparkline } = Fluxo.formato;
+    const { fmt, fmtCompacto, fmtTempo, sparkline } = Fluxo.formato;
     const s = this.state;
     const rp = Fluxo.regras.rendaPassiva(s);
     const pat = Fluxo.regras.patrimonio(s);
@@ -273,14 +301,36 @@ class Component extends DCLogic {
 
     const spark = sparkline(s.hist.length ? s.hist : [pat]);
 
-    const lbLista = Fluxo.placar.ler().map((p, i) => ({
-      pos: '#' + (i + 1),
-      nome: p.nome,
-      status: p.status === 'livre' ? 'LIVRE' : 'FALIU',
-      cor: p.status === 'livre' ? '#22d47e' : '#ff4d5e',
-      detalhe: p.meses + 'm' + (p.tempo ? ' · ⏱' + fmtTempo(p.tempo * 1000) : ''),
-      bg: p.voce ? 'rgba(34,212,126,.08)' : 'transparent',
-    }));
+    // Placar do board atual: global (Supabase) quando carregou, senão o local.
+    const board = Fluxo.placar.boardDe(s);
+    const remoto = s.lbRemoto && s.lbRemoto.board === board ? s.lbRemoto.lista : null;
+    const LB_ROTULOS = {
+      livre: ['LIVRE', '#22d47e'], marco: ['LIVRE', '#22d47e'],
+      apos_sucesso: ['VIVEU', '#22d47e'], apos_faliu: ['ZEROU', '#ff4d5e'],
+      imoveis_fim: ['FIM', '#4bb7ff'], faliu: ['FALIU', '#ff4d5e'],
+    };
+    const lbLista = (remoto || Fluxo.placar.ler(board)).map((p, i) => {
+      const [rotulo, cor] = LB_ROTULOS[p.resultado] || [String(p.resultado || '?').toUpperCase(), '#8fa1b2'];
+      const venceu = Fluxo.placar.vitoria(p.resultado);
+      let det = p.meses + 'm';
+      if (venceu && (board === 'aposentadoria' || board === 'imoveis')) det += ' · ' + fmtCompacto(p.pat || 0);
+      else if (venceu) det += ' · ⏱' + fmtTempo((p.tempo || 0) * 1000);
+      if (board === 'sandbox' && p.detalhe) det = fmtCompacto(Number(p.detalhe)) + ' → ' + det;
+      if (board === 'imoveis' && p.detalhe) det = (p.detalhe === 'comprar' ? '🏠 ' : '📈 ') + det;
+      if (p.dificuldade === 'hardcore') det += ' · HC';
+      return {
+        pos: '#' + (i + 1),
+        nome: p.nome,
+        status: rotulo,
+        cor,
+        detalhe: det,
+        bg: (p.voce || (s.nick && p.nome === s.nick)) ? 'rgba(34,212,126,.08)' : 'transparent',
+      };
+    });
+    if (!lbLista.length) lbLista.push({ pos: '—', nome: remoto ? 'seja o primeiro do mundo a pontuar aqui' : 'nenhuma partida registrada ainda', status: '', cor: '#3a4a5a', detalhe: '', bg: 'transparent' });
+    const boardDef = Fluxo.config.modos.find(m => m.id === board) || Fluxo.config.cenarios.find(c => c.id === board);
+    const lbTitulo = '▮ PLACAR ' + (remoto ? 'GLOBAL' : 'LOCAL') + ' · ' + (boardDef ? boardDef.nome : board.toUpperCase());
+    const lbTituloCor = remoto ? '#22d47e' : '#6b7c8c';
 
     const modosLista = Fluxo.config.modos.map(m => {
       const selecionado = m.id === s.modo;
@@ -574,7 +624,12 @@ class Component extends DCLogic {
       sparkCor: spark.positivo ? '#22d47e' : '#ff4d5e',
       ativosLista,
       logLista: s.log,
-      lbLista,
+      lbLista, lbTitulo, lbTituloCor,
+      nick: s.nick,
+      setNick: this.setNick,
+      nickDica: Fluxo.placar.online()
+        ? 'seu nome no ranking mundial — todos os modos têm placar global'
+        : 'placar global desligado — recordes ficam salvos só neste dispositivo',
       fimTitulo, fimCor, fimResumo, fimLicao,
       tempoFmt: s.inicioTs ? fmtTempo((s.fimTs || s.agora || Date.now()) - s.inicioTs) : '00:00',
       tempoCor: s.auto ? '#ffc24b' : '#f2f7fb',

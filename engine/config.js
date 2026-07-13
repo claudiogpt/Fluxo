@@ -10,6 +10,7 @@
     dificuldades: {
       normal:   { caixaInicial: 3000, custoFator: 0.70, chanceEvento: 0.42, inflacaoBase: 1.004 },
       hardcore: { caixaInicial: 1500, custoFator: 0.76, chanceEvento: 0.55, inflacaoBase: 1.005 },
+      hiperinflacão: { caixaInicial: 3000, custoFator: 0.72, chanceEvento: 0.55, inflacaoBase: 1.030 },
     },
 
     // Modos de jogo exibidos no menu. Novos modos entram aqui com disponivel: false
@@ -19,8 +20,15 @@
       { id: 'sandbox', nome: 'SANDBOX', descricao: 'Sem falência e sem pressa: escolha o capital inicial e teste estratégias à vontade.', disponivel: true },
       { id: 'empresario', nome: 'EMPRESÁRIO', descricao: 'Sem salário: viva do seu negócio. Reinvestir pra crescer ou sacar pra investir? PJ não é seu bolso.', disponivel: true },
       { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Situações da vida real pra atravessar com as decisões certas de alocação.', disponivel: true },
-      { id: 'speedrun', nome: 'SPEEDRUN', descricao: 'Seed compartilhada, relógio global e placar ranqueado. Quão rápido você se liberta?', disponivel: false },
     ],
+
+    // Placar global (Supabase). Preencha url e anonKey pra ligar o online;
+    // vazio = placar local por dispositivo. A anonKey é pública por design (RLS).
+    placarOnline: {
+      url: 'https://cxzotdgpjizmkecqrxuo.supabase.co/rest/v1/',      // ex.: 'https://xxxx.supabase.co'
+      anonKey: 'sb_publishable_Ml1CcZxzZaYdbdGa1ZSZLw_8Wxzn41P',
+      tabela: 'placar',
+    },
 
     // Cenários dentro do modo CENÁRIOS. Novos entram aqui com disponivel: false até existir.
     cenarios: [

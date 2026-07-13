@@ -15,6 +15,15 @@
     return String(m).padStart(2, '0') + ':' + String(seg).padStart(2, '0');
   }
 
+  // Valor compacto pra espaços apertados (placar): R$ 950 · R$ 12k · R$ 1,3M.
+  function fmtCompacto(v) {
+    const n = Math.round(v);
+    const abs = Math.abs(n);
+    if (abs >= 1e6) return 'R$ ' + (n / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'M';
+    if (abs >= 1e3) return 'R$ ' + Math.round(n / 1e3).toLocaleString('pt-BR') + 'k';
+    return 'R$ ' + n.toLocaleString('pt-BR');
+  }
+
   // Converte o histórico de patrimônio nos pontos da polyline 180×34 do cabeçalho.
   function sparkline(hist) {
     const min = Math.min(...hist), max = Math.max(...hist), range = Math.max(1, max - min);
@@ -26,5 +35,5 @@
     return { points, positivo: hist[hist.length - 1] >= hist[0] };
   }
 
-  return { fmt, fmtTempo, sparkline };
+  return { fmt, fmtCompacto, fmtTempo, sparkline };
 });

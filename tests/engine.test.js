@@ -625,21 +625,117 @@ function storageFake() {
   return { getItem: k => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = v; } };
 }
 
-test('placar: salva a partida e ordena livres por menos meses', () => {
-  const st = storageFake();
-  placar.salvar({ fim: 'livre', mes: 30, inicioTs: 1000, fimTs: 61000 }, 50000, st);
-  const lista = placar.ler(st);
-  assert.equal(lista[0].meses, 30); // vence ANA (44) e CARLOS (61)
-  assert.equal(lista[0].voce, true);
-  assert.equal(lista[0].tempo, 60);
+test('placar: registro do clássico usa fim, meses e tempo real', () => {
+  const s = { modo: 'classico', dificuldade: 'hardcore', fim: 'livre', mes: 30, inicioTs: 1000, fimTs: 61000 };
+  const r = placar.registro(s, 50000.4, 'CLAUDIO', undefined);
+  assert.equal(r.modo, 'classico');
+  assert.equal(r.resultado, 'livre');
+  assert.equal(r.meses, 30);
+  assert.equal(r.tempo, 60);
+  assert.equal(r.pat, 50000);
+  assert.equal(r.dificuldade, 'hardcore');
+  assert.ok(placar.vitoria(r.resultado));
 });
 
-test('placar: falidos vêm depois dos livres, ordenados por quem durou mais', () => {
-  const lista = placar.ler(storageFake());
-  const status = lista.map(p => p.status);
-  assert.deepEqual(status, ['livre', 'livre', 'faliu', 'faliu']);
-  const falidos = lista.filter(p => p.status === 'faliu');
-  assert.ok(falidos[0].meses >= falidos[1].meses);
+test('placar: cenários viram boards próprios com o detalhe da variante', () => {
+  const s = { modo: 'cenarios', cenario: 'imoveis', fim: 'imoveis_fim', mes: 48, imoveis: { escolha: 'alugar' } };
+  const r = placar.registro(s, 300000, '', undefined);
+  assert.equal(r.modo, 'imoveis');
+  assert.equal(r.detalhe, 'alugar');
+  assert.equal(r.nome, 'ANÔNIMO');
+});
+
+test('placar: score — vitória sempre acima de derrota; clássico premia menos meses e menos tempo', () => {
+  const base = { modo: 'classico', dificuldade: 'normal', inicioTs: 0 };
+  const v40 = placar.registro({ ...base, fim: 'livre', mes: 40, fimTs: 500000 }, 1, '');
+  const v30 = placar.registro({ ...base, fim: 'livre', mes: 30, fimTs: 900000 }, 1, '');
+  const v30rapido = placar.registro({ ...base, fim: 'livre', mes: 30, fimTs: 100000 }, 1, '');
+  const derrotaLonga = placar.registro({ ...base, fim: 'faliu', mes: 9999, fimTs: 1000 }, 0, '');
+  const ordem = placar.ordenar([v40, derrotaLonga, v30, v30rapido]);
+  assert.deepEqual(ordem.map(r => r.tempo), [100, 900, 500, 1]);
+  assert.equal(ordem[3].resultado, 'faliu');
+});
+
+test('placar: aposentadoria e imóveis rankeiam vitória por patrimônio final', () => {
+  const rico = placar.registro({ modo: 'cenarios', cenario: 'aposentadoria', fim: 'apos_sucesso', mes: 84, aposentadoria: { saqueModo: 'fixo' } }, 900000, '');
+  const pobre = placar.registro({ modo: 'cenarios', cenario: 'aposentadoria', fim: 'apos_sucesso', mes: 84, aposentadoria: { saqueModo: 'fixo' } }, 100, '');
+  const zerou = placar.registro({ modo: 'cenarios', cenario: 'aposentadoria', fim: 'apos_faliu', mes: 70, aposentadoria: { saqueModo: 'fixo' } }, 0, '');
+  assert.deepEqual(placar.ordenar([pobre, zerou, rico]).map(r => r.pat), [900000, 100, 0]);
+});
+
+test('placar: sandbox registra o marco como vitória com o capital no detalhe', () => {
+  const s = { modo: 'sandbox', capitalInicial: 10000, mes: 25, inicioTs: 0, fimTs: 60000 };
+  const r = placar.registro(s, 80000, 'LAB', 'marco');
+  assert.equal(r.modo, 'sandbox');
+  assert.equal(r.resultado, 'marco');
+  assert.equal(r.detalhe, '10000');
+  assert.ok(placar.vitoria('marco'));
+});
+
+test('placar: local salva e lê filtrando pelo board', () => {
+  const st = storageFake();
+  placar.salvar({ nome: 'A', modo: 'classico', resultado: 'livre', meses: 30, pat: 1, tempo: 60, score: 1e12 - 30e6 - 60 }, st);
+  placar.salvar({ nome: 'B', modo: 'sandbox', resultado: 'marco', meses: 20, pat: 1, tempo: 60, score: 1e12 - 20e6 - 60 }, st);
+  const classico = placar.ler('classico', st);
+  assert.equal(classico.length, 1);
+  assert.equal(classico[0].nome, 'A');
+  assert.equal(classico[0].voce, true);
+  assert.equal(placar.ler('sandbox', st)[0].nome, 'B');
+  assert.equal(placar.ler('imoveis', st).length, 0);
+});
+
+test('placar online: sem chaves fica offline e resolve sem rede', async () => {
+  assert.equal(placar.online({ url: '', anonKey: '' }), false);
+  assert.equal(await placar.enviarRemoto({}, { url: '', anonKey: '' }, null), false);
+  assert.equal(await placar.lerRemoto('classico', { url: '', anonKey: '' }, null), null);
+});
+
+test('placar online: envia POST com as colunas certas e lê o top do board', async () => {
+  const cfg = { url: 'https://x.supabase.co/', anonKey: 'anon123', tabela: 'placar' };
+  const chamadas = [];
+  const fetchFake = (url, opts) => {
+    chamadas.push({ url, opts });
+    return Promise.resolve({ ok: true, json: () => Promise.resolve([{ nome: 'GLOBAL1' }]) });
+  };
+  const rec = placar.registro({ modo: 'classico', dificuldade: 'normal', fim: 'livre', mes: 30, inicioTs: 0, fimTs: 60000 }, 5000, 'EU');
+  assert.equal(await placar.enviarRemoto(rec, cfg, fetchFake), true);
+  assert.equal(chamadas[0].url, 'https://x.supabase.co/rest/v1/placar');
+  assert.equal(chamadas[0].opts.method, 'POST');
+  assert.equal(chamadas[0].opts.headers.apikey, 'anon123');
+  const corpo = JSON.parse(chamadas[0].opts.body);
+  assert.deepEqual(Object.keys(corpo).sort(), ['detalhe', 'dificuldade', 'meses', 'modo', 'nome', 'pat', 'resultado', 'score', 'tempo']);
+  assert.equal(corpo.voce, undefined); // campos locais não vazam pro banco
+
+  const lista = await placar.lerRemoto('classico', cfg, fetchFake);
+  assert.equal(lista[0].nome, 'GLOBAL1');
+  assert.ok(chamadas[1].url.includes('modo=eq.classico'));
+  assert.ok(chamadas[1].url.includes('order=score.desc'));
+});
+
+test('placar online: url já com /rest/v1 não duplica o caminho', async () => {
+  const chamadas = [];
+  const fetchFake = (url) => { chamadas.push(url); return Promise.resolve({ ok: true, json: () => Promise.resolve([]) }); };
+  // formato que o painel do Supabase mostra (com sufixo e barra final)
+  const cfg = { url: 'https://abc.supabase.co/rest/v1/', anonKey: 'k', tabela: 'placar' };
+  await placar.enviarRemoto(placar.registro({ modo: 'classico', dificuldade: 'normal', fim: 'livre', mes: 1, inicioTs: 0, fimTs: 0 }, 0, 'X'), cfg, fetchFake);
+  await placar.lerRemoto('classico', cfg, fetchFake);
+  assert.equal(chamadas[0], 'https://abc.supabase.co/rest/v1/placar');
+  assert.ok(chamadas[1].startsWith('https://abc.supabase.co/rest/v1/placar?'));
+  assert.ok(!chamadas[0].includes('/rest/v1/rest/v1'));
+});
+
+test('placar online: erro de rede não explode — resolve false/null', async () => {
+  const cfg = { url: 'https://x.supabase.co', anonKey: 'k' };
+  const fetchRuim = () => Promise.reject(new Error('offline'));
+  assert.equal(await placar.enviarRemoto({}, cfg, fetchRuim), false);
+  assert.equal(await placar.lerRemoto('classico', cfg, fetchRuim), null);
+});
+
+test('placar: nickname persiste truncado em 16 caracteres', () => {
+  const st = storageFake();
+  assert.equal(placar.nick(st), '');
+  placar.salvarNick('UM_NOME_GIGANTE_DEMAIS_PRO_PLACAR', st);
+  assert.equal(placar.nick(st), 'UM_NOME_GIGANTE_');
 });
 
 // ---------- formato ----------
