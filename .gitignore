@@ -1,0 +1,16 @@
+# Segredos — nunca commitar (a publishable key do jogo NÃO vai aqui:
+# ela é pública por design e mora em engine/config.js, commitada).
+.env
+.env.*
+!.env.example
+
+# Configuração local da máquina (não é do projeto)
+.claude/settings.local.json
+
+# Cache regenerável do graphify (o hook pós-commit reescreve toda hora)
+graphify-out/cache/
+graphify-out/needs_update
+graphify-out/.rebuild.lock
+
+# Tooling futuro
+node_modules/
