@@ -28,34 +28,6 @@
         "confidence": "INFERRED",
         "confidence_score": 0.8,
         "source_file": "ConceitoModal.dc.html"
-      },
-      {
-        "id": "fluxo_placar_global_flow",
-        "label": "Fluxo do Placar Global (nick \u2192 jogo \u2192 score \u2192 ranking)",
-        "nodes": [
-          "intro_dc_nickname_input",
-          "simulador_financeiro_dc_registrarplacar",
-          "simulador_financeiro_dc_carregarplacar",
-          "leaderboard_dc",
-          "readme_placar_global"
-        ],
-        "relation": "participate_in",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
-        "source_file": "Simulador Financeiro.dc.html"
-      },
-      {
-        "id": "fluxo_camada_educacional",
-        "label": "Camada educacional de conceitos (modais de primeira vez)",
-        "nodes": [
-          "readme_proposito_ensinar_financas",
-          "simulador_financeiro_dc_executarcomconceito",
-          "simulador_financeiro_dc_verificarconceitosdeestado"
-        ],
-        "relation": "participate_in",
-        "confidence": "INFERRED",
-        "confidence_score": 0.85,
-        "source_file": "Simulador Financeiro.dc.html"
       }
     ]
   },
@@ -617,7 +589,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "support_dcnamefrompath",
-      "community": 24,
+      "community": 17,
       "norm_label": "dcnamefrompath()"
     },
     {
@@ -627,7 +599,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "support_rootnamefordocument",
-      "community": 24,
+      "community": 17,
       "norm_label": "rootnamefordocument()"
     },
     {
@@ -637,7 +609,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "support_safedecode",
-      "community": 24,
+      "community": 17,
       "norm_label": "safedecode()"
     },
     {
@@ -1573,117 +1545,6 @@
       "community": 14,
       "norm_label": "terminaleventos (log de eventos)",
       "id": "terminaleventos_dc"
-    },
-    {
-      "label": "Fluxo \u2014 Simulador Financeiro FAL\u00caNCIA ou LIBERDADE",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 17,
-      "norm_label": "fluxo \u2014 simulador financeiro falencia ou liberdade",
-      "id": "readme_fluxo"
-    },
-    {
-      "label": "Prop\u00f3sito: Ensinar Finan\u00e7as",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Prioridade m\u00e1xima do produto (acima de simula\u00e7\u00e3o e speedrun): cada mec\u00e2nica e evento deve deixar uma li\u00e7\u00e3o real de finan\u00e7as pessoais/investimentos.",
-      "community": 19,
-      "norm_label": "proposito: ensinar financas",
-      "id": "readme_proposito_ensinar_financas"
-    },
-    {
-      "label": "Speedrun (timer + placar em todos os modos)",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Divers\u00e3o/monetiza\u00e7\u00e3o. Sem seed compartilhada de prop\u00f3sito: o jogo \u00e9 n\u00e3o determin\u00edstico e a sorte (e jogar de novo) faz parte da corrida.",
-      "community": 22,
-      "norm_label": "speedrun (timer + placar em todos os modos)",
-      "id": "readme_speedrun"
-    },
-    {
-      "label": "Arquitetura em Tr\u00eas Camadas",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "engine/ (regras puras) \u2192 Simulador Financeiro.dc.html (orquestrador) \u2192 *.dc.html (telas). Camadas acopladas s\u00f3 por contratos simples; nenhuma regra de neg\u00f3cio na UI.",
-      "community": 2,
-      "norm_label": "arquitetura em tres camadas",
-      "id": "readme_arquitetura_tres_camadas"
-    },
-    {
-      "label": "Telas S\u00f3-Template (componentes *.dc.html)",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Telas recebem tudo por props (strings prontas, cores, callbacks), sem estado nem l\u00f3gica. Isso permite abrir cada tela isolada no Live Server com dados de exemplo do data-props \u2014 desenvolvimento visual \u00e1gil sem rodar o jogo inteiro.",
-      "community": 23,
-      "norm_label": "telas so-template (componentes *.dc.html)",
-      "id": "readme_telas_so_template"
-    },
-    {
-      "label": "Placar Global (Supabase)",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Sem configura\u00e7\u00e3o o placar \u00e9 local (localStorage); com um projeto Supabase free vira ranking mundial via REST. A anon key \u00e9 p\u00fablica por design \u2014 RLS s\u00f3 permite select e insert, nunca editar/apagar. Um board por modo, consulta order=score.desc direto no banco.",
-      "community": 18,
-      "norm_label": "placar global (supabase)",
-      "id": "readme_placar_global"
-    },
-    {
-      "label": "Aleatoriedade Injet\u00e1vel (rng por par\u00e2metro)",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "A aleatoriedade entra por par\u00e2metro (rng), nunca por Math.random fixo \u2014 \u00e9 isso que torna as regras test\u00e1veis com node --test, sem depend\u00eancias.",
-      "community": 20,
-      "norm_label": "aleatoriedade injetavel (rng por parametro)",
-      "id": "readme_rng_injetavel"
-    },
-    {
-      "label": "C\u00e1lculo de Score do Ranking",
-      "file_type": "rationale",
-      "source_file": "README.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "Cada partida gera um score (maior = melhor) em placar.js: vit\u00f3ria sempre vence derrota; cl\u00e1ssico/empres\u00e1rio/sandbox premiam menos meses (tempo real desempata); aposentadoria/im\u00f3veis premiam patrim\u00f4nio final.",
-      "community": 21,
-      "norm_label": "calculo de score do ranking",
-      "id": "readme_score"
     },
     {
       "label": "Intro (menu principal)",
@@ -4565,16 +4426,6 @@
       "target": "imovelcard_dc_fantasma"
     },
     {
-      "relation": "implements",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "Simulador Financeiro.dc.html",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "simulador_financeiro_dc_orquestrador",
-      "target": "readme_arquitetura_tres_camadas"
-    },
-    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -4711,35 +4562,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "ConceitoModal.dc.html"
-    },
-    {
-      "id": "fluxo_placar_global_flow",
-      "label": "Fluxo do Placar Global (nick \u2192 jogo \u2192 score \u2192 ranking)",
-      "nodes": [
-        "intro_dc_nickname_input",
-        "simulador_financeiro_dc_registrarplacar",
-        "simulador_financeiro_dc_carregarplacar",
-        "leaderboard_dc",
-        "readme_placar_global"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Simulador Financeiro.dc.html"
-    },
-    {
-      "id": "fluxo_camada_educacional",
-      "label": "Camada educacional de conceitos (modais de primeira vez)",
-      "nodes": [
-        "readme_proposito_ensinar_financas",
-        "simulador_financeiro_dc_executarcomconceito",
-        "simulador_financeiro_dc_verificarconceitosdeestado"
-      ],
-      "relation": "participate_in",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "source_file": "Simulador Financeiro.dc.html"
     }
   ],
-  "built_at_commit": "d4eaa938f64b9a40f2cd6c2a0454a27d4ee074f5"
+  "built_at_commit": "7a19ad3ac009c1e49ab13eec4f77acf04eb99cbe"
 }
