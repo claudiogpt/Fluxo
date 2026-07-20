@@ -1,8 +1,8 @@
 {
   ".claude/launch.json": {
-    "mtime": 1783318249.3448813,
-    "ast_hash": "b8f7764c29d3d5eac03f3ddbf54813c7",
-    "semantic_hash": "b8f7764c29d3d5eac03f3ddbf54813c7"
+    "mtime": 1784085039.3400135,
+    "ast_hash": "cade2e10efa91382cc97b8a878be7e00",
+    "semantic_hash": ""
   },
   "engine/ativos.js": {
     "mtime": 1783317945.7373874,
@@ -117,6 +117,76 @@
   "supabase/hardening.sql": {
     "mtime": 1783968423.2978034,
     "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  ".mcp.json": {
+    "mtime": 1784055612.8233137,
+    "ast_hash": "cf1754f5882211ffb899a3638b8db606",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1784083639.1359365,
+    "ast_hash": "593cf6ba6f1fb0aaca39432bb7a406f7",
+    "semantic_hash": ""
+  },
+  "supabase/.temp/linked-project.json": {
+    "mtime": 1784060612.3590157,
+    "ast_hash": "cb1f06f27899b5f22730ed48c6ddb6a8",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260714191050_hardening_placar.sql": {
+    "mtime": 1784056251.019951,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1784083646.1969974,
+    "ast_hash": "f730a001760178d61d7f730a5c0ce694",
+    "semantic_hash": ""
+  },
+  "vite.config.ts": {
+    "mtime": 1784083652.3380504,
+    "ast_hash": "531cfac9665740908fd16d820ac44b44",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1784083656.3290849,
+    "ast_hash": "209811825e6eebc4de5c59f972b07e8e",
+    "semantic_hash": ""
+  },
+  "src/engine/types.ts": {
+    "mtime": 1784083668.5131903,
+    "ast_hash": "bd01069d13c7f6407e7294fca63e17d3",
+    "semantic_hash": ""
+  },
+  "src/engine/index.ts": {
+    "mtime": 1784083677.287266,
+    "ast_hash": "b3011c938d52b59bc2a72c395461e5d1",
+    "semantic_hash": ""
+  },
+  "src/store/index.ts": {
+    "mtime": 1784085324.9810014,
+    "ast_hash": "83152187f27289181189adf98a9a5a0d",
+    "semantic_hash": ""
+  },
+  "src/main.tsx": {
+    "mtime": 1784083693.9214098,
+    "ast_hash": "6f6efc88285a3e479cab4c33711eddd5",
+    "semantic_hash": ""
+  },
+  "src/App.tsx": {
+    "mtime": 1784085372.6946049,
+    "ast_hash": "77615ef2b54bb2568da4591600fe793f",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.ts": {
+    "mtime": 1784085310.5042243,
+    "ast_hash": "ed21011b4fd9b9ac88d1bf7d31306eb7",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.test.ts": {
+    "mtime": 1784085341.3048096,
+    "ast_hash": "fdf33271188310b279f3f0932c4d0720",
     "semantic_hash": ""
   }
 }
