@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "src/engine/index.ts": {
-    "mtime": 1784083677.287266,
-    "ast_hash": "b3011c938d52b59bc2a72c395461e5d1",
+    "mtime": 1784572849.938878,
+    "ast_hash": "3f6c5adb8242c972f60600ba27ef17a0",
     "semantic_hash": ""
   },
   "src/store/index.ts": {
@@ -175,8 +175,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1784085372.6946049,
-    "ast_hash": "77615ef2b54bb2568da4591600fe793f",
+    "mtime": 1784574362.16072,
+    "ast_hash": "02d6a731d7fe4cb30a25e9f1e59759b0",
     "semantic_hash": ""
   },
   "src/features/conceitos/conceitosSlice.ts": {
@@ -187,6 +187,16 @@
   "src/features/conceitos/conceitosSlice.test.ts": {
     "mtime": 1784085341.3048096,
     "ast_hash": "fdf33271188310b279f3f0932c4d0720",
+    "semantic_hash": ""
+  },
+  "src/components/Glossario.test.tsx": {
+    "mtime": 1784574122.341185,
+    "ast_hash": "1f21488a5994b32451cdba9dca3e63f7",
+    "semantic_hash": ""
+  },
+  "src/components/Glossario.tsx": {
+    "mtime": 1784574040.072029,
+    "ast_hash": "b57e0d8b76151e04f004b30ef17f7d56",
     "semantic_hash": ""
   }
 }

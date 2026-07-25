@@ -8,25 +8,57 @@ Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida
 2. **Simulação** — secundário. A tendência é simular cada vez mais a realidade de investimentos, com decisões mais intricadas de tipos de investimento.
 3. **Speedrun** — diversão/monetização. Timer e placar global em **todos os modos**. Sem seed compartilhada, de propósito: o jogo é não determinístico e a sorte (e jogar de novo) faz parte da corrida.
 
+> **⚠ MIGRAÇÃO EM CURSO (branch `migracao-react-vite`)**: o jogo está sendo migrado do
+> runtime DC pra **React 18 + Vite + TypeScript + Redux Toolkit**, de forma incremental.
+> O app novo vive em `src/`; o protótipo DC continua funcional em paralelo, **congelado**
+> (nenhuma feature nova nele) até o cutover, quando será deletado. A regra de ouro vale
+> pros dois: `engine/*.js` é a fonte única das regras e não muda na migração.
+
 ## Como rodar
 
-Abra a pasta no VSCode e suba o **Live Server** (ou qualquer servidor estático) e acesse `Simulador Financeiro.dc.html`. Precisa ser via HTTP — os componentes de tela são carregados por `fetch`, então abrir com duplo clique (`file://`) não funciona.
+**App React (em migração — desenvolvimento acontece aqui):**
+
+```bash
+npm install
+npm run dev        # Vite em http://localhost:5173
+```
+
+**Protótipo DC (legado, congelado):** abra a pasta no VSCode, suba o **Live Server** e acesse
+`Simulador Financeiro.dc.html` (ou use o próprio Vite: `http://localhost:5173/Simulador%20Financeiro.dc.html`).
+Precisa ser via HTTP — as telas são carregadas por `fetch`, `file://` não funciona.
+
+Os dois apps compartilham o progresso educacional (mesma chave `fluxo_conceitos_v1` no localStorage).
 
 ## Como testar
 
 ```bash
-node --test
+node --test        # engine (regras do jogo) — zero dependências, rng injetado
+npx vitest run     # app React (slices + componentes)
+npx tsc --noEmit   # type-check
 ```
-
-Sem dependências: só o Node embutido. Os testes cobrem as regras do jogo com aleatoriedade injetada (determinística).
 
 ## Arquitetura
 
-Três camadas, acopladas só por contratos simples:
+Três camadas, acopladas só por contratos simples. Durante a migração existem **duas cascas**
+sobre o mesmo engine:
 
 ```
-engine/  (regras puras)  →  Simulador Financeiro.dc.html  (orquestrador)  →  *.dc.html  (telas)
+                        ┌→ src/ (React, NOVO): engine shim → slices RTK → componentes .tsx
+engine/ (regras puras) ─┤
+                        └→ Simulador Financeiro.dc.html (DC, LEGADO congelado) → *.dc.html
 ```
+
+### `src/` — app React (o futuro)
+
+| Pasta | Responsabilidade |
+|---|---|
+| `src/engine/` | Shim tipado do engine UMD: importa os `engine/*.js` e expõe `Fluxo.*` com tipos (funciona no browser E no Vitest/Node). |
+| `src/store/` | `configureStore` + listener middleware (persistência e efeitos). |
+| `src/features/` | Slices RTK + selectors (o view-model `renderVals` do DC vira selectors aqui). `conceitos/` = fonte única do conteúdo educacional. |
+| `src/components/` | Telas convertidas 1:1 dos `.dc.html` (só apresentação). |
+| `src/views/` | Composições de tela. |
+
+Status da conversão: **Glossário ✓** · demais telas pendentes (ver plano da migração).
 
 ### `engine/` — regras do jogo, zero UI
 
@@ -43,11 +75,11 @@ Funções puras sobre um objeto de estado plano. Cada arquivo expõe um módulo 
 
 A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo — é isso que torna as regras testáveis.
 
-### `Simulador Financeiro.dc.html` — orquestrador (entry point)
+### `Simulador Financeiro.dc.html` — orquestrador DC (LEGADO, entry point do protótipo)
 
 Único componente com estado. Guarda o estado do jogo, escuta teclado/timer, delega cada ação ao engine e converte o estado em view-model (`renderVals`) para as telas. Nenhuma regra de negócio aqui.
 
-### Telas — componentes `*.dc.html` só-template
+### Telas — componentes `*.dc.html` só-template (LEGADO; referência visual da conversão)
 
 Recebem tudo por props (strings prontas, cores e callbacks); não têm estado nem lógica. O contrato de props está comentado no topo de cada arquivo.
 

@@ -1,30 +1,22 @@
-import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
-import { conceitos } from '../engine';
-import { conceitosReducer, marcarVisto } from '../features/conceitos/conceitosSlice';
-
-// Persistência: a cada marcarVisto, grava a lista na MESMA chave do protótipo
-// (fluxo_conceitos_v1) — progresso compartilhado entre os dois apps enquanto
-// a migração corre. Efeito colateral mora aqui, nunca no reducer.
-const listener = createListenerMiddleware();
-listener.startListening({
-  actionCreator: marcarVisto,
-  effect: (_action, api) => {
-    const { vistos } = (api.getState() as RootState).conceitos;
-    try {
-      localStorage.setItem(conceitos.CHAVE, JSON.stringify(vistos));
-    } catch {
-      /* sem storage (SSR/teste sem jsdom): só não persiste */
-    }
-  },
-});
+import { configureStore } from '@reduxjs/toolkit';
+import { conceitosReducer } from '../features/conceitos/conceitosSlice';
+import { gameReducer } from '../features/game/gameSlice';
+import { placarReducer } from '../features/placar/placarSlice';
+import { listener } from './listeners';
 
 /** Fábrica de store — usada pelo app e pelos testes (cada teste cria o seu). */
 export function makeStore() {
   return configureStore({
     reducer: {
       conceitos: conceitosReducer,
+      game: gameReducer,
+      placar: placarReducer,
     },
-    middleware: (getDefault) => getDefault().prepend(listener.middleware),
+    middleware: (getDefault) =>
+      getDefault({
+        // fecharMes aceita { rng } injetável (função) — só em testes; ignorado aqui.
+        serializableCheck: { ignoredActionPaths: ['payload.rng'] },
+      }).prepend(listener.middleware),
   });
 }
 

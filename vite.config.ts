@@ -6,6 +6,15 @@ import react from '@vitejs/plugin-react';
 // engine/*.js continuam acessíveis por fetch/script — protótipo intacto.
 export default defineConfig({
   plugins: [react()],
+  build: {
+    // Os engine/*.js são UMD (CommonJS + global). No BUILD, o Rollup precisa
+    // ser mandado tratá-los como CJS explicitamente (por padrão o plugin só
+    // processa node_modules) — sem isso o bundle de produção sai sem o engine.
+    // Com isso, o shim usa o export .default (mesmo caminho do Vitest).
+    commonjsOptions: {
+      include: [/engine\/.*\.js$/, /node_modules/],
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

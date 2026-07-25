@@ -17,7 +17,15 @@ import * as placarM from '../../engine/placar.js';
 import * as conceitosM from '../../engine/conceitos.js';
 import * as regrasM from '../../engine/regras.js';
 
-import type { ConceitosApi, FluxoGlobal } from './types';
+import type {
+  AtivoDef,
+  ConceitosApi,
+  ConfigApi,
+  FluxoGlobal,
+  FormatoApi,
+  PlacarApi,
+  RegrasApi,
+} from './types';
 
 const global_ = globalThis as { Fluxo?: FluxoGlobal };
 
@@ -33,6 +41,11 @@ function api<T>(nome: keyof FluxoGlobal, mod: unknown): T {
 }
 
 export const conceitos = api<ConceitosApi>('conceitos', conceitosM);
+export const config = api<ConfigApi>('config', configM);
+export const ativos = api<AtivoDef[]>('ativos', ativosM);
+export const formato = api<FormatoApi>('formato', formatoM);
+export const placar = api<PlacarApi>('placar', placarM);
+export const regras = api<RegrasApi>('regras', regrasM);
 
 // Demais módulos ficam disponíveis pros próximos passos (tipagem cresce sob demanda).
 const Fluxo: FluxoGlobal = global_.Fluxo ?? {
