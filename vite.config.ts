@@ -1,11 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// O app React (index.html → src/main.tsx) roda em paralelo ao protótipo DC.
-// O Vite serve a raiz do projeto, então "Simulador Financeiro.dc.html" e os
-// engine/*.js continuam acessíveis por fetch/script — protótipo intacto.
+// App React do Fluxo (index.html → src/main.tsx). O protótipo DC foi
+// aposentado no cutover de 2026-07 (vive no git history).
 export default defineConfig({
   plugins: [react()],
+  build: {
+    // Os engine/*.js são UMD (CommonJS + global). No BUILD, o Rollup precisa
+    // ser mandado tratá-los como CJS explicitamente (por padrão o plugin só
+    // processa node_modules) — sem isso o bundle de produção sai sem o engine.
+    // Com isso, o shim usa o export .default (mesmo caminho do Vitest).
+    commonjsOptions: {
+      include: [/engine\/.*\.js$/, /node_modules/],
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

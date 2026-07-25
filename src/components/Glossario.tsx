@@ -1,5 +1,5 @@
 // Glossário — primeira tela convertida do DC pro React (PASSO 3).
-// Visual portado 1:1 de Glossario.dc.html; os dados vêm do conceitosSlice
+// Visual portado 1:1 do Glossario do protótipo DC (git history); os dados vêm do conceitosSlice
 // (selectors), sem prop-drilling: o único prop é o callback de fechar.
 import type { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';

@@ -5,13 +5,22 @@
 // tooltip que o cita é visto") também — os selectors chamam o engine passando
 // um storage adapter em memória sobre o estado do slice. Aqui só mora a
 // reatividade (Redux) e a lista de ids vistos.
-import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, type PayloadAction, type UnknownAction } from '@reduxjs/toolkit';
 import { conceitos } from '../../engine';
 import type { StorageLike } from '../../engine/types';
+
+/** Modal educacional de primeira vez. Em vez de guardar um callback (não
+ *  serializável, como o this.modalAcao do DC), guarda a ACTION pendente:
+ *  confirmar = marcarVisto + dispatch dela. */
+export interface ModalConceito {
+  id: string;
+  acaoPendente?: UnknownAction;
+}
 
 export interface ConceitosState {
   /** ids de tooltips já vistos (mesmo formato do protótipo em fluxo_conceitos_v1) */
   vistos: string[];
+  modal: ModalConceito | null;
 }
 
 /** Adapter que apresenta o estado do slice pro engine como se fosse um storage. */
@@ -22,15 +31,21 @@ const comoStorage = (vistos: string[]): StorageLike => ({
 const conceitosSlice = createSlice({
   name: 'conceitos',
   // Lazy: lê o localStorage (mesma chave do protótipo) na criação do store.
-  initialState: (): ConceitosState => ({ vistos: conceitos.vistos() }),
+  initialState: (): ConceitosState => ({ vistos: conceitos.vistos(), modal: null }),
   reducers: {
     marcarVisto(state, action: PayloadAction<string>) {
       if (!state.vistos.includes(action.payload)) state.vistos.push(action.payload);
     },
+    abrirModal(state, action: PayloadAction<ModalConceito>) {
+      state.modal = action.payload;
+    },
+    fecharModal(state) {
+      state.modal = null;
+    },
   },
 });
 
-export const { marcarVisto } = conceitosSlice.actions;
+export const { marcarVisto, abrirModal, fecharModal } = conceitosSlice.actions;
 export const conceitosReducer = conceitosSlice.reducer;
 
 // ---- selectors ----
@@ -66,3 +81,17 @@ export const selectGlossarioLista = createSelector([selectTermosDesbloqueados], 
 export const selectContador = createSelector([selectTermosDesbloqueados], (desbloqueados) =>
   `${desbloqueados.length}/${Object.keys(conceitos.termos).length} termos desbloqueados`
 );
+
+/** View-model do ConceitoModal — porta o modalConceito do renderVals. */
+export const selectModalConceito = (s: ComConceitos) => {
+  const m = s.conceitos.modal;
+  if (!m) return null;
+  const c = conceitos.tooltips[m.id];
+  return {
+    titulo: c.titulo,
+    explicacao: c.explicacao,
+    termosFmt: (c.termos || []).map((t) => conceitos.termos[t].nome).join(' · '),
+    confirmarLabel: m.acaoPendente ? 'ENTENDI, CONFIRMAR ▸' : 'ENTENDI ▸',
+    mostraCancelar: !!m.acaoPendente,
+  };
+};
