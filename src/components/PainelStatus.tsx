@@ -1,4 +1,4 @@
-// Painel de status — portado 1:1 de PainelStatus.dc.html.
+// Painel de status — portado 1:1 do PainelStatus do protótipo DC (git history).
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPainel } from '../features/game/selectors';
 import { voltarMenu } from '../features/game/gameSlice';

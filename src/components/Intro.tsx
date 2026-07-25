@@ -1,4 +1,4 @@
-// Menu principal — portado 1:1 de Intro.dc.html: modos, dificuldade, capital
+// Menu principal — portado 1:1 do Intro do protótipo DC (git history): modos, dificuldade, capital
 // (sandbox), cenários, modo de saque (aposentadoria), estratégia (imóveis) e
 // nickname do placar global. Dados de selectIntroConfig; ações via dispatch.
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,0 +1,202 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1784085039.3400135,
+    "ast_hash": "cade2e10efa91382cc97b8a878be7e00",
+    "semantic_hash": ""
+  },
+  "engine/ativos.js": {
+    "mtime": 1783317945.7373874,
+    "ast_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6",
+    "semantic_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6"
+  },
+  "engine/conceitos.js": {
+    "mtime": 1783396258.7845106,
+    "ast_hash": "13d06e58f7d6ef8371dd6281f419808c",
+    "semantic_hash": "13d06e58f7d6ef8371dd6281f419808c"
+  },
+  "engine/config.js": {
+    "mtime": 1783918339.3528628,
+    "ast_hash": "06c516b6504bd004008e73b0686337f3",
+    "semantic_hash": "06c516b6504bd004008e73b0686337f3"
+  },
+  "engine/eventos.js": {
+    "mtime": 1783359013.5305095,
+    "ast_hash": "58f04869dd93c802364636e67e4bd1ed",
+    "semantic_hash": "58f04869dd93c802364636e67e4bd1ed"
+  },
+  "engine/formato.js": {
+    "mtime": 1783916711.494111,
+    "ast_hash": "644e3e4d1dc96de43b44493e05fd52ae",
+    "semantic_hash": "644e3e4d1dc96de43b44493e05fd52ae"
+  },
+  "engine/placar.js": {
+    "mtime": 1783968545.5954669,
+    "ast_hash": "3171aadec906a8d475203e445c94a657",
+    "semantic_hash": ""
+  },
+  "engine/regras.js": {
+    "mtime": 1783968454.0158982,
+    "ast_hash": "ad30a5371b863a1c90c2bd711e3530f3",
+    "semantic_hash": ""
+  },
+  "support.js": {
+    "mtime": 1783060547.0,
+    "ast_hash": "5d03065df5441f0c24f990fac9a018dd",
+    "semantic_hash": "5d03065df5441f0c24f990fac9a018dd"
+  },
+  "tests/engine.test.js": {
+    "mtime": 1783968584.6886408,
+    "ast_hash": "5ee491379d885a52becbf91f7b26ad90",
+    "semantic_hash": ""
+  },
+  "AtivoCard.dc.html": {
+    "mtime": 1783318053.8002868,
+    "ast_hash": "b7ce862519579c40e2ddfdc9bd7a21dc",
+    "semantic_hash": "b7ce862519579c40e2ddfdc9bd7a21dc"
+  },
+  "ConceitoModal.dc.html": {
+    "mtime": 1783396282.175481,
+    "ast_hash": "e6bb7e99054911758b93f6550ce8addf",
+    "semantic_hash": "e6bb7e99054911758b93f6550ce8addf"
+  },
+  "FimDeJogo.dc.html": {
+    "mtime": 1783322048.014418,
+    "ast_hash": "31a57b54f1988305e698b46416c80187",
+    "semantic_hash": "31a57b54f1988305e698b46416c80187"
+  },
+  "Glossario.dc.html": {
+    "mtime": 1783398495.2943625,
+    "ast_hash": "ba5725b8755ebfd74d035bad03991336",
+    "semantic_hash": "ba5725b8755ebfd74d035bad03991336"
+  },
+  "ImovelCard.dc.html": {
+    "mtime": 1783378728.7834692,
+    "ast_hash": "44ddd2a5af25ab8e96d50cb0e1bb6a90",
+    "semantic_hash": "44ddd2a5af25ab8e96d50cb0e1bb6a90"
+  },
+  "Intro.dc.html": {
+    "mtime": 1783916711.491111,
+    "ast_hash": "16c1e26df26527189a3e371b237ebeee",
+    "semantic_hash": "16c1e26df26527189a3e371b237ebeee"
+  },
+  "Leaderboard.dc.html": {
+    "mtime": 1783916711.491111,
+    "ast_hash": "fd2fd72bb4bac07bd8b526aa2fc4ee67",
+    "semantic_hash": "fd2fd72bb4bac07bd8b526aa2fc4ee67"
+  },
+  "NegocioCard.dc.html": {
+    "mtime": 1783359110.6181602,
+    "ast_hash": "da96e5de1196be7f63100247ed535f4b",
+    "semantic_hash": "da96e5de1196be7f63100247ed535f4b"
+  },
+  "PainelStatus.dc.html": {
+    "mtime": 1783361588.9489455,
+    "ast_hash": "c184a77f12ce9cb2c7be2c7808f9e86a",
+    "semantic_hash": "c184a77f12ce9cb2c7be2c7808f9e86a"
+  },
+  "README.md": {
+    "mtime": 1783968606.0747964,
+    "ast_hash": "5db583f4ff635ee4525eae8e603ec71f",
+    "semantic_hash": ""
+  },
+  "Simulador Financeiro.dc.html": {
+    "mtime": 1783916711.493111,
+    "ast_hash": "c916de411621e2824e837d1d590c39a2",
+    "semantic_hash": "c916de411621e2824e837d1d590c39a2"
+  },
+  "TerminalEventos.dc.html": {
+    "mtime": 1783318061.2334201,
+    "ast_hash": "44979e5d2908615e98bd536502e8e8b1",
+    "semantic_hash": "44979e5d2908615e98bd536502e8e8b1"
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1783402317.5148194,
+    "ast_hash": "206940b8fcab0cd0c1987baaad8ee4bd",
+    "semantic_hash": "206940b8fcab0cd0c1987baaad8ee4bd"
+  },
+  "supabase/hardening.sql": {
+    "mtime": 1783968423.2978034,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  ".mcp.json": {
+    "mtime": 1784055612.8233137,
+    "ast_hash": "cf1754f5882211ffb899a3638b8db606",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1784083639.1359365,
+    "ast_hash": "593cf6ba6f1fb0aaca39432bb7a406f7",
+    "semantic_hash": ""
+  },
+  "supabase/.temp/linked-project.json": {
+    "mtime": 1784060612.3590157,
+    "ast_hash": "cb1f06f27899b5f22730ed48c6ddb6a8",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260714191050_hardening_placar.sql": {
+    "mtime": 1784056251.019951,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1784083646.1969974,
+    "ast_hash": "f730a001760178d61d7f730a5c0ce694",
+    "semantic_hash": ""
+  },
+  "vite.config.ts": {
+    "mtime": 1784083652.3380504,
+    "ast_hash": "531cfac9665740908fd16d820ac44b44",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1784083656.3290849,
+    "ast_hash": "209811825e6eebc4de5c59f972b07e8e",
+    "semantic_hash": ""
+  },
+  "src/engine/types.ts": {
+    "mtime": 1784083668.5131903,
+    "ast_hash": "bd01069d13c7f6407e7294fca63e17d3",
+    "semantic_hash": ""
+  },
+  "src/engine/index.ts": {
+    "mtime": 1784572849.938878,
+    "ast_hash": "3f6c5adb8242c972f60600ba27ef17a0",
+    "semantic_hash": ""
+  },
+  "src/store/index.ts": {
+    "mtime": 1784085324.9810014,
+    "ast_hash": "83152187f27289181189adf98a9a5a0d",
+    "semantic_hash": ""
+  },
+  "src/main.tsx": {
+    "mtime": 1784083693.9214098,
+    "ast_hash": "6f6efc88285a3e479cab4c33711eddd5",
+    "semantic_hash": ""
+  },
+  "src/App.tsx": {
+    "mtime": 1784574362.16072,
+    "ast_hash": "02d6a731d7fe4cb30a25e9f1e59759b0",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.ts": {
+    "mtime": 1784085310.5042243,
+    "ast_hash": "ed21011b4fd9b9ac88d1bf7d31306eb7",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.test.ts": {
+    "mtime": 1784085341.3048096,
+    "ast_hash": "fdf33271188310b279f3f0932c4d0720",
+    "semantic_hash": ""
+  },
+  "src/components/Glossario.test.tsx": {
+    "mtime": 1784574122.341185,
+    "ast_hash": "1f21488a5994b32451cdba9dca3e63f7",
+    "semantic_hash": ""
+  },
+  "src/components/Glossario.tsx": {
+    "mtime": 1784574040.072029,
+    "ast_hash": "b57e0d8b76151e04f004b30ef17f7d56",
+    "semantic_hash": ""
+  }
+}

@@ -1,4 +1,4 @@
-// Card de ativo com aporte/resgate — portado 1:1 de AtivoCard.dc.html.
+// Card de ativo com aporte/resgate — portado 1:1 do AtivoCard do protótipo DC (git history).
 // O aporte passa pelo thunk educacional (1ª vez em reserva/ações/cripto = modal).
 import { useDispatch, useSelector } from 'react-redux';
 import type { AtivoKey } from '../engine/types';

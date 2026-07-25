@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// O app React (index.html → src/main.tsx) roda em paralelo ao protótipo DC.
-// O Vite serve a raiz do projeto, então "Simulador Financeiro.dc.html" e os
-// engine/*.js continuam acessíveis por fetch/script — protótipo intacto.
+// App React do Fluxo (index.html → src/main.tsx). O protótipo DC foi
+// aposentado no cutover de 2026-07 (vive no git history).
 export default defineConfig({
   plugins: [react()],
   build: {

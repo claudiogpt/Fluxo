@@ -1,4 +1,4 @@
-// Card do negócio (modo empresário) — portado 1:1 de NegocioCard.dc.html.
+// Card do negócio (modo empresário) — portado 1:1 do NegocioCard do protótipo DC (git history).
 import { useDispatch, useSelector } from 'react-redux';
 import { aportarNegocio, reinvestirNegocio, sacarNegocio } from '../features/game/gameSlice';
 import { selectNegocioCard } from '../features/game/selectors';

@@ -1,5 +1,5 @@
 // Placar (global quando o board remoto carregou, local como fallback) —
-// portado 1:1 de Leaderboard.dc.html; dados do placarSlice.
+// portado 1:1 do Leaderboard do protótipo DC (git history); dados do placarSlice.
 import { useSelector } from 'react-redux';
 import { selectLeaderboard } from '../features/placar/placarSlice';
 

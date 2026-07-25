@@ -1,5 +1,5 @@
 // Card da moradia (cenário imóveis): estratégia + corrida contra o fantasma —
-// portado 1:1 de ImovelCard.dc.html.
+// portado 1:1 do ImovelCard do protótipo DC (git history).
 import { useSelector } from 'react-redux';
 import { selectImovelCard } from '../features/game/selectors';
 

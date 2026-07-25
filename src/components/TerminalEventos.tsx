@@ -1,4 +1,4 @@
-// Terminal de eventos (log) — portado 1:1 de TerminalEventos.dc.html.
+// Terminal de eventos (log) — portado 1:1 do TerminalEventos do protótipo DC (git history).
 import { useSelector } from 'react-redux';
 import { selectLog } from '../features/game/selectors';
 

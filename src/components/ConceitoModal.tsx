@@ -1,4 +1,4 @@
-// Modal educacional de primeira vez — portado 1:1 de ConceitoModal.dc.html.
+// Modal educacional de primeira vez — portado 1:1 do ConceitoModal do protótipo DC (git history).
 // Dados do conceitosSlice; confirmar/cancelar são os thunks (ação pendente).
 import { useDispatch, useSelector } from 'react-redux';
 import { selectModalConceito } from '../features/conceitos/conceitosSlice';

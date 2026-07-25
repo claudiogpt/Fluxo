@@ -14,3 +14,7 @@ graphify-out/.rebuild.lock
 
 # Tooling futuro
 node_modules/
+
+# Artefatos de build (regeneráveis com `npm run build`; hash muda a cada build)
+dist/
+tsconfig.tsbuildinfo

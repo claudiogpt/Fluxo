@@ -1,4 +1,4 @@
-// Overlay de fim de jogo — portado 1:1 de FimDeJogo.dc.html (5 desfechos).
+// Overlay de fim de jogo — portado 1:1 do FimDeJogo do protótipo DC (git history) (5 desfechos).
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFimInfo, selectPainel } from '../features/game/selectors';
 import { reiniciar, voltarMenu } from '../features/game/gameSlice';
