@@ -109,18 +109,19 @@ describe('gameSlice', () => {
     expect(g.ativos.reserva).toBe(0); // partida descartada
   });
 
-  // Caracterização do pseudo-modo: `cenarios` é um MODO, e regras.js só monta o
-  // cenário quando modo==='cenarios'. Hoje o Intro esconde a lista de cenários
-  // fora desse modo, então ninguém tropeça — mas com a página CENÁRIOS dedicada
-  // esse vira o caminho normal. A E4 inverte este teste.
-  it('escolherCenario fora do modo cenarios descarta o cenário (comportamento atual)', () => {
+  // Blindagem do pseudo-modo: `cenarios` é um MODO, e regras.js só monta o
+  // cenário quando modo==='cenarios'. Antes, escolher um cenário vindo de outro
+  // modo descartava a escolha em silêncio e começava uma partida clássica —
+  // caminho impossível no Intro monolítico, normal na página CENÁRIOS.
+  it('escolherCenario vindo de outro modo entra no modo cenarios', () => {
     const store = makeStore();
     store.dispatch(escolherModo('sandbox'));
     store.dispatch(escolherCenario('imoveis'));
     const g = store.getState().game;
-    expect(g.modo).toBe('sandbox');
-    expect(g.cenario).toBeNull();
-    expect(g.imoveis).toBeNull();
+    expect(g.modo).toBe('cenarios');
+    expect(g.cenario).toBe('imoveis');
+    expect(g.imoveis).not.toBeNull();
+    expect(g.capitalInicial).toBeNull(); // o capital do sandbox não vaza
   });
 
   it('selectors formatam o view-model (porta do renderVals)', () => {

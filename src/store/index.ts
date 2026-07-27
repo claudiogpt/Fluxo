@@ -3,6 +3,7 @@ import { conceitosReducer } from '../features/conceitos/conceitosSlice';
 import { gameReducer } from '../features/game/gameSlice';
 import { placarReducer } from '../features/placar/placarSlice';
 import { prefsReducer } from '../features/prefs';
+import { uiReducer } from '../features/ui/uiSlice';
 import { listener } from './listeners';
 
 /** Fábrica de store — usada pelo app e pelos testes (cada teste cria o seu). */
@@ -13,6 +14,7 @@ export function makeStore() {
       game: gameReducer,
       placar: placarReducer,
       prefs: prefsReducer,
+      ui: uiReducer,
     },
     middleware: (getDefault) =>
       getDefault({

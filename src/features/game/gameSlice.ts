@@ -96,7 +96,10 @@ const gameSlice = createSlice({
       return recriar(state, { capitalInicial: action.payload });
     },
     escolherCenario(state, action: PayloadAction<string>) {
-      return recriar(state, { cenario: action.payload });
+      // 'cenarios' é um MODO no engine (regras.js só monta o cenário quando
+      // modo==='cenarios'), então escolher um cenário implica entrar no modo —
+      // senão a escolha era descartada em silêncio e caía no clássico.
+      return recriar(state, { modo: 'cenarios', cenario: action.payload });
     },
     escolherSaqueModo(state, action: PayloadAction<'fixo' | 'percentual'>) {
       return recriar(state, { saqueModo: action.payload });
