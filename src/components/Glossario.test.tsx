@@ -11,15 +11,16 @@ describe('Glossario', () => {
     localStorage.clear();
   });
 
-  it('mostra os 8 termos bloqueados como ??? quando nada foi visto', () => {
+  it('mostra os 8 termos de jogo bloqueados como ??? quando nada foi visto', () => {
     const store = makeStore();
     render(
       <Provider store={store}>
         <Glossario fechar={() => {}} />
       </Provider>
     );
-    expect(screen.getAllByText('???')).toHaveLength(8);
-    expect(screen.getByText('0/8 termos desbloqueados')).toBeTruthy();
+    expect(screen.getAllByText('???')).toHaveLength(8); // peculium nasce aberto
+    expect(screen.getByText('1/9 termos desbloqueados')).toBeTruthy();
+    expect(screen.getByText('Peculium')).toBeTruthy();
   });
 
   it('desbloqueia ao vivo quando um tooltip é marcado como visto', () => {
@@ -34,7 +35,7 @@ describe('Glossario', () => {
     });
     expect(screen.getByText('Volatilidade')).toBeTruthy();
     expect(screen.getAllByText('???')).toHaveLength(7);
-    expect(screen.getByText('1/8 termos desbloqueados')).toBeTruthy();
+    expect(screen.getByText('2/9 termos desbloqueados')).toBeTruthy();
   });
 
   it('o botão FECHAR chama o callback', () => {

@@ -22,6 +22,7 @@ export interface StorageLike {
 
 export interface ConceitosApi {
   CHAVE: string;
+  /** `sempre: true` = curiosidade, nasce desbloqueada (ver engine/conceitos.js) */
   termos: Record<string, Termo>;
   tooltips: Record<string, Tooltip>;
   vistos(storage?: StorageLike | null): string[];

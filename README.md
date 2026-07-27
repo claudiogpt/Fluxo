@@ -1,6 +1,8 @@
-# Fluxo — Simulador Financeiro "FALÊNCIA ou LIBERDADE"
+# Peculium — Fluxo Financeiro
 
-Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir.
+Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir. Os dois desfechos que dão o tom seguem sendo **FALIU** e **LIVRE**.
+
+> **peculium** (latim, de *pecus*, "gado"): no direito romano, o patrimônio que alguém sob o poder de outro podia acumular e administrar — e com o qual uma pessoa escravizada podia comprar a própria alforria. Juntar, administrar e converter em liberdade: é o jogo inteiro numa palavra. A versão completa é o primeiro termo do glossário.
 
 ## Propósito do jogo (nesta ordem)
 

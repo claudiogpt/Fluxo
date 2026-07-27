@@ -20,8 +20,10 @@ export function PainelStatus() {
   return (
     <div style={{ color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 20, borderBottom: '1px solid var(--borda)', paddingBottom: 14, marginBottom: 16, flexWrap: 'wrap' }}>
-        <div style={{ fontWeight: 700, letterSpacing: 1, color: 'var(--texto-forte)' }}>
-          FALÊNCIA <span style={{ color: 'var(--texto-apagado)' }}>ou</span> <span style={{ color: 'var(--sucesso)' }}>LIBERDADE</span>
+        <div style={{ fontWeight: 700, color: 'var(--texto-forte)' }}>
+          <span style={{ fontFamily: 'var(--fonte-titulo)', letterSpacing: 2 }}>PECULIUM</span>
+          <span style={{ color: 'var(--texto-apagado)' }}> · </span>
+          <span style={{ color: 'var(--sucesso)', letterSpacing: 1 }}>FLUXO</span>
         </div>
         {p.modoTag && (
           <span style={{ fontSize: 9, letterSpacing: 2, color: 'var(--aviso)', border: '1px solid var(--aviso)', borderRadius: 3, padding: '2px 8px' }}>

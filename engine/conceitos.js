@@ -9,8 +9,14 @@
 
   const CHAVE = 'fluxo_conceitos_v1';
 
-  // Glossário: id → { nome, definicao }
+  // Glossário: id → { nome, definicao, sempre? }
+  // `sempre: true` = curiosidade, já nasce desbloqueada (não depende de tooltip).
   const termos = {
+    peculium: {
+      nome: 'Peculium',
+      sempre: true,
+      definicao: 'Do latim pecus, "gado" — a forma mais antiga de riqueza, e a mesma raiz de "pecúlio" e "pecuniário". No direito romano, o peculium era o patrimônio que alguém sob o poder de outro (um filho, ou uma pessoa escravizada) podia acumular e administrar: no papel pertencia ao senhor, mas na prática crescia nas mãos de quem o gerava — e podia ser usado para comprar a própria alforria. Daí o nome deste jogo: juntar, administrar e converter em liberdade.',
+    },
     cdi: { nome: 'CDI', definicao: 'A taxa que os bancos usam pra emprestar dinheiro entre si por um dia. É o "piso" da renda fixa brasileira: render "100% do CDI" significa acompanhar essa taxa.' },
     selic: { nome: 'Selic', definicao: 'A taxa básica de juros do Brasil, definida pelo Banco Central. Ela puxa o CDI, o rendimento da reserva e o custo de todo crédito do país.' },
     diversificacao: { nome: 'Diversificação', definicao: 'Espalhar o dinheiro entre ativos que não caem juntos. Não é sobre ganhar mais: é sobre nunca ser nocauteado por um golpe só.' },
@@ -82,9 +88,10 @@
     try { st.setItem(CHAVE, JSON.stringify(v)); } catch (e) { /* sem storage */ }
   }
 
-  // Termos desbloqueados no glossário = união dos termos dos tooltips já vistos.
+  // Termos desbloqueados = os de curiosidade (`sempre`) + a união dos termos
+  // dos tooltips já vistos.
   function termosDesbloqueados(storage) {
-    const lista = [];
+    const lista = Object.keys(termos).filter(function (id) { return termos[id].sempre; });
     for (const id of vistos(storage)) {
       const t = tooltips[id];
       if (!t) continue;
