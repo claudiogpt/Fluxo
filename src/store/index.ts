@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { conceitosReducer } from '../features/conceitos/conceitosSlice';
 import { gameReducer } from '../features/game/gameSlice';
 import { placarReducer } from '../features/placar/placarSlice';
+import { prefsReducer } from '../features/prefs';
 import { listener } from './listeners';
 
 /** Fábrica de store — usada pelo app e pelos testes (cada teste cria o seu). */
@@ -11,6 +12,7 @@ export function makeStore() {
       conceitos: conceitosReducer,
       game: gameReducer,
       placar: placarReducer,
+      prefs: prefsReducer,
     },
     middleware: (getDefault) =>
       getDefault({

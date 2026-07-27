@@ -62,11 +62,83 @@ html[data-tema='escuro'] {
   --foco: #4bb7ff;
 }
 
+/* Tema claro: mesma rampa invertida, mesmos matizes. Os acentos escurecem até
+   passar 4.5:1 sobre --fundo — verde/âmbar neon sobre branco é ilegível.
+   --texto-apagado recebe o valor de --texto-rotulo: no escuro ele é quase
+   decorativo, mas carrega conteúdo real (as dicas do menu). */
+html[data-tema='claro'] {
+  color-scheme: light;
+
+  --fundo: #f4f7fa;
+  --superficie: #ffffff;
+  --superficie-2: #eef3f8;
+  --borda: #cfdae5;
+  --borda-suave: #e2e9f0;
+
+  --texto-forte: #0b0f14;
+  --texto: #1e2833;
+  --texto-fraco: #46586a;
+  --texto-rotulo: #5d6d7d;
+  --texto-apagado: #5d6d7d;
+
+  --sucesso: #0b7a43;
+  --sucesso-suave: #3f7a2e;
+  --aviso: #8a5a00;
+  --alerta: #a54a06;
+  --perigo: #c0182b;
+  --info: #1160a8;
+
+  --sucesso-solido: #0b7a43;
+  --sobre-sucesso: #ffffff;
+
+  --tint-sucesso: rgba(11, 122, 67, 0.1);
+  --tint-sucesso-fraco: rgba(11, 122, 67, 0.06);
+  --tint-perigo: rgba(192, 24, 43, 0.09);
+  --tint-aviso: rgba(138, 90, 0, 0.1);
+  --tint-info: rgba(17, 96, 168, 0.1);
+
+  --sucesso-fundo: #eaf7f0;
+  --sucesso-borda: #b9dfc9;
+  --perigo-fundo: #fdeef0;
+  --perigo-borda: #f0c2c8;
+  --aviso-fundo: #fdf6e6;
+  --aviso-fundo-2: #fbf1d9;
+  --aviso-borda: #e6d6a8;
+  --aviso-borda-2: #d9bc72;
+  --aviso-borda-suave: #efe3c4;
+  --info-fundo: #eaf2fb;
+  --info-borda: #b8d3ee;
+  --info-borda-suave: #d5e5f6;
+
+  --overlay: rgba(20, 28, 36, 0.55);
+  --overlay-forte: rgba(20, 28, 36, 0.7);
+  --sombra-flutuante: 0 4px 16px rgba(11, 15, 20, 0.18);
+  --foco: #1160a8;
+}
+
 /* fontes: a família vem por herança do body — é por isso que os componentes
    não repetem fontFamily. Controles de formulário não herdam por padrão. */
 :root {
   --fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --fonte-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   --fonte: var(--fonte-mono);
+  --escala: 1;
+}
+
+html[data-fonte='sans'] {
+  --fonte: var(--fonte-sans);
+}
+
+/* Escala: os tamanhos são px inline em dezenas de lugares, então o zoom é o
+   que escala texto E espaçamento junto, sem tocar em componente nenhum. */
+html[data-escala='compacto'] {
+  --escala: 0.9;
+}
+html[data-escala='grande'] {
+  --escala: 1.18;
+}
+#root {
+  zoom: var(--escala);
 }
 
 body {

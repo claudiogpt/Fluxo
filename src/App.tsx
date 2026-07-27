@@ -12,6 +12,7 @@ import { selectGame, selectTela } from './features/game/selectors';
 import { carregarPlacar } from './features/placar/placarSlice';
 import { useAtalhos } from './hooks/useAtalhos';
 import { useGameLoop } from './hooks/useGameLoop';
+import { usePrefs } from './hooks/usePrefs';
 import { GameView } from './views/GameView';
 import type { AppDispatch } from './store';
 
@@ -24,6 +25,7 @@ export function App() {
 
   useGameLoop();
   useAtalhos(glossarioAberto, setGlossarioAberto);
+  usePrefs();
 
   // Board atual (muda com modo/cenário): busca o top global (no-op offline).
   // `tela` na dependência dá retry natural nas transições menu↔jogo — se a

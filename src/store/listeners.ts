@@ -2,12 +2,14 @@
 // 1. persistir conceitos vistos (mesma chave do protótipo DC);
 // 2. registrar partida no placar (fim de jogo ou marco do sandbox) + envio global;
 // 3. gatilhos educacionais que dependem do ESTADO, não de um clique
-//    (porta o verificarConceitosDeEstado do orquestrador).
+//    (porta o verificarConceitosDeEstado do orquestrador);
+// 4. persistir as preferências de apresentação (tema, fonte, escala).
 import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
 import { ativos as ativosDef, conceitos, placar, regras } from '../engine';
 import { abrirModal, marcarVisto } from '../features/conceitos/conceitosSlice';
 import { fecharMes, mover, setAuto } from '../features/game/gameSlice';
 import { carregarPlacar, placarLocalMudou } from '../features/placar/placarSlice';
+import { salvarPrefs, setEscala, setFonte, setTema } from '../features/prefs';
 import type { AppDispatch, RootState } from './index';
 
 export const listener = createListenerMiddleware();
@@ -46,6 +48,12 @@ startListening({
     const ok = await placar.enviarRemoto(rec);
     if (ok) api.dispatch(carregarPlacar(placar.boardDe(depois)));
   },
+});
+
+// 4) Preferências de apresentação (tema/fonte/escala) — mesma ideia do #1.
+startListening({
+  matcher: isAnyOf(setTema, setFonte, setEscala),
+  effect: (_action, api) => salvarPrefs(api.getState().prefs),
 });
 
 // 3) Conceitos disparados por estado: 1 modal por vez; condições persistentes
