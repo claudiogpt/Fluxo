@@ -10,9 +10,9 @@
     "semantic_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6"
   },
   "engine/conceitos.js": {
-    "mtime": 1783396258.7845106,
-    "ast_hash": "13d06e58f7d6ef8371dd6281f419808c",
-    "semantic_hash": "13d06e58f7d6ef8371dd6281f419808c"
+    "mtime": 1785132025.0603914,
+    "ast_hash": "57308a285e992bb589b8db8e2c194aca",
+    "semantic_hash": ""
   },
   "engine/config.js": {
     "mtime": 1783918339.3528628,
@@ -40,13 +40,13 @@
     "semantic_hash": ""
   },
   "tests/engine.test.js": {
-    "mtime": 1783968584.6886408,
-    "ast_hash": "5ee491379d885a52becbf91f7b26ad90",
+    "mtime": 1785132037.7102454,
+    "ast_hash": "404f8be0ff068167ed375848574c12ec",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785127007.936271,
-    "ast_hash": "2eacc2331b4372d025793772689729cb",
+    "mtime": 1785132138.8461215,
+    "ast_hash": "65326ece675df8afe6dc1fca542758d4",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
@@ -90,13 +90,13 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1784955230.3371546,
-    "ast_hash": "52187c6349dec2bd196ee9d2b161f1f5",
+    "mtime": 1785132084.7207136,
+    "ast_hash": "ee28380231d56e716b651b10659d2a0d",
     "semantic_hash": ""
   },
   "src/engine/types.ts": {
-    "mtime": 1784954613.5817735,
-    "ast_hash": "ab81610cc49d12490d400df6709690cb",
+    "mtime": 1785132039.7922213,
+    "ast_hash": "b3cec407dbce1894070282084b00f40a",
     "semantic_hash": ""
   },
   "src/engine/index.ts": {
@@ -125,13 +125,13 @@
     "semantic_hash": ""
   },
   "src/features/conceitos/conceitosSlice.test.ts": {
-    "mtime": 1784085341.3048096,
-    "ast_hash": "fdf33271188310b279f3f0932c4d0720",
+    "mtime": 1785132182.0186636,
+    "ast_hash": "f3bc082ef873cc68b9a8a239c908ba1c",
     "semantic_hash": ""
   },
   "src/components/Glossario.test.tsx": {
-    "mtime": 1784574122.341185,
-    "ast_hash": "1f21488a5994b32451cdba9dca3e63f7",
+    "mtime": 1785132182.0196636,
+    "ast_hash": "826b4e86d11b0d13733b65dc58829a0c",
     "semantic_hash": ""
   },
   "src/components/Glossario.tsx": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "src/components/PainelStatus.tsx": {
-    "mtime": 1785125731.0868468,
-    "ast_hash": "d16e04bba13e26aef2cf8573f7874026",
+    "mtime": 1785132133.6561775,
+    "ast_hash": "15f681dfe49b1439dc2bdb921e812413",
     "semantic_hash": ""
   },
   "src/components/TerminalEventos.tsx": {
@@ -315,8 +315,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/Home.tsx": {
-    "mtime": 1785126488.7700164,
-    "ast_hash": "43bdaa499215ab8fb1a7719e13b8c311",
+    "mtime": 1785132118.554341,
+    "ast_hash": "c37e5445c0425be3e2cd9f122234a444",
     "semantic_hash": ""
   },
   "src/components/menu/MenuLayout.tsx": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/navegacao.test.tsx": {
-    "mtime": 1785126632.7163882,
-    "ast_hash": "ad5109c901e100bf4a102e9828a7ad58",
+    "mtime": 1785132182.0196636,
+    "ast_hash": "4c160d2a4a0b34a630f7a586684f37c9",
     "semantic_hash": ""
   },
   "src/features/game/selectorsMenu.ts": {
@@ -385,8 +385,8 @@
     "semantic_hash": ""
   },
   "src/features/ui/textos.ts": {
-    "mtime": 1785126431.1044075,
-    "ast_hash": "6bcf3d942bc74b2a8a5a99df2688dc0f",
+    "mtime": 1785132100.120543,
+    "ast_hash": "31993dfe877e7559c6549dae3125a45d",
     "semantic_hash": ""
   }
 }
