@@ -3,6 +3,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Provider } from 'react-redux';
+import { placar } from '../../engine';
 import { CHAVE_PREFS } from '../../features/prefs';
 import { irPara, selectRota } from '../../features/ui/uiSlice';
 import { makeStore } from '../../store';
@@ -59,5 +60,6 @@ describe('CONFIGURAÇÕES', () => {
     expect(selectRota(store.getState())).toBe('perfil');
     fireEvent.change(screen.getByLabelText('Nome no placar'), { target: { value: 'claudio' } });
     expect(store.getState().placar.nick).toBe('CLAUDIO'); // normaliza pra maiúscula
+    expect(localStorage.getItem(placar.CHAVE_NICK)).toBe('CLAUDIO'); // persistido pelo listener
   });
 });

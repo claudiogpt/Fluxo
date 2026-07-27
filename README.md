@@ -53,15 +53,26 @@ A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo — �
 | Pasta | Responsabilidade |
 |---|---|
 | `engine/` | **Shim tipado** do engine UMD: único ponto de import (`index.ts`) + tipos (`types.ts`). Aceita o branch global (browser) e o CommonJS (Vitest/build). |
-| `store/` | `configureStore` + `listeners.ts` (efeitos: persistir conceitos, registrar/enviar placar, gatilhos educacionais de estado). |
-| `features/game/` | `gameSlice` (reducers embrulham o engine: clone→call→merge) + `selectors.ts` (o view-model inteiro — ex-`renderVals`). |
+| `store/` | `configureStore` + `listeners.ts` (efeitos: persistir conceitos, registrar/enviar placar, gatilhos educacionais, preferências e nick). |
+| `features/game/` | `gameSlice` (reducers embrulham o engine: clone→call→merge), `selectors.ts` (view-model do jogo — ex-`renderVals`), `selectorsMenu.ts` (view-model do menu) e `cores.ts` (traduz as cores que o engine emite). |
 | `features/conceitos/` | Slice do conteúdo educacional + `thunks.ts` (interceptação de 1ª vez com **ação pendente serializável**). |
 | `features/placar/` | Nick, board global (thunk `carregarPlacar`) e o view-model do leaderboard. |
-| `components/` | Telas só-apresentação (uma por card/overlay), estilos inline herdados do protótipo. |
+| `features/ui/` | Navegação do menu (`uiSlice`: pilha de rotas + glossário), os botões declarados em `menuItens.ts` e os textos da landing. |
+| `features/prefs/` | Tema, família e tamanho de fonte — persistidos em `fluxo_prefs_v1` e aplicados como atributos no `<html>`. |
+| `components/menu/` | As telas de menu (landing, modos, cenários, setup, configurações, perfil) e as peças reusáveis (`BotaoMenu`, `CartaoEscolha`, `GrupoOpcoes`). |
+| `components/` | Telas de jogo, só-apresentação (uma por card/overlay), estilos inline. |
 | `views/` | `GameView` (composição da tela de jogo). |
-| `hooks/` | `useGameLoop` (tick 500ms/AUTO) e `useAtalhos` (ESPAÇO/A/G/ESC/ENTER com guards). |
+| `hooks/` | `useGameLoop` (tick 500ms/AUTO), `useAtalhos` (ESPAÇO/A/G/ESC/ENTER com guards) e `usePrefs`. |
 
 **Regra de ouro**: componente não calcula regra de negócio; selector não muta; efeito colateral só em thunk/listener; o engine é dono de toda transição de estado do jogo.
+
+### Navegação e tema
+
+O menu é uma **pilha de rotas** no `uiSlice` (`home → modos → setup`, etc.), não um router: o app é um `index.html` estático, não há partida linkável (o jogo é não determinístico) e `game.tela` — que pertence ao engine — já decide menu vs. jogo. `ESC` sobe um nível; a pilha nunca esvazia.
+
+Detalhe que morde: **`cenarios` é um MODO no engine** (`regras.js` só monta o cenário quando `modo === 'cenarios'`), mas na UI virou um botão de primeiro nível. Por isso `selectModosLista` esconde esse id e `escolherCenario` entra no modo junto — sem isso, escolher um cenário vindo de outro modo começaria uma partida clássica em silêncio.
+
+Toda cor vive em `src/tema.css`, em ~38 tokens semânticos; tema, fonte e escala são atributos no `<html>` (`data-tema`, `data-fonte`, `data-escala`). Nenhum outro arquivo do `src/` pode ter cor literal — **há um teste que reprova o commit se tiver** (`features/game/cores.test.ts`), inclusive checando que toda cor emitida pelo engine tem token correspondente.
 
 ## Placar global (Supabase)
 
@@ -72,7 +83,9 @@ Nota do free tier: o projeto **pausa após ~7 dias sem uso** (o jogo cai gracios
 ## Receitas rápidas
 
 - **Mudar balanceamento**: `engine/config.js`.
-- **Adicionar um modo de jogo**: entre em `config.modos` com `disponivel: false` ("EM BREVE" automático no menu). Mecânica: trate o `modo` em `engine/regras.js` + testes; UI: selectors em `src/features/game/selectors.ts` e, se precisar, um card novo em `src/components/`. O placar do modo é automático se ele terminar com `s.fim`; ajuste `scoreDe` em `engine/placar.js` se a métrica não for "menos meses".
+- **Adicionar um botão no menu**: inclua o id novo em `RotaId` (`src/features/ui/uiSlice.ts`) — o `tsc` vai acusar o `Record` incompleto em `MenuRouter.tsx`, que é o seu lembrete de criar a página; depois entre com o item em `ITENS_HOME` (`menuItens.ts`). Um item com `disponivel: false` já sai como "EM BREVE".
+- **Adicionar/ajustar uma cor**: `src/tema.css`, nos DOIS temas. Se a cor vem do engine (`riscoCor`, cor de log), mapeie em `src/features/game/cores.ts`.
+- **Adicionar um modo de jogo**: entre em `config.modos` com `disponivel: false` ("EM BREVE" automático na página de modos). Mecânica: trate o `modo` em `engine/regras.js` + testes; UI: selectors em `src/features/game/selectors.ts` e, se precisar, um card novo em `src/components/`. Ajustes próprios do modo entram como mais um bloco condicional em `selectSetupPagina` + `PaginaSetup.tsx`. O placar do modo é automático se ele terminar com `s.fim`; ajuste `scoreDe` em `engine/placar.js` se a métrica não for "menos meses".
 - **Adicionar um conceito educacional**: nova entrada em `engine/conceitos.js` (`tooltips` + `termos`). Gatilho por clique: intercepte com `executarComConceito` em `src/features/conceitos/thunks.ts`; gatilho por estado: adicione a condição no listener 3 de `src/store/listeners.ts`. Glossário atualiza sozinho.
 - **Adicionar um ativo**: `engine/ativos.js` (+ ordem de liquidação em `config.js`). A UI o exibe automaticamente.
 - **Adicionar um evento**: item com peso `p` e `run` em `engine/eventos.js` (use `modos:` pra restringir).

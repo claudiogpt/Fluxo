@@ -23,9 +23,9 @@ const placarSlice = createSlice({
   initialState: (): PlacarState => ({ nick: placar.nick(), lbRemoto: null, localVersao: 0 }),
   reducers: {
     setNick(state, action: PayloadAction<string>) {
-      const v = action.payload.toUpperCase().slice(0, 16);
-      placar.salvarNick(v);
-      state.nick = v;
+      // só normaliza; quem grava no localStorage é o listener (regra de ouro:
+      // reducer é puro, efeito colateral fica em thunk/listener)
+      state.nick = action.payload.toUpperCase().slice(0, 16);
     },
     placarLocalMudou(state) {
       state.localVersao += 1;
