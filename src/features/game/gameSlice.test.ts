@@ -8,6 +8,7 @@ import {
   fecharMes,
   mover,
   reiniciar,
+  voltarMenu,
 } from './gameSlice';
 import { selectAtivosLista, selectPainel } from './selectors';
 
@@ -90,6 +91,36 @@ describe('gameSlice', () => {
     expect(g.aposentadoria).toBeNull();
     expect(g.imoveis).not.toBeNull();
     expect(g.imoveis?.escolha).toBe('comprar');
+  });
+
+  it('voltarMenu volta pra intro preservando as escolhas do menu', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('sandbox'));
+    store.dispatch(escolherCapital(100000));
+    store.dispatch(comecar());
+    store.dispatch(mover({ key: 'reserva', valor: 500 }));
+    expect(store.getState().game.tela).toBe('jogo');
+
+    store.dispatch(voltarMenu());
+    const g = store.getState().game;
+    expect(g.tela).toBe('intro');
+    expect(g.modo).toBe('sandbox');
+    expect(g.capitalInicial).toBe(100000);
+    expect(g.ativos.reserva).toBe(0); // partida descartada
+  });
+
+  // Caracterização do pseudo-modo: `cenarios` é um MODO, e regras.js só monta o
+  // cenário quando modo==='cenarios'. Hoje o Intro esconde a lista de cenários
+  // fora desse modo, então ninguém tropeça — mas com a página CENÁRIOS dedicada
+  // esse vira o caminho normal. A E4 inverte este teste.
+  it('escolherCenario fora do modo cenarios descarta o cenário (comportamento atual)', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('sandbox'));
+    store.dispatch(escolherCenario('imoveis'));
+    const g = store.getState().game;
+    expect(g.modo).toBe('sandbox');
+    expect(g.cenario).toBeNull();
+    expect(g.imoveis).toBeNull();
   });
 
   it('selectors formatam o view-model (porta do renderVals)', () => {

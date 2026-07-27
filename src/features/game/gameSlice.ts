@@ -82,7 +82,9 @@ const gameSlice = createSlice({
       return { ...novo, tela: 'jogo', inicioTs: Date.now(), agora: Date.now() };
     },
     voltarMenu(state) {
-      return recriar(state, {});
+      // tela explícita: sem isso, voltar pro menu depende de novoJogo devolver
+      // tela:'intro' — um default do engine que ninguém garante pra sempre.
+      return { ...recriar(state, {}), tela: 'intro' as const };
     },
     escolherDificuldade(state, action: PayloadAction<Dificuldade>) {
       return recriar(state, { dificuldade: action.payload });
