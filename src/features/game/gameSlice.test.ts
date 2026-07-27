@@ -8,6 +8,7 @@ import {
   fecharMes,
   mover,
   reiniciar,
+  voltarMenu,
 } from './gameSlice';
 import { selectAtivosLista, selectPainel } from './selectors';
 
@@ -92,6 +93,37 @@ describe('gameSlice', () => {
     expect(g.imoveis?.escolha).toBe('comprar');
   });
 
+  it('voltarMenu volta pra intro preservando as escolhas do menu', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('sandbox'));
+    store.dispatch(escolherCapital(100000));
+    store.dispatch(comecar());
+    store.dispatch(mover({ key: 'reserva', valor: 500 }));
+    expect(store.getState().game.tela).toBe('jogo');
+
+    store.dispatch(voltarMenu());
+    const g = store.getState().game;
+    expect(g.tela).toBe('intro');
+    expect(g.modo).toBe('sandbox');
+    expect(g.capitalInicial).toBe(100000);
+    expect(g.ativos.reserva).toBe(0); // partida descartada
+  });
+
+  // Blindagem do pseudo-modo: `cenarios` é um MODO, e regras.js só monta o
+  // cenário quando modo==='cenarios'. Antes, escolher um cenário vindo de outro
+  // modo descartava a escolha em silêncio e começava uma partida clássica —
+  // caminho impossível no Intro monolítico, normal na página CENÁRIOS.
+  it('escolherCenario vindo de outro modo entra no modo cenarios', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('sandbox'));
+    store.dispatch(escolherCenario('imoveis'));
+    const g = store.getState().game;
+    expect(g.modo).toBe('cenarios');
+    expect(g.cenario).toBe('imoveis');
+    expect(g.imoveis).not.toBeNull();
+    expect(g.capitalInicial).toBeNull(); // o capital do sandbox não vaza
+  });
+
   it('selectors formatam o view-model (porta do renderVals)', () => {
     const store = makeStore();
     store.dispatch(comecar());
@@ -104,7 +136,7 @@ describe('gameSlice', () => {
     expect(cripto?.varFmt).toBe('—'); // zerado mostra o traço (regra v < 1 do renderVals)
     const painel = selectPainel(store.getState());
     expect(painel.caixaFmt).toBe('R$ 1.000');
-    expect(painel.caixaCor).toBe('#ff4d5e'); // caixa < custo
+    expect(painel.caixaCor).toBe('var(--perigo)'); // caixa < custo
     expect(painel.mesFmt).toBe('00');
     expect(painel.progLabel).toContain('RUMO À INDEPENDÊNCIA');
   });

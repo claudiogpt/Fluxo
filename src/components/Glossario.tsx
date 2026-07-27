@@ -8,19 +8,16 @@ import {
   selectGlossarioLista,
 } from '../features/conceitos/conceitosSlice';
 
-const mono = "'IBM Plex Mono', monospace";
-
 const estilos = {
   overlay: {
     position: 'fixed',
     inset: 0,
-    background: 'rgba(5,8,11,.88)',
+    background: 'var(--overlay)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 65,
-    color: '#d7e1ea',
-    fontFamily: mono,
+    color: 'var(--texto)',
     lineHeight: 1.5,
   },
   painel: {
@@ -29,8 +26,8 @@ const estilos = {
     maxHeight: '82vh',
     display: 'flex',
     flexDirection: 'column',
-    background: '#0d1117',
-    border: '1px solid #1e2833',
+    background: 'var(--superficie)',
+    border: '1px solid var(--borda)',
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -40,16 +37,15 @@ const estilos = {
     justifyContent: 'space-between',
     gap: 12,
     padding: '16px 20px',
-    borderBottom: '1px solid #1e2833',
-    background: '#11161d',
+    borderBottom: '1px solid var(--borda)',
+    background: 'var(--superficie-2)',
   },
-  titulo: { fontWeight: 700, letterSpacing: 1, color: '#f2f7fb' },
-  contador: { color: '#22d47e', fontSize: 11, marginLeft: 10 },
+  titulo: { fontWeight: 700, letterSpacing: 1, color: 'var(--texto-forte)' },
+  contador: { color: 'var(--sucesso)', fontSize: 11, marginLeft: 10 },
   fechar: {
     background: 'transparent',
-    border: '1px solid #3a4a5a',
-    color: '#8fa1b2',
-    fontFamily: mono,
+    border: '1px solid var(--texto-apagado)',
+    color: 'var(--texto-fraco)',
     fontSize: 11,
     fontWeight: 600,
     letterSpacing: 1,
@@ -59,8 +55,8 @@ const estilos = {
   },
   lista: { padding: '14px 20px', overflowY: 'auto', display: 'grid', gap: 10 },
   linha: {
-    border: '1px solid #1a222c',
-    background: '#0b0f14',
+    border: '1px solid var(--borda-suave)',
+    background: 'var(--fundo)',
     borderRadius: 6,
     padding: '10px 14px',
     display: 'flex',
@@ -69,8 +65,8 @@ const estilos = {
   },
   rodape: {
     padding: '10px 20px',
-    borderTop: '1px solid #1e2833',
-    color: '#3a4a5a',
+    borderTop: '1px solid var(--borda)',
+    color: 'var(--texto-apagado)',
     fontSize: 10.5,
   },
 } satisfies Record<string, CSSProperties>;
@@ -101,7 +97,7 @@ export function Glossario({ fechar }: { fechar: () => void }) {
                     fontWeight: 700,
                     fontSize: 12,
                     letterSpacing: 0.5,
-                    color: t.desbloqueado ? '#f2f7fb' : '#3a4a5a',
+                    color: t.desbloqueado ? 'var(--texto-forte)' : 'var(--texto-apagado)',
                   }}
                 >
                   {t.nome}
@@ -109,7 +105,7 @@ export function Glossario({ fechar }: { fechar: () => void }) {
                 <div
                   style={{
                     fontSize: 11.5,
-                    color: t.desbloqueado ? '#8fa1b2' : '#3a4a5a',
+                    color: t.desbloqueado ? 'var(--texto-fraco)' : 'var(--texto-apagado)',
                     marginTop: 2,
                   }}
                 >

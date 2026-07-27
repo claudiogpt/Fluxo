@@ -23,9 +23,9 @@ const placarSlice = createSlice({
   initialState: (): PlacarState => ({ nick: placar.nick(), lbRemoto: null, localVersao: 0 }),
   reducers: {
     setNick(state, action: PayloadAction<string>) {
-      const v = action.payload.toUpperCase().slice(0, 16);
-      placar.salvarNick(v);
-      state.nick = v;
+      // só normaliza; quem grava no localStorage é o listener (regra de ouro:
+      // reducer é puro, efeito colateral fica em thunk/listener)
+      state.nick = action.payload.toUpperCase().slice(0, 16);
     },
     placarLocalMudou(state) {
       state.localVersao += 1;
@@ -48,12 +48,12 @@ type ComPlacarEGame = { placar: PlacarState; game: GameState };
 const { fmtCompacto, fmtTempo } = formato;
 
 const LB_ROTULOS: Record<string, [string, string]> = {
-  livre: ['LIVRE', '#22d47e'],
-  marco: ['LIVRE', '#22d47e'],
-  apos_sucesso: ['VIVEU', '#22d47e'],
-  apos_faliu: ['ZEROU', '#ff4d5e'],
-  imoveis_fim: ['FIM', '#4bb7ff'],
-  faliu: ['FALIU', '#ff4d5e'],
+  livre: ['LIVRE', 'var(--sucesso)'],
+  marco: ['LIVRE', 'var(--sucesso)'],
+  apos_sucesso: ['VIVEU', 'var(--sucesso)'],
+  apos_faliu: ['ZEROU', 'var(--perigo)'],
+  imoveis_fim: ['FIM', 'var(--info)'],
+  faliu: ['FALIU', 'var(--perigo)'],
 };
 
 export const selectNick = (s: ComPlacarEGame) => s.placar.nick;
@@ -67,7 +67,7 @@ export const selectLeaderboard = createSelector(
   (board, lbRemoto, nick, _localVersao) => {
     const remoto = lbRemoto && lbRemoto.board === board ? lbRemoto.lista : null;
     const linhas = (remoto ?? placar.ler(board)).map((p, i) => {
-      const [rotulo, cor] = LB_ROTULOS[p.resultado] ?? [String(p.resultado || '?').toUpperCase(), '#8fa1b2'];
+      const [rotulo, cor] = LB_ROTULOS[p.resultado] ?? [String(p.resultado || '?').toUpperCase(), 'var(--texto-fraco)'];
       const venceu = placar.vitoria(p.resultado);
       let det = p.meses + 'm';
       if (venceu && (board === 'aposentadoria' || board === 'imoveis')) det += ' · ' + fmtCompacto(p.pat || 0);
@@ -81,20 +81,20 @@ export const selectLeaderboard = createSelector(
         status: rotulo,
         cor,
         detalhe: det,
-        bg: p.voce || (nick && p.nome === nick) ? 'rgba(34,212,126,.08)' : 'transparent',
+        bg: p.voce || (nick && p.nome === nick) ? 'var(--tint-sucesso-fraco)' : 'transparent',
       };
     });
     if (!linhas.length) {
       linhas.push({
         pos: '—',
         nome: remoto ? 'seja o primeiro do mundo a pontuar aqui' : 'nenhuma partida registrada ainda',
-        status: '', cor: '#3a4a5a', detalhe: '', bg: 'transparent',
+        status: '', cor: 'var(--texto-apagado)', detalhe: '', bg: 'transparent',
       });
     }
     return {
       lbLista: linhas,
       lbTitulo: '▮ PLACAR ' + (remoto ? 'GLOBAL' : 'LOCAL') + ' · ' + nomeDoBoard(board),
-      lbTituloCor: remoto ? '#22d47e' : '#6b7c8c',
+      lbTituloCor: remoto ? 'var(--sucesso)' : 'var(--texto-rotulo)',
     };
   }
 );

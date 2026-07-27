@@ -1,7 +1,201 @@
-/* Tema global — portado 1:1 do tema.css do protótipo DC (fonte via index.html). */
-body{margin:0;background:#0b0f14;font-family:'IBM Plex Mono',monospace;}
-@keyframes piscar{0%,100%{opacity:1}50%{opacity:.25}}
-@keyframes surgir{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-thumb{background:#1e2833;border-radius:4px}
-::-webkit-scrollbar-track{background:transparent}
+/* Tema do Fluxo — ÚNICO lugar do projeto com cor literal.
+   Todo o resto (componentes e selectors) referencia var(--token).
+   Os valores abaixo são exatamente os hex que estavam espalhados pelo src/. */
+
+:root,
+html[data-tema='escuro'] {
+  color-scheme: dark;
+
+  /* estrutura */
+  --fundo: #0b0f14;
+  --superficie: #0d1117;
+  --superficie-2: #11161d;
+  --borda: #1e2833;
+  --borda-suave: #1a222c;
+
+  /* rampa de texto, do mais forte ao mais apagado */
+  --texto-forte: #f2f7fb;
+  --texto: #d7e1ea;
+  --texto-fraco: #8fa1b2;
+  --texto-rotulo: #6b7c8c;
+  --texto-apagado: #3a4a5a;
+
+  /* acentos semânticos (texto e borda) */
+  --sucesso: #22d47e;
+  --sucesso-suave: #8fd47e;
+  --aviso: #ffc24b;
+  --alerta: #ff9d4b;
+  --perigo: #ff4d5e;
+  --info: #4bb7ff;
+
+  /* acento sólido (fundo de botão) + o texto que vai por cima dele.
+     Separado de --sucesso porque no tema claro os dois papéis divergem:
+     um verde legível sobre branco é escuro demais pra ser fundo de botão. */
+  --sucesso-solido: #22d47e;
+  --sobre-sucesso: #08110c;
+
+  /* tints (fundos translúcidos de estado selecionado / destaque) */
+  --tint-sucesso: rgba(34, 212, 126, 0.12);
+  --tint-sucesso-fraco: rgba(34, 212, 126, 0.08);
+  --tint-perigo: rgba(255, 77, 94, 0.12);
+  --tint-aviso: rgba(255, 194, 75, 0.1);
+  --tint-info: rgba(75, 183, 255, 0.12);
+
+  /* superfícies tingidas dos cards (negócio, imóvel, desfechos) */
+  --sucesso-fundo: #0e1a14;
+  --sucesso-borda: #1e4a34;
+  --perigo-fundo: #1a1114;
+  --perigo-borda: #4a1e28;
+  --aviso-fundo: #161309;
+  --aviso-fundo-2: #1a1509;
+  --aviso-borda: #4a3d1e;
+  --aviso-borda-2: #6b5518;
+  --aviso-borda-suave: #2a2312;
+  --info-fundo: #0a1420;
+  --info-borda: #1e3a52;
+  --info-borda-suave: #142638;
+
+  /* overlays, sombra e foco */
+  --overlay: rgba(5, 8, 11, 0.88);
+  --overlay-forte: rgba(5, 8, 11, 0.94);
+  --sombra-flutuante: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --foco: #4bb7ff;
+}
+
+/* Tema claro: mesma rampa invertida, mesmos matizes. Os acentos escurecem até
+   passar 4.5:1 sobre --fundo — verde/âmbar neon sobre branco é ilegível.
+   --texto-apagado recebe o valor de --texto-rotulo: no escuro ele é quase
+   decorativo, mas carrega conteúdo real (as dicas do menu). */
+html[data-tema='claro'] {
+  color-scheme: light;
+
+  --fundo: #f4f7fa;
+  --superficie: #ffffff;
+  --superficie-2: #eef3f8;
+  --borda: #cfdae5;
+  --borda-suave: #e2e9f0;
+
+  --texto-forte: #0b0f14;
+  --texto: #1e2833;
+  --texto-fraco: #46586a;
+  --texto-rotulo: #5d6d7d;
+  --texto-apagado: #5d6d7d;
+
+  --sucesso: #0b7a43;
+  --sucesso-suave: #3f7a2e;
+  --aviso: #8a5a00;
+  --alerta: #a54a06;
+  --perigo: #c0182b;
+  --info: #1160a8;
+
+  --sucesso-solido: #0b7a43;
+  --sobre-sucesso: #ffffff;
+
+  --tint-sucesso: rgba(11, 122, 67, 0.1);
+  --tint-sucesso-fraco: rgba(11, 122, 67, 0.06);
+  --tint-perigo: rgba(192, 24, 43, 0.09);
+  --tint-aviso: rgba(138, 90, 0, 0.1);
+  --tint-info: rgba(17, 96, 168, 0.1);
+
+  --sucesso-fundo: #eaf7f0;
+  --sucesso-borda: #b9dfc9;
+  --perigo-fundo: #fdeef0;
+  --perigo-borda: #f0c2c8;
+  --aviso-fundo: #fdf6e6;
+  --aviso-fundo-2: #fbf1d9;
+  --aviso-borda: #e6d6a8;
+  --aviso-borda-2: #d9bc72;
+  --aviso-borda-suave: #efe3c4;
+  --info-fundo: #eaf2fb;
+  --info-borda: #b8d3ee;
+  --info-borda-suave: #d5e5f6;
+
+  --overlay: rgba(20, 28, 36, 0.55);
+  --overlay-forte: rgba(20, 28, 36, 0.7);
+  --sombra-flutuante: 0 4px 16px rgba(11, 15, 20, 0.18);
+  --foco: #1160a8;
+}
+
+/* fontes: a família vem por herança do body — é por isso que os componentes
+   não repetem fontFamily. Controles de formulário não herdam por padrão. */
+:root {
+  --fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --fonte-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --fonte: var(--fonte-mono);
+  --escala: 1;
+}
+
+html[data-fonte='sans'] {
+  --fonte: var(--fonte-sans);
+}
+
+/* Escala: os tamanhos são px inline em dezenas de lugares, então o zoom é o
+   que escala texto E espaçamento junto, sem tocar em componente nenhum. */
+html[data-escala='compacto'] {
+  --escala: 0.9;
+}
+html[data-escala='grande'] {
+  --escala: 1.18;
+}
+#root {
+  zoom: var(--escala);
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  font-family: var(--fonte);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+@keyframes piscar {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--borda);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

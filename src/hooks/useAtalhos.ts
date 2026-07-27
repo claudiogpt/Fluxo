@@ -1,35 +1,38 @@
 // Atalhos globais — porta a cadeia de guards do orquestrador DC:
-// input/textarea → G/ESC (glossário) → Space/Enter (modal) → Space/A (jogo).
+// input/textarea → G (glossário) → ESC (fecha overlay / volta uma tela) →
+// Space/Enter (modal) → Space/A (jogo).
 // Sempre e.code OU e.key (eventos sintéticos/teclados não-QWERTY).
 import { useEffect } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import type { AppDispatch, RootState } from '../store';
 import { fecharMes, toggleAuto } from '../features/game/gameSlice';
 import { cancelarModal, confirmarModal } from '../features/conceitos/thunks';
+import { alternarGlossario, fecharGlossario, voltar } from '../features/ui/uiSlice';
 
 const ehTecla = (e: KeyboardEvent, code: string, ...keys: string[]) =>
   e.code === code || keys.includes(e.key);
 
-export function useAtalhos(glossarioAberto: boolean, setGlossarioAberto: (fn: (v: boolean) => boolean) => void) {
+export function useAtalhos() {
   const store = useStore<RootState>();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const alvo = e.target as HTMLElement | null;
       if (alvo && /^(INPUT|TEXTAREA)$/.test(alvo.tagName)) return;
+      const { game, conceitos, ui } = store.getState();
+
       if (ehTecla(e, 'KeyG', 'g', 'G')) {
         e.preventDefault();
-        setGlossarioAberto((v) => !v);
+        dispatch(alternarGlossario());
         return;
       }
-      if (glossarioAberto) {
+      if (ui.glossarioAberto) {
         if (ehTecla(e, 'Escape', 'Escape')) {
           e.preventDefault();
-          setGlossarioAberto(() => false);
+          dispatch(fecharGlossario());
         }
         return;
       }
-      const { game, conceitos } = store.getState();
       if (conceitos.modal) {
         if (ehTecla(e, 'Space', ' ') || ehTecla(e, 'Enter', 'Enter')) {
           e.preventDefault();
@@ -40,7 +43,15 @@ export function useAtalhos(glossarioAberto: boolean, setGlossarioAberto: (fn: (v
         }
         return;
       }
-      if (game.tela !== 'jogo' || game.fim) return;
+      // No menu, ESC sobe um nível (no-op na home — a pilha nunca esvazia).
+      if (game.tela !== 'jogo') {
+        if (ehTecla(e, 'Escape', 'Escape')) {
+          e.preventDefault();
+          dispatch(voltar());
+        }
+        return;
+      }
+      if (game.fim) return;
       if (ehTecla(e, 'Space', ' ')) {
         e.preventDefault();
         dispatch(fecharMes());
@@ -51,5 +62,5 @@ export function useAtalhos(glossarioAberto: boolean, setGlossarioAberto: (fn: (v
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [glossarioAberto, setGlossarioAberto, store, dispatch]);
+  }, [store, dispatch]);
 }

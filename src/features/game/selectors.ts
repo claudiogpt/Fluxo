@@ -4,6 +4,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { ativos as ativosDef, config, formato, regras } from '../../engine';
 import type { GameState } from '../../engine/types';
+import { corDoEngine } from './cores';
 
 type ComGame = { game: GameState };
 
@@ -23,10 +24,10 @@ export const selectAtivosLista = createSelector([selectGame], (s) =>
       ticker: d.ticker,
       dica: d.dica,
       riscoLabel: d.risco,
-      riscoCor: d.riscoCor,
+      riscoCor: corDoEngine(d.riscoCor),
       valorFmt: fmt(v),
       varFmt: v < 1 ? '—' : (r >= 0 ? '▲ +' : '▼ ') + (r * 100).toFixed(1) + '% no mês',
-      varCor: v < 1 ? '#3a4a5a' : r >= 0 ? '#22d47e' : '#ff4d5e',
+      varCor: v < 1 ? 'var(--texto-apagado)' : r >= 0 ? 'var(--sucesso)' : 'var(--perigo)',
     };
   })
 );
@@ -50,14 +51,14 @@ export const selectPainel = createSelector([selectGame], (s) => {
       progVal = Math.min(100, (ap.saquesFeitos / ap.turnosSaque) * 100);
       salarioLabel = 'SAQUE / MÊS';
       salarioStatus = '−' + fmt(ap.saqueMes);
-      salarioCor = '#ff9d4b';
+      salarioCor = 'var(--alerta)';
       modoTag = 'SAQUE ' + ap.saquesFeitos + '/' + ap.turnosSaque;
     } else {
       progLabel = 'ACUMULAÇÃO — meses até aposentar';
       progVal = Math.min(100, (s.mes / ap.turnosAcumulacao) * 100);
       salarioLabel = 'SALÁRIO / MÊS';
       salarioStatus = '+' + fmt(s.salario);
-      salarioCor = '#8fd47e';
+      salarioCor = 'var(--sucesso-suave)';
       modoTag = 'ACUMULAÇÃO ' + s.mes + '/' + ap.turnosAcumulacao;
     }
   } else if (im) {
@@ -65,7 +66,7 @@ export const selectPainel = createSelector([selectGame], (s) => {
     progVal = Math.min(100, (s.mes / im.prazo) * 100);
     salarioLabel = 'SALÁRIO / MÊS';
     salarioStatus = s.semSalario > 0 ? 'DESEMPREGADO' : '+' + fmt(s.salario);
-    salarioCor = s.semSalario > 0 ? '#ff4d5e' : '#8fd47e';
+    salarioCor = s.semSalario > 0 ? 'var(--perigo)' : 'var(--sucesso-suave)';
     modoTag = comprando ? 'IMÓVEIS · COMPRANDO' : 'IMÓVEIS · ALUGANDO';
   } else {
     progLabel = 'RUMO À INDEPENDÊNCIA — renda passiva vs. custo de vida';
@@ -80,25 +81,25 @@ export const selectPainel = createSelector([selectGame], (s) => {
         : '+' + fmt(s.salario);
     salarioCor = s.negocio
       ? s.negocio.falido
-        ? '#ff4d5e'
-        : '#8fd47e'
+        ? 'var(--perigo)'
+        : 'var(--sucesso-suave)'
       : s.semSalario > 0
-        ? '#ff4d5e'
-        : '#8fd47e';
+        ? 'var(--perigo)'
+        : 'var(--sucesso-suave)';
     modoTag = s.modo === 'classico' ? '' : modoDef ? modoDef.nome : s.modo.toUpperCase();
   }
-  const progCor = progVal >= 100 ? '#22d47e' : progVal >= 50 ? '#8fd47e' : progVal >= 20 ? '#ffc24b' : '#ff9d4b';
+  const progCor = progVal >= 100 ? 'var(--sucesso)' : progVal >= 50 ? 'var(--sucesso-suave)' : progVal >= 20 ? 'var(--aviso)' : 'var(--alerta)';
   const spark = sparkline(s.hist.length ? s.hist : [pat]);
 
   return {
     mesFmt: String(s.mes).padStart(2, '0'),
     tempoFmt: s.inicioTs ? fmtTempo((s.fimTs ?? s.agora ?? Date.now()) - s.inicioTs) : '00:00',
-    tempoCor: s.auto ? '#ffc24b' : '#f2f7fb',
+    tempoCor: s.auto ? 'var(--aviso)' : 'var(--texto-forte)',
     sparkPoints: spark.points,
-    sparkCor: spark.positivo ? '#22d47e' : '#ff4d5e',
+    sparkCor: spark.positivo ? 'var(--sucesso)' : 'var(--perigo)',
     patrimonioFmt: fmt(pat),
     caixaFmt: fmt(s.caixa),
-    caixaCor: s.caixa < s.custo ? '#ff4d5e' : '#f2f7fb',
+    caixaCor: s.caixa < s.custo ? 'var(--perigo)' : 'var(--texto-forte)',
     salarioLabel,
     salarioStatus,
     salarioCor,
@@ -110,8 +111,8 @@ export const selectPainel = createSelector([selectGame], (s) => {
     progLabel,
     modoTag,
     autoLabel: s.auto ? '⏸ AUTO: ON' : '▶ AUTO: OFF',
-    autoBg: s.auto ? 'rgba(255,194,75,.1)' : 'transparent',
-    autoCor: s.auto ? '#ffc24b' : '#6b7c8c',
+    autoBg: s.auto ? 'var(--tint-aviso)' : 'transparent',
+    autoCor: s.auto ? 'var(--aviso)' : 'var(--texto-rotulo)',
     ehSandbox: s.modo === 'sandbox',
   };
 });
@@ -128,14 +129,14 @@ export const selectFimInfo = createSelector([selectGame], (s) => {
 
   if (s.fim === 'apos_sucesso') {
     return {
-      titulo: 'APOSENTADORIA OK', cor: '#22d47e',
+      titulo: 'APOSENTADORIA OK', cor: 'var(--sucesso)',
       resumo: 'Seu patrimônio sustentou todos os ' + (ap ? ap.turnosSaque : '') + ' meses de saque sem zerar.',
       licao: 'Lição: acumular o suficiente e diversificar amortece o "risco de sequência de retornos" — uma sequência de anos ruins logo no início da aposentadoria é o que mais quebra quem para de trabalhar.',
     };
   }
   if (s.fim === 'apos_faliu') {
     return {
-      titulo: 'ACABOU', cor: '#ff4d5e',
+      titulo: 'ACABOU', cor: 'var(--perigo)',
       resumo: 'Seu patrimônio durou ' + (ap ? ap.saquesFeitos : 0) + ' de ' + (ap ? ap.turnosSaque : '') + ' meses de saque antes de zerar.',
       licao: 'Lição: mesma média de retorno, ordem diferente = resultado diferente. Anos ruins no começo forçam vender na baixa e derrubam tudo. Sacar menos e ter reserva protege os primeiros anos — é o risco de sequência de retornos.',
     };
@@ -146,20 +147,20 @@ export const selectFimInfo = createSelector([selectGame], (s) => {
     const tijoloVenceu = tijolo >= carteira;
     return {
       titulo: tijoloVenceu ? 'TIJOLO VENCEU' : 'ALUGUEL VENCEU',
-      cor: tijoloVenceu === comprando ? '#22d47e' : '#ffc24b',
+      cor: tijoloVenceu === comprando ? 'var(--sucesso)' : 'var(--aviso)',
       resumo: '🏠 COMPRAR: imóvel quitado valendo ' + fmt(tijolo) + '  ·  📈 ALUGAR+INVESTIR: carteira em ' + fmt(carteira) + '. Você escolheu ' + (comprando ? 'COMPRAR' : 'ALUGAR') + ' e fechou com patrimônio total de ' + fmt(pat) + '.',
       licao: 'Lição: custo de oportunidade — cada real na entrada e nas parcelas é um real que não compôs juros na carteira (e vice-versa). Não há resposta universal: juros do financiamento, valorização do imóvel e disciplina de investir a diferença decidem a corrida.',
     };
   }
   if (s.fim === 'faliu') {
     return {
-      titulo: 'FALIU', cor: '#ff4d5e',
+      titulo: 'FALIU', cor: 'var(--perigo)',
       resumo: 'Você sobreviveu ' + s.mes + ' meses antes de as contas engolirem tudo.',
       licao: 'Lição: reserva de emergência primeiro, sempre. Concentração + azar = falência. Diversificar não é sobre ganhar mais, é sobre nunca quebrar.',
     };
   }
   return {
-    titulo: 'LIVRE', cor: '#22d47e',
+    titulo: 'LIVRE', cor: 'var(--sucesso)',
     resumo: 'Em ' + s.mes + ' meses sua renda passiva (' + fmt(rp) + ') superou seu custo de vida (' + fmt(s.custo) + ').',
     licao: 'Lição: quem venceu não acertou o timing do mercado — construiu renda passiva mês a mês e deixou os juros compostos trabalharem.',
   };
@@ -176,11 +177,11 @@ export const selectNegocioCard = createSelector([selectGame], (s) => {
     falido: n.falido,
     operando: !n.falido,
     statusLabel: n.falido ? 'FALIDO' : vermelho ? 'VERMELHO ' + n.mesesNoVermelho + '/' + cfgE.mesesFalencia : 'OPERANDO',
-    statusCor: n.falido ? '#ff4d5e' : vermelho ? '#ff9d4b' : '#22d47e',
+    statusCor: n.falido ? 'var(--perigo)' : vermelho ? 'var(--alerta)' : 'var(--sucesso)',
     caixaFmt: fmt(n.caixa),
-    caixaCor: vermelho ? '#ff4d5e' : '#f2f7fb',
+    caixaCor: vermelho ? 'var(--perigo)' : 'var(--texto-forte)',
     receitaFmt: n.receitaMes == null ? '—' : '+' + fmt(n.receitaMes) + ' no mês',
-    receitaCor: n.receitaMes == null ? '#3a4a5a' : n.varReceitaMes >= 0 ? '#22d47e' : '#ff9d4b',
+    receitaCor: n.receitaMes == null ? 'var(--texto-apagado)' : n.varReceitaMes >= 0 ? 'var(--sucesso)' : 'var(--alerta)',
     receitaBaseFmt: fmt(n.receitaBase),
     custoFixoFmt: fmt(n.custoFixo),
     dica: 'A empresa tem caixa próprio: reinvestir cresce a receita (com retorno decrescente), sacar leva o lucro pro seu bolso. Não deixe o giro secar.',
@@ -204,105 +205,22 @@ export const selectImovelCard = createSelector([selectGame], (s) => {
       ? 'Seu dinheiro vira tijolo: o imóvel valoriza, mas a parcela aperta o caixa. A corrida abaixo compara com quem alugou e investiu a diferença em FIIs.'
       : 'Você paga aluguel e a diferença sobra no SEU caixa — invista com disciplina. A corrida abaixo assume que cada real da diferença foi pra FIIs.',
     varImovelFmt: (im.varImovelMes >= 0 ? '▲ +' : '▼ ') + (im.varImovelMes * 100).toFixed(1) + '% no mês',
-    varImovelCor: im.varImovelMes >= 0 ? '#22d47e' : '#ff4d5e',
+    varImovelCor: im.varImovelMes >= 0 ? 'var(--sucesso)' : 'var(--perigo)',
     tijoloTag: 'TIJOLO' + (comprando ? ' (VOCÊ)' : ' (FANTASMA)'),
     tijoloFmt: fmt(equityTijolo),
-    tijoloCor: tijoloLidera ? '#22d47e' : '#8fa1b2',
+    tijoloCor: tijoloLidera ? 'var(--sucesso)' : 'var(--texto-fraco)',
     carteiraTag: 'ALUGAR+INVESTIR' + (comprando ? ' (FANTASMA)' : ' (SUA META)'),
     carteiraFmt: fmt(im.carteiraAluguel),
-    carteiraCor: !tijoloLidera ? '#22d47e' : '#8fa1b2',
+    carteiraCor: !tijoloLidera ? 'var(--sucesso)' : 'var(--texto-fraco)',
   };
 });
 
-// ---- menu (Intro) ----
+const selectLog = (s: ComGame) => s.game.log;
 
-export const selectIntroConfig = createSelector([selectGame], (s) => {
-  const normalSel = s.dificuldade === 'normal';
-  const ap = s.aposentadoria;
-  const im = s.imoveis;
-  const cfgI = config.imoveis;
-  const comprando = im?.escolha === 'comprar';
-  const saqueFixo = ap?.saqueModo === 'fixo';
+/** O log guarda a cor que o engine gravou — traduz pra token antes da tela. */
+export const selectLogLinhas = createSelector([selectLog], (log) =>
+  log.map((l) => ({ ...l, cor: corDoEngine(l.cor) }))
+);
 
-  return {
-    modosLista: config.modos.map((m) => {
-      const selecionado = m.id === s.modo;
-      return {
-        id: m.id,
-        nome: m.nome,
-        descricao: m.descricao,
-        disponivel: m.disponivel,
-        tag: m.disponivel ? (selecionado ? '▸ SELECIONADO' : '') : 'EM BREVE',
-        tagCor: m.disponivel ? '#22d47e' : '#3a4a5a',
-        borda: selecionado ? '#22d47e' : '#1e2833',
-        nomeCor: m.disponivel ? '#f2f7fb' : '#3a4a5a',
-        descCor: m.disponivel ? '#8fa1b2' : '#3a4a5a',
-        cursor: m.disponivel ? ('pointer' as const) : ('default' as const),
-      };
-    }),
-    cenariosLista: config.cenarios.map((c) => {
-      const selecionado = c.id === s.cenario;
-      return {
-        id: c.id,
-        nome: c.nome,
-        descricao: c.descricao,
-        disponivel: c.disponivel,
-        tag: c.disponivel ? (selecionado ? '▸ SELECIONADO' : '') : 'EM BREVE',
-        tagCor: c.disponivel ? '#22d47e' : '#3a4a5a',
-        borda: selecionado ? '#22d47e' : '#1e2833',
-        nomeCor: c.disponivel ? '#f2f7fb' : '#3a4a5a',
-        descCor: c.disponivel ? '#8fa1b2' : '#3a4a5a',
-        cursor: c.disponivel ? ('pointer' as const) : ('default' as const),
-      };
-    }),
-    capitaisLista: config.sandbox.capitais.map((v) => ({
-      valor: v,
-      rotulo: fmt(v),
-      bg: s.capitalInicial === v ? 'rgba(34,212,126,.12)' : 'transparent',
-      cor: s.capitalInicial === v ? '#22d47e' : '#6b7c8c',
-    })),
-    mostraCapitais: s.modo === 'sandbox',
-    mostraCenarios: s.modo === 'cenarios',
-    mostraSaqueConfig: !!ap,
-    mostraEstrategia: !!im,
-    normalBg: normalSel ? 'rgba(34,212,126,.12)' : 'transparent',
-    normalCor: normalSel ? '#22d47e' : '#6b7c8c',
-    hardBg: normalSel ? 'transparent' : 'rgba(255,77,94,.12)',
-    hardCor: normalSel ? '#6b7c8c' : '#ff4d5e',
-    difDica: normalSel
-      ? 'mais folga no caixa e menos acidentes — bom pra aprender as mecânicas'
-      : 'caixa inicial menor, custo de vida mais pesado e mais acidentes no caminho',
-    fixoBg: saqueFixo ? 'rgba(34,212,126,.12)' : 'transparent',
-    fixoCor: saqueFixo ? '#22d47e' : '#6b7c8c',
-    pctBg: !saqueFixo ? 'rgba(34,212,126,.12)' : 'transparent',
-    pctCor: !saqueFixo ? '#22d47e' : '#6b7c8c',
-    saqueDica: saqueFixo
-      ? 'saque fixo = seu custo de vida (inflaciona). É o que cria o risco de sequência.'
-      : 'saque de ' + (ap ? (ap.taxaSaque * 100).toFixed(0) : '4') + '% do patrimônio/mês — se ajusta sozinho e quase nunca zera.',
-    comprarBg: comprando ? 'rgba(75,183,255,.12)' : 'transparent',
-    comprarCor: comprando ? '#4bb7ff' : '#6b7c8c',
-    alugarBg: im && !comprando ? 'rgba(75,183,255,.12)' : 'transparent',
-    alugarCor: im && !comprando ? '#4bb7ff' : '#6b7c8c',
-    estrategiaDica: im
-      ? comprando
-        ? 'entrada ' + fmt(Math.round(cfgI.valorImovel * cfgI.entradaPct)) + ' + ' + im.prazo + ' parcelas de ' + fmt(im.parcela) + ' — o imóvel é seu e valoriza'
-        : 'aluguel ' + fmt(im.aluguel) + '/mês — sobra mais no bolso; disciplina decide se rende mais que o tijolo'
-      : '',
-    caixaFmt: fmt(s.caixa),
-    custoFmt: fmt(s.custo),
-    salarioFmt: fmt(s.salario),
-    rendaResumo: ap
-      ? 'acumula ' + ap.turnosAcumulacao + ' meses, depois saca por ' + ap.turnosSaque + ' meses'
-      : im
-        ? comprando
-          ? 'parcela ' + fmt(im.parcela) + '/mês por ' + im.prazo + ' meses'
-          : 'aluguel ' + fmt(im.aluguel) + '/mês · diferença sobra pra investir'
-        : s.negocio
-          ? 'negócio: giro ' + fmt(s.negocio.caixa) + ' · receita ~' + fmt(s.negocio.receitaBase) + ' − custos ' + fmt(s.negocio.custoFixo) + '/mês'
-          : 'salário ' + fmt(s.salario) + '/mês',
-  };
-});
-
-export const selectLog = (s: ComGame) => s.game.log;
 export const selectTela = (s: ComGame) => s.game.tela;
 export const selectFimAtivo = (s: ComGame) => !!s.game.fim;

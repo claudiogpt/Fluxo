@@ -2,12 +2,15 @@
 // 1. persistir conceitos vistos (mesma chave do protótipo DC);
 // 2. registrar partida no placar (fim de jogo ou marco do sandbox) + envio global;
 // 3. gatilhos educacionais que dependem do ESTADO, não de um clique
-//    (porta o verificarConceitosDeEstado do orquestrador).
+//    (porta o verificarConceitosDeEstado do orquestrador);
+// 4. persistir as preferências de apresentação (tema, fonte, escala);
+// 5. persistir o nick do placar.
 import { createListenerMiddleware, isAnyOf } from '@reduxjs/toolkit';
 import { ativos as ativosDef, conceitos, placar, regras } from '../engine';
 import { abrirModal, marcarVisto } from '../features/conceitos/conceitosSlice';
 import { fecharMes, mover, setAuto } from '../features/game/gameSlice';
-import { carregarPlacar, placarLocalMudou } from '../features/placar/placarSlice';
+import { carregarPlacar, placarLocalMudou, setNick } from '../features/placar/placarSlice';
+import { salvarPrefs, setEscala, setFonte, setTema } from '../features/prefs';
 import type { AppDispatch, RootState } from './index';
 
 export const listener = createListenerMiddleware();
@@ -46,6 +49,18 @@ startListening({
     const ok = await placar.enviarRemoto(rec);
     if (ok) api.dispatch(carregarPlacar(placar.boardDe(depois)));
   },
+});
+
+// 4) Preferências de apresentação (tema/fonte/escala) — mesma ideia do #1.
+startListening({
+  matcher: isAnyOf(setTema, setFonte, setEscala),
+  effect: (_action, api) => salvarPrefs(api.getState().prefs),
+});
+
+// 5) Nick do placar: persiste pela mesma chave que o engine já usa.
+startListening({
+  actionCreator: setNick,
+  effect: (_action, api) => placar.salvarNick(api.getState().placar.nick),
 });
 
 // 3) Conceitos disparados por estado: 1 modal por vez; condições persistentes
