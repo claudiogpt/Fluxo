@@ -13,7 +13,8 @@ import {
   reinvestirNegocio,
   sacarNegocio,
 } from './gameSlice';
-import { selectImovelCard, selectIntroConfig, selectNegocioCard, selectPainel } from './selectors';
+import { selectImovelCard, selectNegocioCard, selectPainel } from './selectors';
+import { selectSetupPagina } from './selectorsMenu';
 
 // 10 draws neutros (5 ativos ×2) + 0.99 no sorteio de evento (não sorteia).
 // Modos com draws extras (empresário: variância da receita; imóveis:
@@ -66,7 +67,7 @@ describe('modos no store', () => {
     const store = makeStore();
     store.dispatch(escolherModo('cenarios'));
     store.dispatch(escolherCenario('imoveis'));
-    expect(selectIntroConfig(store.getState()).mostraEstrategia).toBe(true);
+    expect(selectSetupPagina(store.getState()).estrategia).not.toBeNull();
     store.dispatch(escolherEstrategia('alugar'));
     expect(store.getState().game.imoveis?.escolha).toBe('alugar');
     store.dispatch(escolherEstrategia('comprar'));

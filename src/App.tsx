@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ConceitoModal } from './components/ConceitoModal';
 import { FimDeJogo } from './components/FimDeJogo';
 import { Glossario } from './components/Glossario';
-import { Intro } from './components/Intro';
+import { MenuRouter } from './components/menu/MenuRouter';
 import { placar } from './engine';
 import { selectContador } from './features/conceitos/conceitosSlice';
 import { selectGame, selectTela } from './features/game/selectors';
@@ -38,7 +38,7 @@ export function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--fundo)', color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
-      {tela === 'intro' ? <Intro /> : <GameView />}
+      {tela === 'intro' ? <MenuRouter /> : <GameView />}
 
       <div style={{ position: 'fixed', right: 16, bottom: 16, zIndex: 70 }}>
         <button
