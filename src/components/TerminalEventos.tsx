@@ -1,18 +1,18 @@
 // Terminal de eventos (log) — portado 1:1 do TerminalEventos do protótipo DC (git history).
 import { useSelector } from 'react-redux';
-import { selectLog } from '../features/game/selectors';
+import { selectLogLinhas } from '../features/game/selectors';
 
 export function TerminalEventos() {
-  const log = useSelector(selectLog);
+  const log = useSelector(selectLogLinhas);
   return (
-    <div style={{ background: '#0d1117', border: '1px solid #1e2833', borderRadius: 6, overflow: 'hidden', color: '#d7e1ea', fontFamily: "'IBM Plex Mono',monospace", lineHeight: 1.5 }}>
-      <div style={{ background: '#11161d', borderBottom: '1px solid #1e2833', padding: '8px 14px', fontSize: 10, letterSpacing: 2, color: '#6b7c8c' }}>
+    <div style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', borderRadius: 6, overflow: 'hidden', color: 'var(--texto)', lineHeight: 1.5 }}>
+      <div style={{ background: 'var(--superficie-2)', borderBottom: '1px solid var(--borda)', padding: '8px 14px', fontSize: 10, letterSpacing: 2, color: 'var(--texto-rotulo)' }}>
         ▮ TERMINAL DE EVENTOS
       </div>
       <div style={{ padding: '10px 14px', maxHeight: 380, overflowY: 'auto', display: 'grid', gap: 7, fontSize: 11.5 }}>
         {log.map((l) => (
           <div key={l.id} style={{ display: 'flex', gap: 8, animation: 'surgir .3s ease' }}>
-            <span style={{ color: '#3a4a5a', flex: 'none' }}>{l.mes}</span>
+            <span style={{ color: 'var(--texto-apagado)', flex: 'none' }}>{l.mes}</span>
             <span style={{ color: l.cor }}>{l.texto}</span>
           </div>
         ))}

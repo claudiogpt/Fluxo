@@ -135,7 +135,7 @@ describe('gameSlice', () => {
     expect(cripto?.varFmt).toBe('—'); // zerado mostra o traço (regra v < 1 do renderVals)
     const painel = selectPainel(store.getState());
     expect(painel.caixaFmt).toBe('R$ 1.000');
-    expect(painel.caixaCor).toBe('#ff4d5e'); // caixa < custo
+    expect(painel.caixaCor).toBe('var(--perigo)'); // caixa < custo
     expect(painel.mesFmt).toBe('00');
     expect(painel.progLabel).toContain('RUMO À INDEPENDÊNCIA');
   });
