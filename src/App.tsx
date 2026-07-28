@@ -42,9 +42,11 @@ export function App() {
       {tela === 'intro' ? <MenuRouter /> : <GameView />}
 
       {/* O glossário flutuante existe só DURANTE a partida: é consulta rápida
-          sem sair da mesa. No menu ele é uma página (rota 'glossario'). */}
+          sem sair da mesa. No menu ele é uma página (rota 'glossario').
+          O `bottom` vem do tema.css e não inline: no estreito ele sobe pra não
+          sentar em cima da barra de ação fixa. */}
       {emJogo && (
-        <div style={{ position: 'fixed', right: 16, bottom: 16, zIndex: 70 }}>
+        <div className="glossario-flutuante" style={{ position: 'fixed', right: 16, zIndex: 70 }}>
           <button
             onClick={() => dispatch(alternarGlossario())}
             style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', color: 'var(--texto-fraco)', fontSize: 11, fontWeight: 600, letterSpacing: 0.5, padding: '8px 14px', borderRadius: 20, cursor: 'pointer', boxShadow: 'var(--sombra-flutuante)' }}

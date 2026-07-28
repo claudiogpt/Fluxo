@@ -27,7 +27,9 @@ export function AtivoCard({ a }: { a: Linha }) {
           <span style={{ color: 'var(--texto-apagado)', fontSize: 11 }}>{a.ticker}</span>
           <span style={{ fontSize: 10, letterSpacing: 1, color: a.riscoCor, border: `1px solid ${a.riscoCor}`, borderRadius: 3, padding: '1px 6px' }}>{a.riscoLabel}</span>
         </div>
-        <div style={{ color: 'var(--texto-rotulo)', fontSize: 11, marginTop: 2, maxWidth: 460 }}>{a.dica}</div>
+        <div className="dica-curta" style={{ color: 'var(--texto-rotulo)', fontSize: 11, marginTop: 2, maxWidth: 460 }}>
+          {a.dica}
+        </div>
       </div>
       <div style={{ textAlign: 'right' }}>
         <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--texto-forte)' }}>{a.valorFmt}</div>
