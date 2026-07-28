@@ -1,5 +1,10 @@
-// Balanceamento do jogo — todos os números de ajuste moram aqui.
-// Mexeu em dificuldade, inflação ou deságio? É neste arquivo.
+/**
+ * @module config
+ * Balanceamento do jogo — todos os números de ajuste moram aqui.
+ * Contém: dificuldades, modos, cenários, parâmetros de aposentadoria/imóveis/empresário,
+ * ordem de liquidação, placar online (Supabase) e limites globais (log, eventos).
+ * Mexeu em salário, inflação ou deságio? É neste arquivo.
+ */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) module.exports = factory();
   else { root.Fluxo = root.Fluxo || {}; root.Fluxo.config = factory(); }
