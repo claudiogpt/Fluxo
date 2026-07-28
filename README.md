@@ -89,7 +89,7 @@ Nota do free tier: o projeto **pausa após ~7 dias sem uso** (o jogo cai gracios
 - **Adicionar/ajustar uma cor**: `src/tema.css`, nos DOIS temas. Se a cor vem do engine (`riscoCor`, cor de log), mapeie em `src/features/game/cores.ts`.
 - **Adicionar um modo de jogo**: entre em `config.modos` com `disponivel: false` ("EM BREVE" automático na página de modos). Mecânica: trate o `modo` em `engine/regras.js` + testes; UI: selectors em `src/features/game/selectors.ts` e, se precisar, um card novo em `src/components/`. Ajustes próprios do modo entram como mais um bloco condicional em `selectSetupPagina` + `PaginaSetup.tsx`. O placar do modo é automático se ele terminar com `s.fim`; ajuste `scoreDe` em `engine/placar.js` se a métrica não for "menos meses".
 - **Adicionar um conceito educacional**: nova entrada em `engine/conceitos.js` (`tooltips` + `termos`). Gatilho por clique: intercepte com `executarComConceito` em `src/features/conceitos/thunks.ts`; gatilho por estado: adicione a condição no listener 3 de `src/store/listeners.ts`. Glossário atualiza sozinho.
-- **Adicionar um ativo**: `engine/ativos.js` (+ ordem de liquidação em `config.js`). A UI o exibe automaticamente.
+- **Adicionar um ativo**: `engine/ativos.js` (+ ordem de liquidação em `config.js`). A UI o exibe automaticamente, e o card **não cresce**: a alocação é um trilho percentual (`src/components/ControleAporte.tsx`), não uma fileira de botões de valor fixo.
 - **Adicionar um evento**: item com peso `p` e `run` em `engine/eventos.js` (use `modos:` pra restringir).
 - **Nova regra de turno**: `engine/regras.js` (`fecharMes`) + teste em `tests/engine.test.js`; exponha na UI via selector.
 - **Mexer no visual**: o componente correspondente em `src/components/` (estilos inline).

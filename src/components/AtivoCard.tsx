@@ -1,29 +1,13 @@
-// Card de ativo com aporte/resgate — portado 1:1 do AtivoCard do protótipo DC (git history).
-// O aporte passa pelo thunk educacional (1ª vez em reserva/ações/cripto = modal).
-import { useDispatch, useSelector } from 'react-redux';
+// Card de ativo. A alocação é feita pelo ControleAporte (trilho percentual):
+// os 8 botões de valor fixo saíram porque a fileira crescia junto com o número
+// de ativos, e o percentual não cresce.
 import type { AtivoKey } from '../engine/types';
-import { moverComConceito } from '../features/conceitos/thunks';
-import { selectGame, type selectAtivosLista } from '../features/game/selectors';
-import type { AppDispatch } from '../store';
+import { type selectAtivosLista } from '../features/game/selectors';
 import { ControleAporte } from './ControleAporte';
 
 type Linha = ReturnType<typeof selectAtivosLista>[number];
 
-/** TEMPORÁRIO (Etapa B): só a reserva estreia o controle por percentual, pra
- *  dar pra comparar lado a lado com os 8 botões antes de trocar em todos. */
-const COM_SLIDER: AtivoKey = 'reserva';
-
-const btnMais = {
-  background: 'var(--sucesso-fundo)', border: '1px solid var(--sucesso-borda)', color: 'var(--sucesso)',
-  fontSize: 11, fontWeight: 600, padding: '5px 10px', borderRadius: 3, cursor: 'pointer',
-} as const;
-const btnMenos = { ...btnMais, background: 'var(--perigo-fundo)', border: '1px solid var(--perigo-borda)', color: 'var(--perigo)' } as const;
-
 export function AtivoCard({ a }: { a: Linha }) {
-  const dispatch = useDispatch<AppDispatch>();
-  const { caixa, ativos } = useSelector(selectGame);
-  const mover = (valor: number) => dispatch(moverComConceito(a.key as AtivoKey, valor));
-
   return (
     <div style={{ background: 'var(--superficie-2)', border: '1px solid var(--borda)', borderRadius: 6, padding: '14px 16px', display: 'grid', gridTemplateColumns: '1fr auto', gap: '6px 16px', alignItems: 'center', color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
       <div>
@@ -40,22 +24,7 @@ export function AtivoCard({ a }: { a: Linha }) {
         <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--texto-forte)' }}>{a.valorFmt}</div>
         <div style={{ fontSize: 11, fontWeight: 600, color: a.varCor }}>{a.varFmt}</div>
       </div>
-      {a.key === COM_SLIDER ? (
-        <ControleAporte ativo={a.key as AtivoKey} />
-      ) : (
-      <div style={{ gridColumn: '1/-1', display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', borderTop: '1px solid var(--borda-suave)', paddingTop: 9 }}>
-        <span style={{ color: 'var(--texto-apagado)', fontSize: 10, letterSpacing: 1 }}>APORTE</span>
-        <button style={btnMais} onClick={() => mover(500)}>+500</button>
-        <button style={btnMais} onClick={() => mover(1000)}>+1.000</button>
-        <button style={btnMais} onClick={() => mover(2000)}>+2.000</button>
-        <button style={btnMais} onClick={() => mover(caixa)}>MAX</button>
-        <span style={{ color: 'var(--texto-apagado)', fontSize: 10, letterSpacing: 1, marginLeft: 10 }}>RESGATE</span>
-        <button style={btnMenos} onClick={() => mover(-500)}>−500</button>
-        <button style={btnMenos} onClick={() => mover(-1000)}>−1.000</button>
-        <button style={btnMenos} onClick={() => mover(-2000)}>−2.000</button>
-        <button style={btnMenos} onClick={() => mover(-ativos[a.key as AtivoKey])}>ZERAR</button>
-      </div>
-      )}
+      <ControleAporte ativo={a.key as AtivoKey} />
     </div>
   );
 }

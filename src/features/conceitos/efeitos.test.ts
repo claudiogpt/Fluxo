@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { makeStore } from '../../store';
 import { placar } from '../../engine';
 import { comecar, fecharMes, mover } from '../game/gameSlice';
-import { confirmarModal, moverComConceito } from './thunks';
+import { aportarPctComConceito, confirmarModal } from './thunks';
 
 function rngNeutro() {
   const vals = [...Array(10).fill(0.5), 0.99];
@@ -17,7 +17,7 @@ describe('efeitos educacionais e placar', () => {
   it('1º aporte em ações abre o modal com a ação pendente; confirmar aplica', () => {
     const store = makeStore();
     store.dispatch(comecar());
-    store.dispatch(moverComConceito('acoes', 500));
+    store.dispatch(aportarPctComConceito('acoes', 20));
     // interceptado: modal aberto, dinheiro parado
     expect(store.getState().conceitos.modal?.id).toBe('acoes');
     expect(store.getState().game.caixa).toBe(1500);
@@ -26,11 +26,11 @@ describe('efeitos educacionais e placar', () => {
     store.dispatch(confirmarModal());
     expect(store.getState().conceitos.modal).toBeNull();
     expect(store.getState().conceitos.vistos).toContain('acoes');
-    expect(store.getState().game.ativos.acoes).toBe(500);
-    // 2ª vez: direto, sem modal
-    store.dispatch(moverComConceito('acoes', 500));
+    expect(store.getState().game.ativos.acoes).toBe(300); // 20% de 1.500
+    // 2ª vez: direto, sem modal — e sobre a base nova (20% de 1.200)
+    store.dispatch(aportarPctComConceito('acoes', 20));
     expect(store.getState().conceitos.modal).toBeNull();
-    expect(store.getState().game.ativos.acoes).toBe(1000);
+    expect(store.getState().game.ativos.acoes).toBe(540);
   });
 
   it('3 classes na carteira disparam o conceito de diversificação (gatilho de estado)', () => {
