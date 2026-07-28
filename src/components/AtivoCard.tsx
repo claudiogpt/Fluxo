@@ -5,8 +5,13 @@ import type { AtivoKey } from '../engine/types';
 import { moverComConceito } from '../features/conceitos/thunks';
 import { selectGame, type selectAtivosLista } from '../features/game/selectors';
 import type { AppDispatch } from '../store';
+import { ControleAporte } from './ControleAporte';
 
 type Linha = ReturnType<typeof selectAtivosLista>[number];
+
+/** TEMPORÁRIO (Etapa B): só a reserva estreia o controle por percentual, pra
+ *  dar pra comparar lado a lado com os 8 botões antes de trocar em todos. */
+const COM_SLIDER: AtivoKey = 'reserva';
 
 const btnMais = {
   background: 'var(--sucesso-fundo)', border: '1px solid var(--sucesso-borda)', color: 'var(--sucesso)',
@@ -35,6 +40,9 @@ export function AtivoCard({ a }: { a: Linha }) {
         <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--texto-forte)' }}>{a.valorFmt}</div>
         <div style={{ fontSize: 11, fontWeight: 600, color: a.varCor }}>{a.varFmt}</div>
       </div>
+      {a.key === COM_SLIDER ? (
+        <ControleAporte ativo={a.key as AtivoKey} />
+      ) : (
       <div style={{ gridColumn: '1/-1', display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', borderTop: '1px solid var(--borda-suave)', paddingTop: 9 }}>
         <span style={{ color: 'var(--texto-apagado)', fontSize: 10, letterSpacing: 1 }}>APORTE</span>
         <button style={btnMais} onClick={() => mover(500)}>+500</button>
@@ -47,6 +55,7 @@ export function AtivoCard({ a }: { a: Linha }) {
         <button style={btnMenos} onClick={() => mover(-2000)}>−2.000</button>
         <button style={btnMenos} onClick={() => mover(-ativos[a.key as AtivoKey])}>ZERAR</button>
       </div>
+      )}
     </div>
   );
 }

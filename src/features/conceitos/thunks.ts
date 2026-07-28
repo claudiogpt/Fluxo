@@ -5,7 +5,7 @@
 import type { UnknownAction } from '@reduxjs/toolkit';
 import type { AppDispatch, RootState } from '../../store';
 import type { AtivoKey } from '../../engine/types';
-import { comecar, mover, setAuto } from '../game/gameSlice';
+import { aportarPct, comecar, mover, setAuto } from '../game/gameSlice';
 import { abrirModal, fecharModal, marcarVisto } from './conceitosSlice';
 
 type Thunk = (dispatch: AppDispatch, getState: () => RootState) => void;
@@ -27,6 +27,20 @@ export function moverComConceito(key: AtivoKey, valor: number): Thunk {
   return (dispatch) => {
     const acao = mover({ key, valor });
     if (valor > 0 && (key === 'reserva' || key === 'acoes' || key === 'cripto')) {
+      dispatch(executarComConceito(key, acao));
+      return;
+    }
+    dispatch(acao);
+  };
+}
+
+/** Mesma interceptação do moverComConceito, para o aporte por percentual.
+ *  A pendente guarda o PCT: se o jogador demorar no modal, o valor é
+ *  recalculado contra o caixa do momento em que ele confirma. */
+export function aportarPctComConceito(key: AtivoKey, pct: number): Thunk {
+  return (dispatch) => {
+    const acao = aportarPct({ key, pct });
+    if (pct > 0 && (key === 'reserva' || key === 'acoes' || key === 'cripto')) {
       dispatch(executarComConceito(key, acao));
       return;
     }
