@@ -30,7 +30,8 @@ describe('navegação do menu', () => {
   it('a home apresenta o jogo e oferece três caminhos', () => {
     montar();
     expect(screen.getByRole('heading', { name: /PECULIUM/ })).toBeDefined();
-    expect(screen.getByText(/direito romano/)).toBeDefined(); // o que a palavra significa
+    // o significado da palavra vive só no glossário, não na landing
+    expect(screen.queryByText(/direito romano/)).toBeNull();
     expect(screen.getByText(/Todo mês entra salário/)).toBeDefined(); // as regras
     const menu = screen.getByRole('navigation', { name: /Menu principal/ });
     expect(within(menu).getAllByRole('button')).toHaveLength(3);

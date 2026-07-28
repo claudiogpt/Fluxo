@@ -2,7 +2,6 @@
 // Os botões vêm de ITENS_HOME — acrescentar um é editar aquela lista.
 import { useDispatch } from 'react-redux';
 import { ITENS_HOME } from '../../features/ui/menuItens';
-import { PECULIUM } from '../../features/ui/textos';
 import { irPara } from '../../features/ui/uiSlice';
 import type { AppDispatch } from '../../store';
 import { BotaoMenu } from './BotaoMenu';
@@ -14,33 +13,30 @@ export function Home() {
 
   return (
     <MenuLayout>
-      <h1 style={{ margin: '0 0 10px', fontWeight: 700, color: 'var(--texto-forte)' }}>
+      <h1
+        style={{
+          margin: '0 0 16px',
+          fontWeight: 700,
+          display: 'flex',
+          alignItems: 'baseline',
+          gap: 14,
+          flexWrap: 'wrap',
+        }}
+      >
         <span
           style={{
             fontFamily: 'var(--fonte-titulo)',
-            fontSize: 46,
+            fontSize: 44,
             letterSpacing: 3,
-            display: 'block',
+            color: 'var(--texto-forte)',
           }}
         >
           PECULIUM
         </span>
-        <span style={{ fontSize: 20, letterSpacing: -0.5, color: 'var(--texto-fraco)' }}>
+        <span style={{ fontSize: 18, letterSpacing: -0.5, color: 'var(--texto-fraco)' }}>
           Fluxo <span style={{ color: 'var(--sucesso)' }}>Financeiro</span>
         </span>
       </h1>
-      <p
-        style={{
-          color: 'var(--texto-rotulo)',
-          fontSize: 12,
-          margin: '0 0 20px',
-          maxWidth: 520,
-          borderLeft: '2px solid var(--borda)',
-          paddingLeft: 12,
-        }}
-      >
-        {PECULIUM}
-      </p>
       <p style={{ color: 'var(--texto-fraco)', margin: '0 0 28px', maxWidth: 520 }}>
         Cada turno é um mês. Seu custo de vida drena a conta. Se o dinheiro acabar,{' '}
         <span style={{ color: 'var(--perigo)', fontWeight: 600 }}>FALIU</span>. Se a renda passiva
