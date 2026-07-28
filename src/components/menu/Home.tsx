@@ -15,30 +15,39 @@ export function Home() {
 
   return (
     <MenuLayout>
+      {/* Título do design: capitular romana em corpo grande, tracking largo e
+          o cursor de terminal piscando. O text-indent compensa o letter-spacing
+          da última letra, que senão puxa o bloco visualmente pra esquerda.
+          clamp() no lugar dos 66px fixos: em 375px de largura estouraria. */}
       <h1
         style={{
-          margin: '0 0 16px',
-          fontWeight: 700,
-          display: 'flex',
-          alignItems: 'baseline',
-          gap: 14,
-          flexWrap: 'wrap',
+          margin: 0,
+          fontFamily: 'var(--fonte-titulo)',
+          fontSize: 'clamp(38px, 11vw, 66px)',
+          fontWeight: 600,
+          letterSpacing: '.16em',
+          textIndent: '.16em',
+          lineHeight: 1,
+          color: 'var(--texto-forte)',
         }}
       >
+        PECULIUM
         <span
-          style={{
-            fontFamily: 'var(--fonte-titulo)',
-            fontSize: 44,
-            letterSpacing: 3,
-            color: 'var(--texto-forte)',
-          }}
+          aria-hidden="true"
+          style={{ color: 'var(--sucesso)', animation: 'piscar 1.1s steps(1,end) infinite' }}
         >
-          PECULIUM
-        </span>
-        <span style={{ fontSize: 18, letterSpacing: -0.5, color: 'var(--texto-fraco)' }}>
-          Fluxo <span style={{ color: 'var(--sucesso)' }}>Financeiro</span>
+          _
         </span>
       </h1>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, margin: '18px 0 26px' }}>
+        <span style={{ color: 'var(--texto-fraco)', fontSize: 12, letterSpacing: 5 }}>
+          FLUXO&nbsp;FINANCEIRO
+        </span>
+        <span style={{ flex: 1, height: 1, background: 'var(--borda)', display: 'block' }} />
+        <span style={{ color: 'var(--texto-apagado)', fontSize: 11, letterSpacing: 2 }}>
+          RISCO REAL
+        </span>
+      </div>
       <p style={{ color: 'var(--texto-fraco)', margin: '0 0 28px', maxWidth: 520 }}>
         Cada turno é um mês. Seu custo de vida drena a conta. Se o dinheiro acabar,{' '}
         <span style={{ color: 'var(--perigo)', fontWeight: 600 }}>FALIU</span>. Se a renda passiva
