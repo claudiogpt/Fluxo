@@ -30,10 +30,18 @@ export const ITENS_HOME: readonly ItemMenu[] = [
     disponivel: true,
   },
   {
+    id: 'glossario',
+    icone: '📖',
+    // a Home troca esta descrição pelo contador de termos (ex.: "1/9")
+    rotulo: 'GLOSSÁRIO',
+    descricao: 'os termos que o jogo já te ensinou',
+    disponivel: true,
+  },
+  {
     id: 'config',
     icone: '⚙',
     rotulo: 'CONFIGURAÇÕES',
-    descricao: 'tema, fontes, glossário e perfil',
+    descricao: 'tema, fontes e perfil',
     disponivel: true,
   },
 ];

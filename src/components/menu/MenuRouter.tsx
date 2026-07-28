@@ -6,6 +6,7 @@ import { selectRota, type RotaId } from '../../features/ui/uiSlice';
 import { Home } from './Home';
 import { PaginaCenarios } from './PaginaCenarios';
 import { PaginaConfig } from './PaginaConfig';
+import { PaginaGlossario } from './PaginaGlossario';
 import { PaginaModos } from './PaginaModos';
 import { PaginaPerfil } from './PaginaPerfil';
 import { PaginaSetup } from './PaginaSetup';
@@ -15,6 +16,7 @@ const PAGINAS: Record<RotaId, ComponentType> = {
   modos: PaginaModos,
   cenarios: PaginaCenarios,
   setup: PaginaSetup,
+  glossario: PaginaGlossario,
   config: PaginaConfig,
   perfil: PaginaPerfil,
 };

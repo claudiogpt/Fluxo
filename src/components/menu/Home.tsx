@@ -1,6 +1,7 @@
 // Landing: recebe o jogador, explica o clássico e oferece os caminhos.
 // Os botões vêm de ITENS_HOME — acrescentar um é editar aquela lista.
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContador } from '../../features/conceitos/conceitosSlice';
 import { ITENS_HOME } from '../../features/ui/menuItens';
 import { irPara } from '../../features/ui/uiSlice';
 import type { AppDispatch } from '../../store';
@@ -10,6 +11,7 @@ import { RegrasCard } from './RegrasCard';
 
 export function Home() {
   const dispatch = useDispatch<AppDispatch>();
+  const contador = useSelector(selectContador);
 
   return (
     <MenuLayout>
@@ -48,7 +50,12 @@ export function Home() {
 
       <nav style={{ display: 'grid', gap: 10 }} aria-label="Menu principal">
         {ITENS_HOME.map((item) => (
-          <BotaoMenu key={item.id} item={item} aoClicar={() => dispatch(irPara(item.id))} />
+          <BotaoMenu
+            key={item.id}
+            // o glossário mostra o progresso no lugar da descrição fixa
+            item={item.id === 'glossario' ? { ...item, descricao: contador } : item}
+            aoClicar={() => dispatch(irPara(item.id))}
+          />
         ))}
       </nav>
     </MenuLayout>

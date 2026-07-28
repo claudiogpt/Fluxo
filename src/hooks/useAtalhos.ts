@@ -7,7 +7,13 @@ import { useDispatch, useStore } from 'react-redux';
 import type { AppDispatch, RootState } from '../store';
 import { fecharMes, toggleAuto } from '../features/game/gameSlice';
 import { cancelarModal, confirmarModal } from '../features/conceitos/thunks';
-import { alternarGlossario, fecharGlossario, voltar } from '../features/ui/uiSlice';
+import {
+  alternarGlossario,
+  fecharGlossario,
+  irPara,
+  selectRota,
+  voltar,
+} from '../features/ui/uiSlice';
 
 const ehTecla = (e: KeyboardEvent, code: string, ...keys: string[]) =>
   e.code === code || keys.includes(e.key);
@@ -21,9 +27,13 @@ export function useAtalhos() {
       if (alvo && /^(INPUT|TEXTAREA)$/.test(alvo.tagName)) return;
       const { game, conceitos, ui } = store.getState();
 
+      // [G] leva ao glossário nos dois mundos, mas em formatos diferentes:
+      // overlay durante a partida, página no menu (onde apertar de novo volta).
       if (ehTecla(e, 'KeyG', 'g', 'G')) {
         e.preventDefault();
-        dispatch(alternarGlossario());
+        if (game.tela === 'jogo') dispatch(alternarGlossario());
+        else if (selectRota({ ui }) === 'glossario') dispatch(voltar());
+        else dispatch(irPara('glossario'));
         return;
       }
       if (ui.glossarioAberto) {

@@ -9,7 +9,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { comecar, voltarMenu } from '../game/gameSlice';
 
-export type RotaId = 'home' | 'modos' | 'cenarios' | 'setup' | 'config' | 'perfil';
+export type RotaId = 'home' | 'modos' | 'cenarios' | 'setup' | 'glossario' | 'config' | 'perfil';
 
 export interface UiState {
   /** pilha de navegação; o índice 0 é sempre 'home' e nunca sai */

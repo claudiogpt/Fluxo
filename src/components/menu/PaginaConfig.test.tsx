@@ -46,12 +46,14 @@ describe('CONFIGURAÇÕES', () => {
     expect(document.documentElement.dataset.fonte).toBe('sans');
   });
 
-  it('GLOSSÁRIO abre o overlay sem sair da página', () => {
-    const store = montarEmConfig();
-    clicar(/GLOSSÁRIO/);
-    expect(store.getState().ui.glossarioAberto).toBe(true);
-    expect(selectRota(store.getState())).toBe('config');
-    expect(screen.getByText(/FECHAR \[ESC\]/)).toBeDefined();
+  it('o glossário não mora mais aqui — é botão da home', () => {
+    montarEmConfig();
+    expect(screen.queryByRole('button', { name: /GLOSSÁRIO/ })).toBeNull();
+  });
+
+  it('no menu não existe glossário flutuante — só durante a partida', () => {
+    montarEmConfig();
+    expect(screen.queryByText(/termos desbloqueados \[G\]/)).toBeNull();
   });
 
   it('PERFIL navega e o nick digitado persiste', () => {
