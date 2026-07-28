@@ -1,16 +1,16 @@
 # Graph Report - Fluxo  (2026-07-28)
 
 ## Corpus Check
-- 82 files · ~31,244 words
+- 84 files · ~33,531 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 416 nodes · 579 edges · 36 communities (29 shown, 7 thin omitted)
+- 427 nodes · 588 edges · 37 communities (31 shown, 6 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8e46e9e0`
+- Built from commit: `e57934e1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,12 +47,12 @@
 2. `RegrasApi` - 13 edges
 3. `PlacarApi` - 13 edges
 4. `selectRota()` - 9 edges
-5. `Peculium — Fluxo Financeiro` - 7 edges
+5. `Guia de docstrings — Fluxo (Google-style híbrido)` - 8 edges
 6. `scripts` - 7 edges
-7. `ConceitosApi` - 6 edges
-8. `FormatoApi` - 6 edges
-9. `aplicarPrefs()` - 6 edges
-10. `PrefsState` - 6 edges
+7. `Peculium — Fluxo Financeiro` - 7 edges
+8. `fecharMes()` - 6 edges
+9. `ConceitosApi` - 6 edges
+10. `FormatoApi` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `MenuRouter()` --indirect_call--> `selectRota()`  [INFERRED]
@@ -69,7 +69,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (36 total, 7 thin omitted)
+## Communities (37 total, 6 thin omitted)
 
 ### Community 0 - "Regras do Jogo e Formatação"
 Cohesion: 0.21
@@ -80,8 +80,8 @@ Cohesion: 0.12
 Nodes (19): jaVisto(), marcarVisto(), storagePadrao(), termosDesbloqueados(), vistos(), assert, ativos, conceitos (+11 more)
 
 ### Community 2 - "Conceitos Educacionais e Menu"
-Cohesion: 0.19
-Nodes (8): gameSlice, PROPS_PADRAO, abrirSetupDeCenario(), abrirSetupDeModo(), selectPodeVoltar(), AppDispatch, makeStore(), RootState
+Cohesion: 0.10
+Nodes (18): Props, gameSlice, PROPS_PADRAO, valorDePct(), ItemMenu, ITENS_HOME, abrirSetupDeCenario(), abrirSetupDeModo() (+10 more)
 
 ### Community 3 - "Runtime DC: Componentes"
 Cohesion: 0.14
@@ -108,8 +108,8 @@ Cohesion: 0.24
 Nodes (16): aplicarPrefs(), lerPrefs(), salvarPrefs(), valido(), ComPrefs, prefsSlice, selectPrefs(), EscalaId (+8 more)
 
 ### Community 12 - "conceitosSlice.ts"
-Cohesion: 0.17
-Nodes (10): conceitos, ComConceitos, comoStorage(), conceitosSlice, ConceitosState, ModalConceito, selectContador, selectGlossarioLista (+2 more)
+Cohesion: 0.13
+Nodes (11): conceitos, StorageLike, ComConceitos, comoStorage(), conceitosSlice, ConceitosState, ModalConceito, selectContador (+3 more)
 
 ### Community 15 - "Fluxo — Simulador Financeiro "FALÊNCIA ou LIBERDADE""
 Cohesion: 0.18
@@ -128,8 +128,8 @@ Cohesion: 0.14
 Nodes (13): AtivoKey, Dificuldade, EstadoAposentadoria, EstadoImoveis, EstadoNegocio, FimDeJogo, GameState, LogItem (+5 more)
 
 ### Community 24 - "conceitos.js"
-Cohesion: 0.08
-Nodes (20): Props, Home(), MenuRouter(), PAGINAS, Store, PaginaConfig(), PaginaGlossario(), TermosGlossario() (+12 more)
+Cohesion: 0.12
+Nodes (12): Home(), MenuRouter(), PAGINAS, Store, PaginaConfig(), PaginaGlossario(), TermosGlossario(), selectRota() (+4 more)
 
 ### Community 25 - "cores.test.ts"
 Cohesion: 0.47
@@ -137,35 +137,39 @@ Nodes (4): corDoEngine(), MAPA_COR_ENGINE, fontesApp, fontesEngine
 
 ### Community 26 - "GameView.tsx"
 Cohesion: 0.12
-Nodes (11): App(), AtivoCard(), Linha, Store, card, PainelStatus(), rotulo, store (+3 more)
+Nodes (10): App(), AtivoCard(), Linha, Store, card, PainelStatus(), rotulo, Aba (+2 more)
+
+### Community 28 - "StorageLike"
+Cohesion: 0.20
+Nodes (9): Engine JS e tipos, Exemplos bons vs ruins, Guia de docstrings — Fluxo (Google-style híbrido), Idioma, O que documentar, Onde ler mais, Reducers RTK, Template (+1 more)
 
 ### Community 30 - "thunks.ts"
-Cohesion: 0.29
-Nodes (6): aportarPctComConceito(), comecarComConceito(), confirmarModal(), executarComConceito(), Thunk, valorDePct()
+Cohesion: 0.33
+Nodes (5): aportarPctComConceito(), comecarComConceito(), confirmarModal(), executarComConceito(), Thunk
 
 ### Community 35 - "ControleAporte.tsx"
 Cohesion: 0.33
 Nodes (3): btnConfirmar, btnTampa, ControleAporte()
 
 ## Knowledge Gaps
-- **126 isolated node(s):** `Propósito do jogo (nesta ordem)`, `Como rodar`, `Como testar`, ``engine/` — regras do jogo, zero UI`, ``src/` — app React` (+121 more)
+- **133 isolated node(s):** `Idioma`, `TypeScript (tipos redundantes)`, `O que documentar`, `Reducers RTK`, `Engine JS e tipos` (+128 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `RegrasApi` connect `RegrasApi` to `index.ts`, `types.ts`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `PlacarApi` connect `PlacarApi` to `index.ts`, `types.ts`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `selectRota()` connect `conceitos.js` to `GameView.tsx`, `Conceitos Educacionais e Menu`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **What connects `Propósito do jogo (nesta ordem)`, `Como rodar`, `Como testar` to the rest of the system?**
-  _126 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `Idioma`, `TypeScript (tipos redundantes)`, `O que documentar` to the rest of the system?**
+  _133 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Config, Ativos, Eventos e Testes` be split into smaller, more focused modules?**
   _Cohesion score 0.11594202898550725 - nodes in this community are weakly interconnected._
+- **Should `Conceitos Educacionais e Menu` be split into smaller, more focused modules?**
+  _Cohesion score 0.09659090909090909 - nodes in this community are weakly interconnected._
 - **Should `Runtime DC: Componentes` be split into smaller, more focused modules?**
   _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
-- **Should `Runtime DC: Compilador de Templates` be split into smaller, more focused modules?**
-  _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
