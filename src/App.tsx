@@ -23,6 +23,7 @@ export function App() {
   const contador = useSelector(selectContador);
   const dispatch = useDispatch<AppDispatch>();
   const glossarioAberto = useSelector(selectGlossarioAberto);
+  const emJogo = tela === 'jogo';
 
   useGameLoop();
   useAtalhos();
@@ -40,16 +41,22 @@ export function App() {
     <div style={{ minHeight: '100vh', background: 'var(--fundo)', color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
       {tela === 'intro' ? <MenuRouter /> : <GameView />}
 
-      <div style={{ position: 'fixed', right: 16, bottom: 16, zIndex: 70 }}>
-        <button
-          onClick={() => dispatch(alternarGlossario())}
-          style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', color: 'var(--texto-fraco)', fontSize: 11, fontWeight: 600, letterSpacing: 0.5, padding: '8px 14px', borderRadius: 20, cursor: 'pointer', boxShadow: 'var(--sombra-flutuante)' }}
-        >
-          📖 {contador} [G]
-        </button>
-      </div>
+      {/* O glossário flutuante existe só DURANTE a partida: é consulta rápida
+          sem sair da mesa. No menu ele é uma página (rota 'glossario').
+          O `bottom` vem do tema.css e não inline: no estreito ele sobe pra não
+          sentar em cima da barra de ação fixa. */}
+      {emJogo && (
+        <div className="glossario-flutuante" style={{ position: 'fixed', right: 16, zIndex: 70 }}>
+          <button
+            onClick={() => dispatch(alternarGlossario())}
+            style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', color: 'var(--texto-fraco)', fontSize: 11, fontWeight: 600, letterSpacing: 0.5, padding: '8px 14px', borderRadius: 20, cursor: 'pointer', boxShadow: 'var(--sombra-flutuante)' }}
+          >
+            📖 {contador} [G]
+          </button>
+        </div>
+      )}
 
-      {glossarioAberto && <Glossario fechar={() => dispatch(fecharGlossario())} />}
+      {emJogo && glossarioAberto && <Glossario fechar={() => dispatch(fecharGlossario())} />}
       <ConceitoModal />
       <FimDeJogo />
     </div>

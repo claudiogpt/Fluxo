@@ -27,12 +27,14 @@ describe('navegação do menu', () => {
     document.body.innerHTML = '';
   });
 
-  it('a home apresenta o jogo e oferece três caminhos', () => {
+  it('a home apresenta o jogo e oferece quatro caminhos', () => {
     montar();
-    expect(screen.getByRole('heading', { name: /FALÊNCIA/ })).toBeDefined();
+    expect(screen.getByRole('heading', { name: /PECULIUM/ })).toBeDefined();
+    // o significado da palavra vive só no glossário, não na landing
+    expect(screen.queryByText(/direito romano/)).toBeNull();
     expect(screen.getByText(/Todo mês entra salário/)).toBeDefined(); // as regras
     const menu = screen.getByRole('navigation', { name: /Menu principal/ });
-    expect(within(menu).getAllByRole('button')).toHaveLength(3);
+    expect(within(menu).getAllByRole('button')).toHaveLength(4);
   });
 
   it('MODOS DE JOGO não lista CENÁRIOS (que é botão de primeiro nível)', () => {
@@ -89,6 +91,15 @@ describe('navegação do menu', () => {
     expect(g.imoveis).not.toBeNull();
     expect(placar.boardDe(g)).toBe('imoveis'); // board próprio do cenário
     expect(screen.getByText('ESTRATÉGIA DE MORADIA')).toBeDefined();
+  });
+
+  it('GLOSSÁRIO é uma página do menu, com o significado de Peculium', () => {
+    const store = montar();
+    clicar(/GLOSSÁRIO/);
+    expect(selectRota(store.getState())).toBe('glossario');
+    expect(store.getState().ui.glossarioAberto).toBe(false); // página, não overlay
+    expect(screen.getByText('Peculium')).toBeDefined();
+    expect(screen.getByText(/direito romano/)).toBeDefined();
   });
 
   it('a aposentadoria traz o ajuste de saque', () => {

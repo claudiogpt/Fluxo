@@ -19,9 +19,11 @@ export function PainelStatus() {
 
   return (
     <div style={{ color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, borderBottom: '1px solid var(--borda)', paddingBottom: 14, marginBottom: 16, flexWrap: 'wrap' }}>
-        <div style={{ fontWeight: 700, letterSpacing: 1, color: 'var(--texto-forte)' }}>
-          FALÊNCIA <span style={{ color: 'var(--texto-apagado)' }}>ou</span> <span style={{ color: 'var(--sucesso)' }}>LIBERDADE</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px 16px', borderBottom: '1px solid var(--borda)', paddingBottom: 14, marginBottom: 16, flexWrap: 'wrap' }}>
+        <div style={{ fontWeight: 700, color: 'var(--texto-forte)' }}>
+          <span style={{ fontFamily: 'var(--fonte-titulo)', letterSpacing: 2 }}>PECULIUM</span>
+          <span style={{ color: 'var(--texto-apagado)' }}> · </span>
+          <span style={{ color: 'var(--sucesso)', letterSpacing: 1 }}>FLUXO</span>
         </div>
         {p.modoTag && (
           <span style={{ fontSize: 9, letterSpacing: 2, color: 'var(--aviso)', border: '1px solid var(--aviso)', borderRadius: 3, padding: '2px 8px' }}>
@@ -34,7 +36,7 @@ export function PainelStatus() {
         <div style={{ color: 'var(--texto-fraco)' }}>
           ⏱ <span style={{ color: p.tempoCor, fontWeight: 600 }}>{p.tempoFmt}</span>
         </div>
-        <svg width={180} height={34} viewBox="0 0 180 34" style={{ display: 'block' }}>
+        <svg width={180} height={34} viewBox="0 0 180 34" style={{ display: 'block', flex: 'none', maxWidth: '100%' }} aria-hidden="true">
           <polyline points={p.sparkPoints} fill="none" stroke={p.sparkCor} strokeWidth={1.5} />
         </svg>
         <button
@@ -49,7 +51,10 @@ export function PainelStatus() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, marginBottom: 10 }}>
+      {/* auto-fit resolve os três tamanhos sem breakpoint: 4-up no desktop,
+          2-up no tablet, 1-up no celular. Antes era repeat(4,1fr) fixo, que
+          no estreito virava 4 colunas de 84px com o rótulo em 3 linhas. */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(150px,1fr))', gap: 10, marginBottom: 10 }}>
         <div style={card}>
           <div style={rotulo}>SALDO EM CAIXA</div>
           <div style={{ fontSize: 18, fontWeight: 700, color: p.caixaCor }}>{p.caixaFmt}</div>

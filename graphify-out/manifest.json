@@ -10,9 +10,9 @@
     "semantic_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6"
   },
   "engine/conceitos.js": {
-    "mtime": 1783396258.7845106,
-    "ast_hash": "13d06e58f7d6ef8371dd6281f419808c",
-    "semantic_hash": "13d06e58f7d6ef8371dd6281f419808c"
+    "mtime": 1785132025.0603914,
+    "ast_hash": "57308a285e992bb589b8db8e2c194aca",
+    "semantic_hash": ""
   },
   "engine/config.js": {
     "mtime": 1783918339.3528628,
@@ -40,13 +40,13 @@
     "semantic_hash": ""
   },
   "tests/engine.test.js": {
-    "mtime": 1783968584.6886408,
-    "ast_hash": "5ee491379d885a52becbf91f7b26ad90",
+    "mtime": 1785132037.7102454,
+    "ast_hash": "404f8be0ff068167ed375848574c12ec",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785127007.936271,
-    "ast_hash": "2eacc2331b4372d025793772689729cb",
+    "mtime": 1785266476.6907644,
+    "ast_hash": "2e5e7955ef059ac736417461d5b87288",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
@@ -90,13 +90,13 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1784955230.3371546,
-    "ast_hash": "52187c6349dec2bd196ee9d2b161f1f5",
+    "mtime": 1785132084.7207136,
+    "ast_hash": "ee28380231d56e716b651b10659d2a0d",
     "semantic_hash": ""
   },
   "src/engine/types.ts": {
-    "mtime": 1784954613.5817735,
-    "ast_hash": "ab81610cc49d12490d400df6709690cb",
+    "mtime": 1785132039.7922213,
+    "ast_hash": "b3cec407dbce1894070282084b00f40a",
     "semantic_hash": ""
   },
   "src/engine/index.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1785126565.9897764,
-    "ast_hash": "b6623e97638c4188e76c09d71e01f53e",
+    "mtime": 1785260951.301409,
+    "ast_hash": "9be6672e853ad0a281964da9f1fa52bd",
     "semantic_hash": ""
   },
   "src/features/conceitos/conceitosSlice.ts": {
@@ -125,23 +125,23 @@
     "semantic_hash": ""
   },
   "src/features/conceitos/conceitosSlice.test.ts": {
-    "mtime": 1784085341.3048096,
-    "ast_hash": "fdf33271188310b279f3f0932c4d0720",
+    "mtime": 1785132182.0186636,
+    "ast_hash": "f3bc082ef873cc68b9a8a239c908ba1c",
     "semantic_hash": ""
   },
   "src/components/Glossario.test.tsx": {
-    "mtime": 1784574122.341185,
-    "ast_hash": "1f21488a5994b32451cdba9dca3e63f7",
+    "mtime": 1785132182.0196636,
+    "ast_hash": "826b4e86d11b0d13733b65dc58829a0c",
     "semantic_hash": ""
   },
   "src/components/Glossario.tsx": {
-    "mtime": 1785125632.4178843,
-    "ast_hash": "c6037f4bf8c2abe797bf9d5e135f7968",
+    "mtime": 1785210170.8952184,
+    "ast_hash": "137b22d42e4b0e283f50295e7dead046",
     "semantic_hash": ""
   },
   "src/components/AtivoCard.tsx": {
-    "mtime": 1785125731.0868468,
-    "ast_hash": "b2dcd7fc5cc454ae7ff2c2a087291607",
+    "mtime": 1785266378.5335283,
+    "ast_hash": "af7405e05c8fec4c664a3a295bc3ad6c",
     "semantic_hash": ""
   },
   "src/components/ConceitoModal.tsx": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "src/components/PainelStatus.tsx": {
-    "mtime": 1785125731.0868468,
-    "ast_hash": "d16e04bba13e26aef2cf8573f7874026",
+    "mtime": 1785215065.6115737,
+    "ast_hash": "a8c0de046c2de81bace6b0edf09a4666",
     "semantic_hash": ""
   },
   "src/components/TerminalEventos.tsx": {
@@ -180,13 +180,13 @@
     "semantic_hash": ""
   },
   "src/features/conceitos/efeitos.test.ts": {
-    "mtime": 1784954994.020805,
-    "ast_hash": "9c6d7d3d70f2cf39efc5fdd7f5ade434",
+    "mtime": 1785266352.2804623,
+    "ast_hash": "1752c5010337933fcec7808f49d7dac7",
     "semantic_hash": ""
   },
   "src/features/conceitos/thunks.ts": {
-    "mtime": 1784954881.7576346,
-    "ast_hash": "3cd67861cba72087cd8e02d7e61291d3",
+    "mtime": 1785266379.8275316,
+    "ast_hash": "5a4218ec2d67ae5a51cddc08040c0439",
     "semantic_hash": ""
   },
   "src/features/game/gameModos.test.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "src/features/game/gameSlice.ts": {
-    "mtime": 1785126295.6428118,
-    "ast_hash": "9d44412848e7e799fd08962278c37689",
+    "mtime": 1785261630.7527227,
+    "ast_hash": "cb2317630778241c761a1fc4e9ad6a24",
     "semantic_hash": ""
   },
   "src/features/game/selectors.ts": {
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "src/hooks/useAtalhos.ts": {
-    "mtime": 1785126244.542139,
-    "ast_hash": "b6fb7bcd9277a6484df59c0995e3b58b",
+    "mtime": 1785210241.780903,
+    "ast_hash": "5f56160c9c8d4f993b1d9aade0d8acea",
     "semantic_hash": ""
   },
   "src/hooks/useGameLoop.ts": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "src/views/GameView.tsx": {
-    "mtime": 1785125795.8178895,
-    "ast_hash": "b3d32b71c6bf61c32891af83216acb3a",
+    "mtime": 1785261402.8062088,
+    "ast_hash": "6ad40ea89b122cc724b29b321b1a5dcc",
     "semantic_hash": ""
   },
   "src/features/game/cores.test.ts": {
@@ -290,13 +290,13 @@
     "semantic_hash": ""
   },
   "src/features/ui/uiSlice.ts": {
-    "mtime": 1785126222.12183,
-    "ast_hash": "352ae6211d202d69cf5365b1b05293d0",
+    "mtime": 1785210179.065712,
+    "ast_hash": "e9ad4f5c3bd052151e0c6f3c189f8f53",
     "semantic_hash": ""
   },
   "src/hooks/useAtalhos.test.tsx": {
-    "mtime": 1785126328.517223,
-    "ast_hash": "c4aa9e0813e87074ba80ec7bf65bc5e9",
+    "mtime": 1785210281.1313007,
+    "ast_hash": "a8318a22352950b6dd87d320de622539",
     "semantic_hash": ""
   },
   "src/components/menu/BotaoMenu.tsx": {
@@ -315,8 +315,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/Home.tsx": {
-    "mtime": 1785126488.7700164,
-    "ast_hash": "43bdaa499215ab8fb1a7719e13b8c311",
+    "mtime": 1785211431.0421634,
+    "ast_hash": "a5cf64e46f4f661ff0ebaa13c0a3e537",
     "semantic_hash": ""
   },
   "src/components/menu/MenuLayout.tsx": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/MenuRouter.tsx": {
-    "mtime": 1785126563.111749,
-    "ast_hash": "132749f7796dd853deb0daa49ec9663b",
+    "mtime": 1785210185.8089135,
+    "ast_hash": "1273ed4c2aaec0f6a564f3c834c25a31",
     "semantic_hash": ""
   },
   "src/components/menu/PaginaCenarios.tsx": {
@@ -335,13 +335,13 @@
     "semantic_hash": ""
   },
   "src/components/menu/PaginaConfig.test.tsx": {
-    "mtime": 1785126957.4549258,
-    "ast_hash": "77eab38b39dd1e788814a492b6e8f0a8",
+    "mtime": 1785210288.4742343,
+    "ast_hash": "995587908f5f84a47324e6926e05dacc",
     "semantic_hash": ""
   },
   "src/components/menu/PaginaConfig.tsx": {
-    "mtime": 1785126554.5636675,
-    "ast_hash": "ac6872cb8f16f5f401d98c0d05c7a4e0",
+    "mtime": 1785210214.1726787,
+    "ast_hash": "c27af6b136e11a7a900004205aff2f0c",
     "semantic_hash": ""
   },
   "src/components/menu/PaginaModos.tsx": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/navegacao.test.tsx": {
-    "mtime": 1785126632.7163882,
-    "ast_hash": "ad5109c901e100bf4a102e9828a7ad58",
+    "mtime": 1785210281.1323009,
+    "ast_hash": "2362608f5abf43221668e032e5047206",
     "semantic_hash": ""
   },
   "src/features/game/selectorsMenu.ts": {
@@ -380,13 +380,43 @@
     "semantic_hash": ""
   },
   "src/features/ui/menuItens.ts": {
-    "mtime": 1785126426.6273587,
-    "ast_hash": "e8f5f837626e3c6235771ff95a0fa5cc",
+    "mtime": 1785210182.380306,
+    "ast_hash": "a6b0c4f46fb19dce90395609cb78e7c1",
     "semantic_hash": ""
   },
   "src/features/ui/textos.ts": {
-    "mtime": 1785126431.1044075,
-    "ast_hash": "6bcf3d942bc74b2a8a5a99df2688dc0f",
+    "mtime": 1785209917.2463913,
+    "ast_hash": "883fed02297f3288e892ea296a8a0a2e",
+    "semantic_hash": ""
+  },
+  "src/components/TermosGlossario.tsx": {
+    "mtime": 1785210157.3816547,
+    "ast_hash": "67eb11126874314719fa5f4f428e63e5",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaGlossario.tsx": {
+    "mtime": 1785210174.0728042,
+    "ast_hash": "202702fad4dc4a138b61b666642d3be1",
+    "semantic_hash": ""
+  },
+  "src/views/GameView.test.tsx": {
+    "mtime": 1785261527.2384229,
+    "ast_hash": "918c05968557a64a9d12ba34c358f487",
+    "semantic_hash": ""
+  },
+  "src/components/ControleAporte.tsx": {
+    "mtime": 1785266107.312772,
+    "ast_hash": "c6dd18af68e17bce12277544ad53f7ed",
+    "semantic_hash": ""
+  },
+  "src/features/game/percentual.test.ts": {
+    "mtime": 1785261710.9313486,
+    "ast_hash": "fc90dad5d37e6e6932ea0da01e1ea36d",
+    "semantic_hash": ""
+  },
+  "src/components/ControleAporte.test.tsx": {
+    "mtime": 1785266138.2108676,
+    "ast_hash": "e4eb7e6f64d3b04b78c99c5a63a4f890",
     "semantic_hash": ""
   }
 }

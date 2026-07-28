@@ -1,12 +1,9 @@
-// Glossário — primeira tela convertida do DC pro React (PASSO 3).
-// Visual portado 1:1 do Glossario do protótipo DC (git history); os dados vêm do conceitosSlice
-// (selectors), sem prop-drilling: o único prop é o callback de fechar.
+// Glossário flutuante — usado SÓ durante a partida, pra consultar um termo sem
+// sair do jogo. No menu o glossário é uma página (components/menu/PaginaGlossario).
 import type { CSSProperties } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  selectContador,
-  selectGlossarioLista,
-} from '../features/conceitos/conceitosSlice';
+import { selectContador } from '../features/conceitos/conceitosSlice';
+import { RODAPE_GLOSSARIO, TermosGlossario } from './TermosGlossario';
 
 const estilos = {
   overlay: {
@@ -54,15 +51,6 @@ const estilos = {
     cursor: 'pointer',
   },
   lista: { padding: '14px 20px', overflowY: 'auto', display: 'grid', gap: 10 },
-  linha: {
-    border: '1px solid var(--borda-suave)',
-    background: 'var(--fundo)',
-    borderRadius: 6,
-    padding: '10px 14px',
-    display: 'flex',
-    gap: 12,
-    alignItems: 'baseline',
-  },
   rodape: {
     padding: '10px 20px',
     borderTop: '1px solid var(--borda)',
@@ -72,7 +60,6 @@ const estilos = {
 } satisfies Record<string, CSSProperties>;
 
 export function Glossario({ fechar }: { fechar: () => void }) {
-  const lista = useSelector(selectGlossarioLista);
   const contador = useSelector(selectContador);
 
   return (
@@ -88,37 +75,9 @@ export function Glossario({ fechar }: { fechar: () => void }) {
           </button>
         </div>
         <div style={estilos.lista}>
-          {lista.map((t) => (
-            <div key={t.id} style={estilos.linha}>
-              <span style={{ flex: 'none' }}>{t.icone}</span>
-              <div>
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 12,
-                    letterSpacing: 0.5,
-                    color: t.desbloqueado ? 'var(--texto-forte)' : 'var(--texto-apagado)',
-                  }}
-                >
-                  {t.nome}
-                </div>
-                <div
-                  style={{
-                    fontSize: 11.5,
-                    color: t.desbloqueado ? 'var(--texto-fraco)' : 'var(--texto-apagado)',
-                    marginTop: 2,
-                  }}
-                >
-                  {t.definicao}
-                </div>
-              </div>
-            </div>
-          ))}
+          <TermosGlossario />
         </div>
-        <div style={estilos.rodape}>
-          termos destravam quando o conceito aparece no jogo — jogue os modos e cenários pra
-          completar
-        </div>
+        <div style={estilos.rodape}>{RODAPE_GLOSSARIO}</div>
       </div>
     </div>
   );

@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1784959302.9545758,
-    "ast_hash": "e5ce179de8cd5a7548723c7f594cbd41",
+    "mtime": 1785127007.936271,
+    "ast_hash": "2eacc2331b4372d025793772689729cb",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "src/features/placar/placarSlice.ts": {
-    "mtime": 1785125731.0868468,
-    "ast_hash": "c3b69f3d1eae0310c9aaf0dea54d2907",
+    "mtime": 1785126930.93774,
+    "ast_hash": "13c081572775c6e395679564cf398755",
     "semantic_hash": ""
   },
   "src/hooks/useAtalhos.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/store/listeners.ts": {
-    "mtime": 1785125991.8202257,
-    "ast_hash": "694015721df08c2959aaf3c41a78652c",
+    "mtime": 1785126942.702823,
+    "ast_hash": "d1d7276b434449de84b6803a1b8d0a27",
     "semantic_hash": ""
   },
   "src/views/GameView.tsx": {
@@ -335,8 +335,8 @@
     "semantic_hash": ""
   },
   "src/components/menu/PaginaConfig.test.tsx": {
-    "mtime": 1785126647.9035225,
-    "ast_hash": "a3a3b38fa62c4cfa15d0b780c9d4f1c3",
+    "mtime": 1785126957.4549258,
+    "ast_hash": "77eab38b39dd1e788814a492b6e8f0a8",
     "semantic_hash": ""
   },
   "src/components/menu/PaginaConfig.tsx": {

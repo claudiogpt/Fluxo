@@ -401,8 +401,18 @@ test('conceitos: os 8 termos mínimos do glossário existem, com nome e definiç
 test('conceitos: todo termo do glossário é desbloqueável por algum tooltip', () => {
   const alcancaveis = new Set();
   for (const t of Object.values(conceitos.tooltips)) for (const termo of t.termos) alcancaveis.add(termo);
-  for (const id of Object.keys(conceitos.termos)) {
+  for (const [id, t] of Object.entries(conceitos.termos)) {
+    if (t.sempre) continue; // curiosidade: já nasce aberta, não precisa de gatilho
     assert.ok(alcancaveis.has(id), 'termo ' + id + ' ficaria trancado pra sempre — nenhum tooltip o desbloqueia');
+  }
+});
+
+test('conceitos: termo de curiosidade já nasce desbloqueado', () => {
+  const st = storageFake();
+  const abertos = conceitos.termosDesbloqueados(st); // storage vazio
+  for (const [id, t] of Object.entries(conceitos.termos)) {
+    if (t.sempre) assert.ok(abertos.includes(id), 'termo ' + id + ' devia nascer aberto');
+    else assert.ok(!abertos.includes(id), 'termo ' + id + ' não devia estar aberto sem gatilho');
   }
 });
 
@@ -414,7 +424,7 @@ test('conceitos: visto persiste, não duplica e desbloqueia os termos certos', (
   conceitos.marcarVisto('reserva', st);
   assert.equal(conceitos.jaVisto('acoes', st), true);
   assert.deepEqual(conceitos.vistos(st), ['acoes', 'reserva']);
-  assert.deepEqual(conceitos.termosDesbloqueados(st), ['volatilidade', 'cdi', 'selic']);
+  assert.deepEqual(conceitos.termosDesbloqueados(st), ['peculium', 'volatilidade', 'cdi', 'selic']);
 });
 
 test('conceitos: fecharMes marca liquidacaoNoMes só quando vendeu algo à força', () => {

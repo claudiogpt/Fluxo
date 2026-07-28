@@ -38,10 +38,21 @@ describe('useAtalhos', () => {
     document.body.innerHTML = '';
   });
 
-  it('G abre e fecha o glossário', () => {
+  it('G no menu abre a PÁGINA do glossário, e de novo volta', () => {
     const store = montar();
     tecla({ code: 'KeyG', key: 'g' });
+    expect(selectRota(store.getState())).toBe('glossario');
+    expect(store.getState().ui.glossarioAberto).toBe(false); // sem overlay no menu
+    tecla({ code: 'KeyG', key: 'g' });
+    expect(selectRota(store.getState())).toBe('home');
+  });
+
+  it('G no jogo abre e fecha o overlay flutuante', () => {
+    const store = montar();
+    store.dispatch(comecar());
+    tecla({ code: 'KeyG', key: 'g' });
     expect(store.getState().ui.glossarioAberto).toBe(true);
+    expect(selectRota(store.getState())).toBe('home'); // não navegou
     tecla({ code: 'KeyG', key: 'g' });
     expect(store.getState().ui.glossarioAberto).toBe(false);
   });
@@ -50,11 +61,12 @@ describe('useAtalhos', () => {
     const store = montar();
     const campo = document.querySelector('[data-testid="campo"]')!;
     tecla({ code: 'KeyG', key: 'g', alvo: campo });
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    expect(selectRota(store.getState())).toBe('home');
   });
 
-  it('ESC fecha o glossário e não navega', () => {
+  it('no jogo, ESC fecha o overlay e não navega', () => {
     const store = montar();
+    store.dispatch(comecar());
     store.dispatch(irPara('config'));
     store.dispatch(abrirGlossario());
     tecla({ code: 'Escape', key: 'Escape' });
@@ -95,6 +107,6 @@ describe('useAtalhos', () => {
   it('reconhece a tecla só por e.key (teclado não-QWERTY)', () => {
     const store = montar();
     tecla({ key: 'G' });
-    expect(store.getState().ui.glossarioAberto).toBe(true);
+    expect(selectRota(store.getState())).toBe('glossario');
   });
 });

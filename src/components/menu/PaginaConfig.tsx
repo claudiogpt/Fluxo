@@ -11,8 +11,7 @@ import {
   type FonteFamiliaId,
   type TemaId,
 } from '../../features/prefs';
-import { selectContador } from '../../features/conceitos/conceitosSlice';
-import { abrirGlossario, irPara } from '../../features/ui/uiSlice';
+import { irPara } from '../../features/ui/uiSlice';
 import type { AppDispatch } from '../../store';
 import { BotaoMenu } from './BotaoMenu';
 import { GrupoOpcoes } from './GrupoOpcoes';
@@ -20,7 +19,6 @@ import { MenuLayout } from './MenuLayout';
 
 export function PaginaConfig() {
   const prefs = useSelector(selectPrefs);
-  const contador = useSelector(selectContador);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
@@ -66,16 +64,6 @@ export function PaginaConfig() {
       />
 
       <div style={{ display: 'grid', gap: 10, marginTop: 10 }}>
-        <BotaoMenu
-          item={{
-            id: 'config',
-            icone: '📖',
-            rotulo: 'GLOSSÁRIO',
-            descricao: `${contador} — os termos que o jogo já te ensinou`,
-            disponivel: true,
-          }}
-          aoClicar={() => dispatch(abrirGlossario())}
-        />
         <BotaoMenu
           item={{
             id: 'perfil',

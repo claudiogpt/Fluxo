@@ -12,6 +12,19 @@ import type { AtivoKey, Dificuldade, GameState, NovoJogoProps } from '../../engi
 
 const PROPS_PADRAO: NovoJogoProps = { dificuldade: 'hardcore', salarioInicial: 4500 };
 
+/** Converte percentual em reais. Regra de arredondamento do jogo:
+ *  - 100% devolve a base EXATA (centavos inclusive), pra "tudo" ser mesmo tudo
+ *    e o MAX/ZERAR baterem com o trilho cheio;
+ *  - abaixo disso trunca pra baixo, em reais inteiros — nunca move mais do que
+ *    existe no pote, e o valor mostrado é o valor movido.
+ *  Lembrando que `regras.mover` ainda clampa e ignora movimento < R$ 1: uma
+ *  fração pequena de um saldo pequeno vira no-op, e o readout já mostra R$ 0. */
+export function valorDePct(base: number, pct: number): number {
+  if (pct >= 100) return base;
+  if (pct <= 0) return 0;
+  return Math.floor((base * pct) / 100);
+}
+
 /** clone → engine → merge (o engine pode mutar a cópia e/ou retornar parcial). */
 function aplicar(
   state: GameState,
@@ -57,6 +70,20 @@ const gameSlice = createSlice({
     },
     mover(state, action: PayloadAction<{ key: AtivoKey; valor: number }>) {
       return aplicar(state, (s) => regras.mover(s, action.payload.key, action.payload.valor));
+    },
+    // As duas abaixo carregam PERCENTUAL, não valor. A conversão acontece aqui
+    // no reducer, lendo o estado do momento — o engine não sabe que percentual
+    // existe, e a action fica imune a um caixa que mudou entre o gesto e o
+    // dispatch (é o caso do modal educacional, que segura a ação pendente).
+    aportarPct(state, action: PayloadAction<{ key: AtivoKey; pct: number }>) {
+      return aplicar(state, (s) =>
+        regras.mover(s, action.payload.key, valorDePct(s.caixa, action.payload.pct))
+      );
+    },
+    resgatarPct(state, action: PayloadAction<{ key: AtivoKey; pct: number }>) {
+      return aplicar(state, (s) =>
+        regras.mover(s, action.payload.key, -valorDePct(s.ativos[action.payload.key], action.payload.pct))
+      );
     },
     aportarNegocio(state, action: PayloadAction<number>) {
       return aplicar(state, (s) => regras.aportarNegocio(s, action.payload));
@@ -114,6 +141,8 @@ export const {
   comecar,
   fecharMes,
   mover,
+  aportarPct,
+  resgatarPct,
   aportarNegocio,
   sacarNegocio,
   reinvestirNegocio,
