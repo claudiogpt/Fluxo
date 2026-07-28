@@ -1,6 +1,11 @@
-// Regras centrais do jogo: funções puras sobre o estado plano.
-// Nenhuma referência a UI, setState ou DOM — tudo testável em Node.
-// A aleatoriedade entra por `rng` injetável (default Math.random).
+/**
+ * @file Regras centrais do jogo: funções puras sobre estado plano.
+ * Sem UI, DOM ou Redux — testável em Node com `rng` injetável.
+ * @typedef {import('./typedefs.jsdoc').GameState} GameState
+ * @typedef {import('./typedefs.jsdoc').NovoJogoProps} NovoJogoProps
+ * @typedef {import('./typedefs.jsdoc').AtivoKey} AtivoKey
+ * @typedef {import('./typedefs.jsdoc').EstadoImoveis} EstadoImoveis
+ */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = factory(
@@ -17,12 +22,29 @@
 
   const fmt = formato.fmt;
 
+  /**
+   * Cria mapa de saldos zerados para todos os ativos definidos.
+   *
+   * @returns {Record<AtivoKey, number>} All asset keys at zero.
+   */
   function chavesZeradas() {
     const o = {};
     for (const d of ativos) o[d.key] = 0;
     return o;
   }
 
+  /**
+   * Cria um estado inicial de partida a partir das escolhas do menu.
+   *
+   * Monta caixa, salário e sub-estados (aposentadoria, imóveis, empresário)
+   * conforme modo e cenário. A partida começa com `tela: 'intro'`.
+   *
+   * @param {NovoJogoProps} [props] - Menu choices (difficulty, mode, capital).
+   * @returns {GameState} Fresh game state ready for `comecar`.
+   *
+   * @example
+   * const s = novoJogo({ dificuldade: 'hardcore', modo: 'classico' });
+   */
   function novoJogo(props) {
     const hard = ((props && props.dificuldade) ?? 'normal') === 'hardcore';
     const dif = config.dificuldades[hard ? 'hardcore' : 'normal'];
@@ -104,20 +126,49 @@
     };
   }
 
+  /**
+   * Insere entrada no log do turno (mais recente primeiro).
+   *
+   * @param {GameState} s - State whose `proximoLogId` is incremented.
+   * @param {LogItem[]} logs - Mutable log array (usually `s.log`).
+   * @param {string} texto - Message shown in the event terminal.
+   * @param {string} cor - Hex color from engine palette.
+   * @param {number} mes - Current month number for the Mxx label.
+   */
   function addLog(s, logs, texto, cor, mes) {
     logs.unshift({ id: s.proximoLogId++, mes: 'M' + String(mes).padStart(2, '0'), texto, cor });
   }
 
+  /**
+   * Calcula renda passiva mensal (dividendos dos ativos × saldos).
+   *
+   * @param {GameState} s - Current game state.
+   * @returns {number} Monthly passive income in BRL.
+   */
   function rendaPassiva(s) {
     return ativos.reduce((t, d) => t + s.ativos[d.key] * d.div, 0);
   }
 
-  // Parcela fixa (tabela Price): principal financiado, juros mensais, nº de parcelas.
+  /**
+   * Calcula parcela fixa mensal (tabela Price).
+   *
+   * @param {number} principal - Financed amount in BRL.
+   * @param {number} jurosMes - Monthly interest rate (decimal).
+   * @param {number} prazo - Number of installments.
+   * @returns {number} Rounded monthly payment in BRL.
+   */
   function parcelaFinanciamento(principal, jurosMes, prazo) {
     return Math.round(principal * jurosMes / (1 - Math.pow(1 + jurosMes, -prazo)));
   }
 
-  // Saldo devedor restante do financiamento (independe da escolha — serve pro fantasma).
+  /**
+   * Calcula saldo devedor restante do financiamento imobiliário.
+   *
+   * Usado no patrimônio do comprador e na carteira-fantasma do cenário imóveis.
+   *
+   * @param {EstadoImoveis} im - Real-estate sub-state.
+   * @returns {number} Remaining debt in BRL (0 if paid off).
+   */
   function saldoDevedor(im) {
     const rest = im.prazo - im.pagas;
     if (rest <= 0) return 0;
@@ -125,6 +176,12 @@
     return im.parcela * (1 - Math.pow(1 + i, -rest)) / i;
   }
 
+  /**
+   * Soma patrimônio total: caixa + ativos + negócio + equity imóvel.
+   *
+   * @param {GameState} s - Current game state.
+   * @returns {number} Net worth in BRL.
+   */
   function patrimonio(s) {
     // No cenário imóveis, o comprador tem patrimônio no imóvel = valor − saldo devedor.
     const imovel = s.imoveis && s.imoveis.escolha === 'comprar'
@@ -133,11 +190,23 @@
       + (s.negocio ? s.negocio.caixa : 0) + imovel;
   }
 
+  /**
+   * Retorna ganho de receita ao reinvestir no negócio (retornos decrescentes).
+   *
+   * @param {number} nivel - Current reinvestment level (0-based).
+   * @returns {number} Revenue bump in BRL for the next level.
+   */
   function ganhoReinvestimento(nivel) {
     return Math.round(config.empresario.impulsoReceita / (1 + nivel * config.empresario.decaimento));
   }
 
-  // PF → PJ: aporta capital de giro do caixa pessoal na empresa.
+  /**
+   * Transfere capital do caixa pessoal para o caixa da empresa (PF → PJ).
+   *
+   * @param {GameState} s - Current game state.
+   * @param {number} valor - Amount to transfer in BRL.
+   * @returns {Partial<GameState>} Updated fields, or `{}` if noop.
+   */
   function aportarNegocio(s, valor) {
     if (!s.negocio || s.negocio.falido) return {};
     const v = Math.min(valor, s.caixa);
@@ -145,7 +214,15 @@
     return { caixa: s.caixa - v, negocio: { ...s.negocio, caixa: s.negocio.caixa + v } };
   }
 
-  // PJ → PF: retira lucro pro caixa pessoal (saque não deixa a empresa no vermelho).
+  /**
+   * Transfere capital da empresa para o caixa pessoal (PJ → PF).
+   *
+   * Não permite deixar a empresa com caixa negativo.
+   *
+   * @param {GameState} s - Current game state.
+   * @param {number} valor - Amount to withdraw in BRL.
+   * @returns {Partial<GameState>} Updated fields, or `{}` if noop.
+   */
   function sacarNegocio(s, valor) {
     if (!s.negocio || s.negocio.falido) return {};
     const v = Math.min(valor, s.negocio.caixa);
@@ -153,7 +230,12 @@
     return { caixa: s.caixa + v, negocio: { ...s.negocio, caixa: s.negocio.caixa - v } };
   }
 
-  // Reinveste um passo fixo: aumenta a receita base com retornos decrescentes.
+  /**
+   * Reinveste um passo fixo no negócio, aumentando a receita base.
+   *
+   * @param {GameState} s - Current game state.
+   * @returns {Partial<GameState>} Updated `negocio`, or `{}` if insufficient cash.
+   */
   function reinvestirNegocio(s) {
     if (!s.negocio || s.negocio.falido) return {};
     const cfgE = config.empresario;
@@ -168,8 +250,17 @@
     };
   }
 
-  // Aporte (valor > 0, limitado ao caixa) ou resgate (valor < 0, limitado ao saldo).
-  // Retorna o update parcial de estado ({} = nada a fazer).
+  /**
+   * Move valor entre caixa e um ativo (positivo = aporte, negativo = resgate).
+   *
+   * Ignora movimentos menores que R$ 1 ou que esvaziariam o pote de origem.
+   * Retorna parcial para merge no slice — `{}` significa no-op.
+   *
+   * @param {GameState} s - Current game state (not mutated; slice clones first).
+   * @param {AtivoKey} key - Asset bucket key.
+   * @param {number} valor - Signed amount in BRL (positive = buy).
+   * @returns {Partial<GameState>} Fields to merge, or `{}` if noop.
+   */
   function mover(s, key, valor) {
     const a = { ...s.ativos };
     let v = valor;
@@ -185,7 +276,16 @@
     return { ativos: a, caixa: s.caixa + v };
   }
 
-  // Cobre déficit liquidando na ordem de config.liquidacao; retorna o que faltou.
+  /**
+   * Liquida ativos em cascata para cobrir déficit de caixa (com deságio).
+   *
+   * Ordem definida em `config.liquidacao`. Muta `s.ativos` in place.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {number} deficit - Shortfall in BRL to cover.
+   * @param {LogItem[]} logs - Log array for forced-sale messages.
+   * @returns {number} Remaining uncovered amount (> 0 = still broke).
+   */
   function cobrir(s, deficit, logs) {
     for (const [k, fator, msg] of config.liquidacao) {
       if (deficit <= 0) break;
@@ -199,9 +299,16 @@
     return deficit;
   }
 
-  // Saque planejado (aposentadoria): puxa do caixa e depois dos ativos a VALOR JUSTO
-  // (sem deságio — não é liquidação de pânico), na ordem segura-primeiro.
-  // Retorna quanto faltou (> 0 = patrimônio esgotado).
+  /**
+   * Saca valor do patrimônio a valor justo (fase de aposentadoria).
+   *
+   * Drena caixa primeiro, depois ativos na ordem segura-primeiro, sem deságio.
+   * Muta `s` in place.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {number} valor - Withdrawal amount in BRL.
+   * @returns {number} Uncovered amount (> 0.5 = portfolio exhausted).
+   */
   function sacarPortfolio(s, valor) {
     let falta = valor;
     const doCaixa = Math.min(Math.max(s.caixa, 0), falta);
@@ -217,7 +324,23 @@
     return falta;
   }
 
-  // Resolve um turno completo e retorna o novo estado (não muta `st`).
+  /**
+   * Avança um turno (mês) completo e retorna o novo estado.
+   *
+   * Ordem das fases: salário/custo → moradia → negócio → valorização imóvel →
+   * retornos de mercado → dividendos → saque ou evento → inflação → progressão
+   * anual → liquidação forçada → checagem FALIU/LIVRE.
+   *
+   * Clona `st` internamente — o argumento original não é mutado.
+   *
+   * @param {GameState} st - State at end of current month (before advance).
+   * @param {Object} [opts] - Options.
+   * @param {() => number} [opts.rng] - Injectable RNG (default `Math.random`).
+   * @returns {GameState} Complete new state after the month closes.
+   *
+   * @example
+   * const depois = fecharMes(antes, { rng: () => 0.5 });
+   */
   function fecharMes(st, opts) {
     const rng = (opts && opts.rng) || Math.random;
     const s = { ...st, ativos: { ...st.ativos }, varMes: {}, log: [...st.log], hist: [...st.hist] };

@@ -1,6 +1,9 @@
-// Eventos aleatórios do jogo: tabela de pesos + sorteio.
-// Cada evento muta o estado de trabalho `s` (cópia do turno) e registra no log.
-// `s.pendente` acumula gastos debitados no fim do turno.
+/**
+ * @file Eventos aleatórios do jogo: tabela de pesos + sorteio por turno.
+ * Cada evento muta a cópia de trabalho `s` e registra no log.
+ * `s.pendente` acumula gastos debitados no fim do turno.
+ * @typedef {import('./typedefs.jsdoc').GameState} GameState
+ */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = factory(require('./config.js'), require('./formato.js'));
@@ -12,9 +15,18 @@
 
   const fmt = formato.fmt;
 
-  // ctx: { rng: () => number, addLog: (s, logs, texto, cor, mes) => void }
-  // Eventos sem `modos` valem pra todos os modos; com `modos`, só pros listados.
-  // `soComNegocio` exige empresa viva (modo empresário, não falida).
+  /**
+   * Sorteia e aplica um evento aleatório no turno atual.
+   *
+   * Respeita `config.mesMinimoEvento`, chance por dificuldade e filtros
+   * `modos` / `soComNegocio`. Eventos sem `modos` valem para todos.
+   *
+   * @param {GameState} s - Working copy of game state (mutated in place).
+   * @param {LogItem[]} logs - Log array for event messages.
+   * @param {Object} ctx - Context injected by `fecharMes`.
+   * @param {() => number} ctx.rng - Injectable RNG.
+   * @param {Function} ctx.addLog - Log helper from regras.
+   */
   function sortear(s, logs, ctx) {
     const rng = ctx.rng || Math.random;
     const addLog = ctx.addLog;

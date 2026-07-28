@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785132138.8461215,
-    "ast_hash": "65326ece675df8afe6dc1fca542758d4",
+    "mtime": 1785266476.6907644,
+    "ast_hash": "2e5e7955ef059ac736417461d5b87288",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "src/components/AtivoCard.tsx": {
-    "mtime": 1785261674.6826272,
-    "ast_hash": "5dbe695aa838ef676c5e3c3008d713b4",
+    "mtime": 1785266378.5335283,
+    "ast_hash": "af7405e05c8fec4c664a3a295bc3ad6c",
     "semantic_hash": ""
   },
   "src/components/ConceitoModal.tsx": {
@@ -180,13 +180,13 @@
     "semantic_hash": ""
   },
   "src/features/conceitos/efeitos.test.ts": {
-    "mtime": 1784954994.020805,
-    "ast_hash": "9c6d7d3d70f2cf39efc5fdd7f5ade434",
+    "mtime": 1785266352.2804623,
+    "ast_hash": "1752c5010337933fcec7808f49d7dac7",
     "semantic_hash": ""
   },
   "src/features/conceitos/thunks.ts": {
-    "mtime": 1785261634.540802,
-    "ast_hash": "d3219473b033ebd4066c34993e37246d",
+    "mtime": 1785266379.8275316,
+    "ast_hash": "5a4218ec2d67ae5a51cddc08040c0439",
     "semantic_hash": ""
   },
   "src/features/game/gameModos.test.ts": {

@@ -4,14 +4,874 @@
   "graph": {},
   "nodes": [
     {
+      "label": "DOCSTYLE.md",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_docstyle",
+      "community": 28,
+      "norm_label": "docstyle.md"
+    },
+    {
+      "label": "Guia de docstrings \u2014 Fluxo (Google-style h\u00edbrido)",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "community": 28,
+      "norm_label": "guia de docstrings \u2014 fluxo (google-style hibrido)"
+    },
+    {
+      "label": "Idioma",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "docs_docstyle_idioma",
+      "community": 28,
+      "norm_label": "idioma"
+    },
+    {
+      "label": "Template",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "docs_docstyle_template",
+      "community": 28,
+      "norm_label": "template"
+    },
+    {
+      "label": "TypeScript (tipos redundantes)",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "docs_docstyle_typescript_tipos_redundantes",
+      "community": 28,
+      "norm_label": "typescript (tipos redundantes)"
+    },
+    {
+      "label": "O que documentar",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "docs_docstyle_o_que_documentar",
+      "community": 28,
+      "norm_label": "o que documentar"
+    },
+    {
+      "label": "Reducers RTK",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "docs_docstyle_reducers_rtk",
+      "community": 28,
+      "norm_label": "reducers rtk"
+    },
+    {
+      "label": "Engine JS e tipos",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "docs_docstyle_engine_js_e_tipos",
+      "community": 28,
+      "norm_label": "engine js e tipos"
+    },
+    {
+      "label": "Exemplos bons vs ruins",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "docs_docstyle_exemplos_bons_vs_ruins",
+      "community": 28,
+      "norm_label": "exemplos bons vs ruins"
+    },
+    {
+      "label": "Onde ler mais",
+      "file_type": "document",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "docs_docstyle_onde_ler_mais",
+      "community": 28,
+      "norm_label": "onde ler mais"
+    },
+    {
+      "label": "ativos.js",
+      "file_type": "code",
+      "source_file": "engine/ativos.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_ativos",
+      "community": 31,
+      "norm_label": "ativos.js"
+    },
+    {
+      "label": "conceitos.js",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_conceitos",
+      "community": 1,
+      "norm_label": "conceitos.js"
+    },
+    {
+      "label": "storagePadrao()",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "engine_conceitos_storagepadrao",
+      "community": 1,
+      "norm_label": "storagepadrao()"
+    },
+    {
+      "label": "vistos()",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "engine_conceitos_vistos",
+      "community": 1,
+      "norm_label": "vistos()"
+    },
+    {
+      "label": "jaVisto()",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "engine_conceitos_javisto",
+      "community": 1,
+      "norm_label": "javisto()"
+    },
+    {
+      "label": "marcarVisto()",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "engine_conceitos_marcarvisto",
+      "community": 1,
+      "norm_label": "marcarvisto()"
+    },
+    {
+      "label": "termosDesbloqueados()",
+      "file_type": "code",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "engine_conceitos_termosdesbloqueados",
+      "community": 1,
+      "norm_label": "termosdesbloqueados()"
+    },
+    {
+      "label": "config.js",
+      "file_type": "code",
+      "source_file": "engine/config.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_config",
+      "community": 32,
+      "norm_label": "config.js"
+    },
+    {
+      "label": "eventos.js",
+      "file_type": "code",
+      "source_file": "engine/eventos.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_eventos",
+      "community": 29,
+      "norm_label": "eventos.js"
+    },
+    {
+      "label": "sortear()",
+      "file_type": "code",
+      "source_file": "engine/eventos.js",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "engine_eventos_sortear",
+      "community": 29,
+      "norm_label": "sortear()"
+    },
+    {
+      "label": "formato.js",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_formato",
+      "community": 9,
+      "norm_label": "formato.js"
+    },
+    {
+      "label": "fmt()",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "engine_formato_fmt",
+      "community": 9,
+      "norm_label": "fmt()"
+    },
+    {
+      "label": "fmtTempo()",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "engine_formato_fmttempo",
+      "community": 9,
+      "norm_label": "fmttempo()"
+    },
+    {
+      "label": "fmtCompacto()",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "engine_formato_fmtcompacto",
+      "community": 9,
+      "norm_label": "fmtcompacto()"
+    },
+    {
+      "label": "sparkline()",
+      "file_type": "code",
+      "source_file": "engine/formato.js",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "engine_formato_sparkline",
+      "community": 9,
+      "norm_label": "sparkline()"
+    },
+    {
+      "label": "placar.js",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_placar",
+      "community": 4,
+      "norm_label": "placar.js"
+    },
+    {
+      "label": "storagePadrao()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "engine_placar_storagepadrao",
+      "community": 4,
+      "norm_label": "storagepadrao()"
+    },
+    {
+      "label": "nick()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "engine_placar_nick",
+      "community": 4,
+      "norm_label": "nick()"
+    },
+    {
+      "label": "salvarNick()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "engine_placar_salvarnick",
+      "community": 4,
+      "norm_label": "salvarnick()"
+    },
+    {
+      "label": "boardDe()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "engine_placar_boardde",
+      "community": 4,
+      "norm_label": "boardde()"
+    },
+    {
+      "label": "scoreDe()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "engine_placar_scorede",
+      "community": 4,
+      "norm_label": "scorede()"
+    },
+    {
+      "label": "nomeLimpo()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "engine_placar_nomelimpo",
+      "community": 4,
+      "norm_label": "nomelimpo()"
+    },
+    {
+      "label": "registro()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "engine_placar_registro",
+      "community": 4,
+      "norm_label": "registro()"
+    },
+    {
+      "label": "vitoria()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "engine_placar_vitoria",
+      "community": 4,
+      "norm_label": "vitoria()"
+    },
+    {
+      "label": "ordenar()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "engine_placar_ordenar",
+      "community": 4,
+      "norm_label": "ordenar()"
+    },
+    {
+      "label": "salvar()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "engine_placar_salvar",
+      "community": 4,
+      "norm_label": "salvar()"
+    },
+    {
+      "label": "ler()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L165",
+      "_origin": "ast",
+      "id": "engine_placar_ler",
+      "community": 4,
+      "norm_label": "ler()"
+    },
+    {
+      "label": "cfgPadrao()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L173",
+      "_origin": "ast",
+      "id": "engine_placar_cfgpadrao",
+      "community": 4,
+      "norm_label": "cfgpadrao()"
+    },
+    {
+      "label": "online()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L181",
+      "_origin": "ast",
+      "id": "engine_placar_online",
+      "community": 4,
+      "norm_label": "online()"
+    },
+    {
+      "label": "cabecalhos()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L192",
+      "_origin": "ast",
+      "id": "engine_placar_cabecalhos",
+      "community": 4,
+      "norm_label": "cabecalhos()"
+    },
+    {
+      "label": "urlTabela()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L206",
+      "_origin": "ast",
+      "id": "engine_placar_urltabela",
+      "community": 4,
+      "norm_label": "urltabela()"
+    },
+    {
+      "label": "enviarRemoto()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L221",
+      "_origin": "ast",
+      "id": "engine_placar_enviarremoto",
+      "community": 4,
+      "norm_label": "enviarremoto()"
+    },
+    {
+      "label": "lerRemoto()",
+      "file_type": "code",
+      "source_file": "engine/placar.js",
+      "source_location": "L241",
+      "_origin": "ast",
+      "id": "engine_placar_lerremoto",
+      "community": 4,
+      "norm_label": "lerremoto()"
+    },
+    {
+      "label": "regras.js",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_regras",
+      "community": 0,
+      "norm_label": "regras.js"
+    },
+    {
+      "label": "chavesZeradas()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "engine_regras_chaveszeradas",
+      "community": 0,
+      "norm_label": "chaveszeradas()"
+    },
+    {
+      "label": "novoJogo()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "engine_regras_novojogo",
+      "community": 0,
+      "norm_label": "novojogo()"
+    },
+    {
+      "label": "addLog()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "engine_regras_addlog",
+      "community": 0,
+      "norm_label": "addlog()"
+    },
+    {
+      "label": "rendaPassiva()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "engine_regras_rendapassiva",
+      "community": 0,
+      "norm_label": "rendapassiva()"
+    },
+    {
+      "label": "parcelaFinanciamento()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L160",
+      "_origin": "ast",
+      "id": "engine_regras_parcelafinanciamento",
+      "community": 0,
+      "norm_label": "parcelafinanciamento()"
+    },
+    {
+      "label": "saldoDevedor()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L172",
+      "_origin": "ast",
+      "id": "engine_regras_saldodevedor",
+      "community": 0,
+      "norm_label": "saldodevedor()"
+    },
+    {
+      "label": "patrimonio()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L185",
+      "_origin": "ast",
+      "id": "engine_regras_patrimonio",
+      "community": 0,
+      "norm_label": "patrimonio()"
+    },
+    {
+      "label": "ganhoReinvestimento()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L199",
+      "_origin": "ast",
+      "id": "engine_regras_ganhoreinvestimento",
+      "community": 0,
+      "norm_label": "ganhoreinvestimento()"
+    },
+    {
+      "label": "aportarNegocio()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L210",
+      "_origin": "ast",
+      "id": "engine_regras_aportarnegocio",
+      "community": 0,
+      "norm_label": "aportarnegocio()"
+    },
+    {
+      "label": "sacarNegocio()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L226",
+      "_origin": "ast",
+      "id": "engine_regras_sacarnegocio",
+      "community": 0,
+      "norm_label": "sacarnegocio()"
+    },
+    {
+      "label": "reinvestirNegocio()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L239",
+      "_origin": "ast",
+      "id": "engine_regras_reinvestirnegocio",
+      "community": 0,
+      "norm_label": "reinvestirnegocio()"
+    },
+    {
+      "label": "mover()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L264",
+      "_origin": "ast",
+      "id": "engine_regras_mover",
+      "community": 0,
+      "norm_label": "mover()"
+    },
+    {
+      "label": "cobrir()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L289",
+      "_origin": "ast",
+      "id": "engine_regras_cobrir",
+      "community": 0,
+      "norm_label": "cobrir()"
+    },
+    {
+      "label": "sacarPortfolio()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L312",
+      "_origin": "ast",
+      "id": "engine_regras_sacarportfolio",
+      "community": 0,
+      "norm_label": "sacarportfolio()"
+    },
+    {
+      "label": "fecharMes()",
+      "file_type": "code",
+      "source_file": "engine/regras.js",
+      "source_location": "L344",
+      "_origin": "ast",
+      "id": "engine_regras_fecharmes",
+      "community": 0,
+      "norm_label": "fecharmes()"
+    },
+    {
+      "label": "typedefs.jsdoc.js",
+      "file_type": "code",
+      "source_file": "engine/typedefs.jsdoc.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "engine_typedefs_jsdoc",
+      "community": 36,
+      "norm_label": "typedefs.jsdoc.js"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "package",
+      "community": 18,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "package_name",
+      "community": 18,
+      "norm_label": "name"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "package_private",
+      "community": 18,
+      "norm_label": "private"
+    },
+    {
+      "label": "comment_type",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "package_comment_type",
+      "community": 18,
+      "norm_label": "comment_type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "package_scripts",
+      "community": 18,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "package_scripts_dev",
+      "community": 18,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "package_scripts_build",
+      "community": 18,
+      "norm_label": "build"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "package_scripts_preview",
+      "community": 18,
+      "norm_label": "preview"
+    },
+    {
+      "label": "test:engine",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "package_scripts_test_engine",
+      "community": 18,
+      "norm_label": "test:engine"
+    },
+    {
+      "label": "test:unit",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "package_scripts_test_unit",
+      "community": 18,
+      "norm_label": "test:unit"
+    },
+    {
+      "label": "test",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "package_scripts_test",
+      "community": 18,
+      "norm_label": "test"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "package_dependencies",
+      "community": 18,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@reduxjs/toolkit",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "package_dependencies_reduxjs_toolkit",
+      "community": 18,
+      "norm_label": "@reduxjs/toolkit"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "package_dependencies_react",
+      "community": 18,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "package_dependencies_react_dom",
+      "community": 18,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "react-redux",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "package_dependencies_react_redux",
+      "community": 18,
+      "norm_label": "react-redux"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "package_devdependencies",
+      "community": 18,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@testing-library/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "package_devdependencies_testing_library_react",
+      "community": 18,
+      "norm_label": "@testing-library/react"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react",
+      "community": 18,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_react_dom",
+      "community": 18,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "package_devdependencies_vitejs_plugin_react",
+      "community": 18,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "jsdom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "package_devdependencies_jsdom",
+      "community": 18,
+      "norm_label": "jsdom"
+    },
+    {
+      "label": "supabase",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "package_devdependencies_supabase",
+      "community": 18,
+      "norm_label": "supabase"
+    },
+    {
+      "label": "typescript",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "package_devdependencies_typescript",
+      "community": 18,
+      "norm_label": "typescript"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "package_devdependencies_vite",
+      "community": 18,
+      "norm_label": "vite"
+    },
+    {
+      "label": "vitest",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "package_devdependencies_vitest",
+      "community": 18,
+      "norm_label": "vitest"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme",
       "community": 15,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "readme"
     },
     {
       "label": "Peculium \u2014 Fluxo Financeiro",
@@ -19,9 +879,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_peculium_fluxo_financeiro",
       "community": 15,
-      "norm_label": "peculium \u2014 fluxo financeiro"
+      "norm_label": "peculium \u2014 fluxo financeiro",
+      "id": "readme_peculium_fluxo_financeiro"
     },
     {
       "label": "Prop\u00f3sito do jogo (nesta ordem)",
@@ -29,9 +889,9 @@
       "source_file": "README.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
       "community": 15,
-      "norm_label": "proposito do jogo (nesta ordem)"
+      "norm_label": "proposito do jogo (nesta ordem)",
+      "id": "readme_prop\u00f3sito_do_jogo_nesta_ordem"
     },
     {
       "label": "Como rodar",
@@ -39,9 +899,9 @@
       "source_file": "README.md",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "readme_como_rodar",
       "community": 15,
-      "norm_label": "como rodar"
+      "norm_label": "como rodar",
+      "id": "readme_como_rodar"
     },
     {
       "label": "Como testar",
@@ -49,9 +909,9 @@
       "source_file": "README.md",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "readme_como_testar",
       "community": 15,
-      "norm_label": "como testar"
+      "norm_label": "como testar",
+      "id": "readme_como_testar"
     },
     {
       "label": "Arquitetura",
@@ -59,9 +919,9 @@
       "source_file": "README.md",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "readme_arquitetura",
       "community": 15,
-      "norm_label": "arquitetura"
+      "norm_label": "arquitetura",
+      "id": "readme_arquitetura"
     },
     {
       "label": "`engine/` \u2014 regras do jogo, zero UI",
@@ -69,9 +929,9 @@
       "source_file": "README.md",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "readme_engine_regras_do_jogo_zero_ui",
       "community": 15,
-      "norm_label": "`engine/` \u2014 regras do jogo, zero ui"
+      "norm_label": "`engine/` \u2014 regras do jogo, zero ui",
+      "id": "readme_engine_regras_do_jogo_zero_ui"
     },
     {
       "label": "`src/` \u2014 app React",
@@ -79,9 +939,9 @@
       "source_file": "README.md",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "readme_src_app_react",
       "community": 15,
-      "norm_label": "`src/` \u2014 app react"
+      "norm_label": "`src/` \u2014 app react",
+      "id": "readme_src_app_react"
     },
     {
       "label": "Navega\u00e7\u00e3o e tema",
@@ -89,9 +949,9 @@
       "source_file": "README.md",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "readme_navega\u00e7\u00e3o_e_tema",
       "community": 15,
-      "norm_label": "navegacao e tema"
+      "norm_label": "navegacao e tema",
+      "id": "readme_navega\u00e7\u00e3o_e_tema"
     },
     {
       "label": "Placar global (Supabase)",
@@ -99,9 +959,9 @@
       "source_file": "README.md",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "readme_placar_global_supabase",
       "community": 15,
-      "norm_label": "placar global (supabase)"
+      "norm_label": "placar global (supabase)",
+      "id": "readme_placar_global_supabase"
     },
     {
       "label": "Receitas r\u00e1pidas",
@@ -109,9 +969,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "_origin": "ast",
-      "id": "readme_receitas_r\u00e1pidas",
       "community": 15,
-      "norm_label": "receitas rapidas"
+      "norm_label": "receitas rapidas",
+      "id": "readme_receitas_r\u00e1pidas"
     },
     {
       "label": "AtivoCard.tsx",
@@ -119,9 +979,9 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_components_ativocard",
       "community": 26,
-      "norm_label": "ativocard.tsx"
+      "norm_label": "ativocard.tsx",
+      "id": "src_components_ativocard"
     },
     {
       "label": "Linha",
@@ -129,9 +989,9 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "src_components_ativocard_linha",
       "community": 26,
-      "norm_label": "linha"
+      "norm_label": "linha",
+      "id": "src_components_ativocard_linha"
     },
     {
       "label": "AtivoCard()",
@@ -139,9 +999,9 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "src_components_ativocard_ativocard",
       "community": 26,
-      "norm_label": "ativocard()"
+      "norm_label": "ativocard()",
+      "id": "src_components_ativocard_ativocard"
     },
     {
       "label": "efeitos.test.ts",
@@ -149,9 +1009,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_features_conceitos_efeitos_test",
       "community": 30,
-      "norm_label": "efeitos.test.ts"
+      "norm_label": "efeitos.test.ts",
+      "id": "src_features_conceitos_efeitos_test"
     },
     {
       "label": "rngNeutro()",
@@ -159,9 +1019,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "src_features_conceitos_efeitos_test_rngneutro",
       "community": 30,
-      "norm_label": "rngneutro()"
+      "norm_label": "rngneutro()",
+      "id": "src_features_conceitos_efeitos_test_rngneutro"
     },
     {
       "label": "thunks.ts",
@@ -169,9 +1029,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks",
       "community": 30,
-      "norm_label": "thunks.ts"
+      "norm_label": "thunks.ts",
+      "id": "src_features_conceitos_thunks"
     },
     {
       "label": "Thunk",
@@ -179,9 +1039,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_thunk",
       "community": 30,
-      "norm_label": "thunk"
+      "norm_label": "thunk",
+      "id": "src_features_conceitos_thunks_thunk"
     },
     {
       "label": "executarComConceito()",
@@ -189,9 +1049,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_executarcomconceito",
       "community": 30,
-      "norm_label": "executarcomconceito()"
+      "norm_label": "executarcomconceito()",
+      "id": "src_features_conceitos_thunks_executarcomconceito"
     },
     {
       "label": "aportarPctComConceito()",
@@ -199,9 +1059,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_aportarpctcomconceito",
       "community": 30,
-      "norm_label": "aportarpctcomconceito()"
+      "norm_label": "aportarpctcomconceito()",
+      "id": "src_features_conceitos_thunks_aportarpctcomconceito"
     },
     {
       "label": "comecarComConceito()",
@@ -209,9 +1069,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_comecarcomconceito",
       "community": 30,
-      "norm_label": "comecarcomconceito()"
+      "norm_label": "comecarcomconceito()",
+      "id": "src_features_conceitos_thunks_comecarcomconceito"
     },
     {
       "label": "confirmarModal()",
@@ -219,9 +1079,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_confirmarmodal",
       "community": 30,
-      "norm_label": "confirmarmodal()"
+      "norm_label": "confirmarmodal()",
+      "id": "src_features_conceitos_thunks_confirmarmodal"
     },
     {
       "label": "cancelarModal()",
@@ -229,9 +1089,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "src_features_conceitos_thunks_cancelarmodal",
       "community": 30,
-      "norm_label": "cancelarmodal()"
+      "norm_label": "cancelarmodal()",
+      "id": "src_features_conceitos_thunks_cancelarmodal"
     },
     {
       "label": "ControleAporte.test.tsx",
@@ -329,7 +1189,7 @@
       "source_file": "src/features/game/gameSlice.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 30,
+      "community": 2,
       "norm_label": "valordepct()",
       "id": "src_features_game_gameslice_valordepct"
     },
@@ -719,7 +1579,7 @@
       "source_file": "src/features/ui/menuItens.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "menuitens.ts",
       "id": "src_features_ui_menuitens"
     },
@@ -729,7 +1589,7 @@
       "source_file": "src/features/ui/menuItens.ts",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "itemmenu",
       "id": "src_features_ui_menuitens_itemmenu"
     },
@@ -739,7 +1599,7 @@
       "source_file": "src/features/ui/menuItens.ts",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "itens_home",
       "id": "src_features_ui_menuitens_itens_home"
     },
@@ -749,7 +1609,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "uislice.ts",
       "id": "src_features_ui_uislice"
     },
@@ -759,7 +1619,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "rotaid",
       "id": "src_features_ui_uislice_rotaid"
     },
@@ -769,7 +1629,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "uistate",
       "id": "src_features_ui_uislice_uistate"
     },
@@ -779,7 +1639,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "inicial",
       "id": "src_features_ui_uislice_inicial"
     },
@@ -789,7 +1649,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "uislice",
       "id": "src_features_ui_uislice_uislice"
     },
@@ -799,7 +1659,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "comui",
       "id": "src_features_ui_uislice_comui"
     },
@@ -829,7 +1689,7 @@
       "source_file": "src/features/ui/uiSlice.ts",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "selectglossarioaberto()",
       "id": "src_features_ui_uislice_selectglossarioaberto"
     },
@@ -934,66 +1794,6 @@
       "id": "src_features_ui_textos_regras"
     },
     {
-      "label": "conceitos.js",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "conceitos.js",
-      "id": "engine_conceitos"
-    },
-    {
-      "label": "storagePadrao()",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L69",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "storagepadrao()",
-      "id": "engine_conceitos_storagepadrao"
-    },
-    {
-      "label": "vistos()",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L73",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "vistos()",
-      "id": "engine_conceitos_vistos"
-    },
-    {
-      "label": "jaVisto()",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L78",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "javisto()",
-      "id": "engine_conceitos_javisto"
-    },
-    {
-      "label": "marcarVisto()",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L82",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "marcarvisto()",
-      "id": "engine_conceitos_marcarvisto"
-    },
-    {
-      "label": "termosDesbloqueados()",
-      "file_type": "code",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L93",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "termosdesbloqueados()",
-      "id": "engine_conceitos_termosdesbloqueados"
-    },
-    {
       "label": "Glossario.test.tsx",
       "file_type": "code",
       "source_file": "src/components/Glossario.test.tsx",
@@ -1039,7 +1839,7 @@
       "source_file": "src/engine/types.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 28,
+      "community": 12,
       "norm_label": "storagelike",
       "id": "src_engine_types_storagelike"
     },
@@ -1049,7 +1849,7 @@
       "source_file": "src/engine/types.ts",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 28,
+      "community": 12,
       "norm_label": ".getitem()",
       "id": "src_engine_types_storagelike_getitem"
     },
@@ -1059,7 +1859,7 @@
       "source_file": "src/engine/types.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 28,
+      "community": 12,
       "norm_label": ".setitem()",
       "id": "src_engine_types_storagelike_setitem"
     },
@@ -1889,7 +2689,7 @@
       "source_file": "src/components/menu/BotaoMenu.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "botaomenu.tsx",
       "id": "src_components_menu_botaomenu"
     },
@@ -1899,7 +2699,7 @@
       "source_file": "src/components/menu/BotaoMenu.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "props",
       "id": "src_components_menu_botaomenu_props"
     },
@@ -1909,7 +2709,7 @@
       "source_file": "src/components/menu/BotaoMenu.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 24,
+      "community": 2,
       "norm_label": "botaomenu()",
       "id": "src_components_menu_botaomenu_botaomenu"
     },
@@ -2509,7 +3309,7 @@
       "source_file": "src/store/index.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 26,
+      "community": 2,
       "norm_label": "store",
       "id": "src_store_index_store"
     },
@@ -3454,266 +4254,6 @@
       "id": "src_hooks_usegameloop_usegameloop"
     },
     {
-      "label": "package.json",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "package.json",
-      "id": "package"
-    },
-    {
-      "label": "name",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L2",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "name",
-      "id": "package_name"
-    },
-    {
-      "label": "private",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L3",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "private",
-      "id": "package_private"
-    },
-    {
-      "label": "comment_type",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L4",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "comment_type",
-      "id": "package_comment_type"
-    },
-    {
-      "label": "scripts",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "scripts",
-      "id": "package_scripts"
-    },
-    {
-      "label": "dev",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "dev",
-      "id": "package_scripts_dev"
-    },
-    {
-      "label": "build",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "build",
-      "id": "package_scripts_build"
-    },
-    {
-      "label": "preview",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "preview",
-      "id": "package_scripts_preview"
-    },
-    {
-      "label": "test:engine",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "test:engine",
-      "id": "package_scripts_test_engine"
-    },
-    {
-      "label": "test:unit",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "test:unit",
-      "id": "package_scripts_test_unit"
-    },
-    {
-      "label": "test",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "test",
-      "id": "package_scripts_test"
-    },
-    {
-      "label": "dependencies",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "dependencies",
-      "id": "package_dependencies"
-    },
-    {
-      "label": "@reduxjs/toolkit",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "@reduxjs/toolkit",
-      "id": "package_dependencies_reduxjs_toolkit"
-    },
-    {
-      "label": "react",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L15",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "react",
-      "id": "package_dependencies_react"
-    },
-    {
-      "label": "react-dom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "react-dom",
-      "id": "package_dependencies_react_dom"
-    },
-    {
-      "label": "react-redux",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "react-redux",
-      "id": "package_dependencies_react_redux"
-    },
-    {
-      "label": "devDependencies",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "devdependencies",
-      "id": "package_devdependencies"
-    },
-    {
-      "label": "@testing-library/react",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "@testing-library/react",
-      "id": "package_devdependencies_testing_library_react"
-    },
-    {
-      "label": "@types/react",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L21",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "@types/react",
-      "id": "package_devdependencies_types_react"
-    },
-    {
-      "label": "@types/react-dom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L22",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "@types/react-dom",
-      "id": "package_devdependencies_types_react_dom"
-    },
-    {
-      "label": "@vitejs/plugin-react",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "@vitejs/plugin-react",
-      "id": "package_devdependencies_vitejs_plugin_react"
-    },
-    {
-      "label": "jsdom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "jsdom",
-      "id": "package_devdependencies_jsdom"
-    },
-    {
-      "label": "supabase",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "supabase",
-      "id": "package_devdependencies_supabase"
-    },
-    {
-      "label": "typescript",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "typescript",
-      "id": "package_devdependencies_typescript"
-    },
-    {
-      "label": "vite",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "vite",
-      "id": "package_devdependencies_vite"
-    },
-    {
-      "label": "vitest",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "vitest",
-      "id": "package_devdependencies_vitest"
-    },
-    {
       "label": ".mcp.json",
       "file_type": "code",
       "source_file": ".mcp.json",
@@ -3738,448 +4278,1141 @@
       "community": 19,
       "norm_label": "supabase",
       "id": "mcp_mcp_server_supabase"
-    },
-    {
-      "label": "ativos.js",
-      "file_type": "code",
-      "source_file": "engine/ativos.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "ativos.js",
-      "id": "engine_ativos"
-    },
-    {
-      "label": "config.js",
-      "file_type": "code",
-      "source_file": "engine/config.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "config.js",
-      "id": "engine_config"
-    },
-    {
-      "label": "eventos.js",
-      "file_type": "code",
-      "source_file": "engine/eventos.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "eventos.js",
-      "id": "engine_eventos"
-    },
-    {
-      "label": "sortear()",
-      "file_type": "code",
-      "source_file": "engine/eventos.js",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "sortear()",
-      "id": "engine_eventos_sortear"
-    },
-    {
-      "label": "formato.js",
-      "file_type": "code",
-      "source_file": "engine/formato.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "formato.js",
-      "id": "engine_formato"
-    },
-    {
-      "label": "fmt()",
-      "file_type": "code",
-      "source_file": "engine/formato.js",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "fmt()",
-      "id": "engine_formato_fmt"
-    },
-    {
-      "label": "fmtTempo()",
-      "file_type": "code",
-      "source_file": "engine/formato.js",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "fmttempo()",
-      "id": "engine_formato_fmttempo"
-    },
-    {
-      "label": "fmtCompacto()",
-      "file_type": "code",
-      "source_file": "engine/formato.js",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "fmtcompacto()",
-      "id": "engine_formato_fmtcompacto"
-    },
-    {
-      "label": "sparkline()",
-      "file_type": "code",
-      "source_file": "engine/formato.js",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "sparkline()",
-      "id": "engine_formato_sparkline"
-    },
-    {
-      "label": "placar.js",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "placar.js",
-      "id": "engine_placar"
-    },
-    {
-      "label": "storagePadrao()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "storagepadrao()",
-      "id": "engine_placar_storagepadrao"
-    },
-    {
-      "label": "nick()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L23",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "nick()",
-      "id": "engine_placar_nick"
-    },
-    {
-      "label": "salvarNick()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "salvarnick()",
-      "id": "engine_placar_salvarnick"
-    },
-    {
-      "label": "boardDe()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "boardde()",
-      "id": "engine_placar_boardde"
-    },
-    {
-      "label": "scoreDe()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L46",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "scorede()",
-      "id": "engine_placar_scorede"
-    },
-    {
-      "label": "nomeLimpo()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L55",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "nomelimpo()",
-      "id": "engine_placar_nomelimpo"
-    },
-    {
-      "label": "registro()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L62",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "registro()",
-      "id": "engine_placar_registro"
-    },
-    {
-      "label": "vitoria()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L83",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "vitoria()",
-      "id": "engine_placar_vitoria"
-    },
-    {
-      "label": "ordenar()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L85",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "ordenar()",
-      "id": "engine_placar_ordenar"
-    },
-    {
-      "label": "salvar()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L91",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "salvar()",
-      "id": "engine_placar_salvar"
-    },
-    {
-      "label": "ler()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L101",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "ler()",
-      "id": "engine_placar_ler"
-    },
-    {
-      "label": "cfgPadrao()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L110",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "cfgpadrao()",
-      "id": "engine_placar_cfgpadrao"
-    },
-    {
-      "label": "online()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L112",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "online()",
-      "id": "engine_placar_online"
-    },
-    {
-      "label": "cabecalhos()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L117",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "cabecalhos()",
-      "id": "engine_placar_cabecalhos"
-    },
-    {
-      "label": "urlTabela()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L127",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "urltabela()",
-      "id": "engine_placar_urltabela"
-    },
-    {
-      "label": "enviarRemoto()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "enviarremoto()",
-      "id": "engine_placar_enviarremoto"
-    },
-    {
-      "label": "lerRemoto()",
-      "file_type": "code",
-      "source_file": "engine/placar.js",
-      "source_location": "L146",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "lerremoto()",
-      "id": "engine_placar_lerremoto"
-    },
-    {
-      "label": "regras.js",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "regras.js",
-      "id": "engine_regras"
-    },
-    {
-      "label": "chavesZeradas()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "chaveszeradas()",
-      "id": "engine_regras_chaveszeradas"
-    },
-    {
-      "label": "novoJogo()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "novojogo()",
-      "id": "engine_regras_novojogo"
-    },
-    {
-      "label": "addLog()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L107",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "addlog()",
-      "id": "engine_regras_addlog"
-    },
-    {
-      "label": "rendaPassiva()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L111",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "rendapassiva()",
-      "id": "engine_regras_rendapassiva"
-    },
-    {
-      "label": "parcelaFinanciamento()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L116",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "parcelafinanciamento()",
-      "id": "engine_regras_parcelafinanciamento"
-    },
-    {
-      "label": "saldoDevedor()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L121",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "saldodevedor()",
-      "id": "engine_regras_saldodevedor"
-    },
-    {
-      "label": "patrimonio()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L128",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "patrimonio()",
-      "id": "engine_regras_patrimonio"
-    },
-    {
-      "label": "ganhoReinvestimento()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L136",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "ganhoreinvestimento()",
-      "id": "engine_regras_ganhoreinvestimento"
-    },
-    {
-      "label": "aportarNegocio()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L141",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "aportarnegocio()",
-      "id": "engine_regras_aportarnegocio"
-    },
-    {
-      "label": "sacarNegocio()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L149",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "sacarnegocio()",
-      "id": "engine_regras_sacarnegocio"
-    },
-    {
-      "label": "reinvestirNegocio()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L157",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "reinvestirnegocio()",
-      "id": "engine_regras_reinvestirnegocio"
-    },
-    {
-      "label": "mover()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L173",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "mover()",
-      "id": "engine_regras_mover"
-    },
-    {
-      "label": "cobrir()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L189",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "cobrir()",
-      "id": "engine_regras_cobrir"
-    },
-    {
-      "label": "sacarPortfolio()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L205",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "sacarportfolio()",
-      "id": "engine_regras_sacarportfolio"
-    },
-    {
-      "label": "fecharMes()",
-      "file_type": "code",
-      "source_file": "engine/regras.js",
-      "source_location": "L221",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "fecharmes()",
-      "id": "engine_regras_fecharmes"
     }
   ],
   "links": [
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "docs_docstyle",
+      "target": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_engine_js_e_tipos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_exemplos_bons_vs_ruins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_idioma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_o_que_documentar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_onde_ler_mais",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_reducers_rtk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "docs_docstyle_guia_de_docstrings_fluxo_google_style_h\u00edbrido",
+      "target": "docs_docstyle_template",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOCSTYLE.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "docs_docstyle_template",
+      "target": "docs_docstyle_typescript_tipos_redundantes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "engine_conceitos",
+      "target": "engine_conceitos_javisto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "engine_conceitos",
+      "target": "engine_conceitos_marcarvisto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "engine_conceitos",
+      "target": "engine_conceitos_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "engine_conceitos",
+      "target": "engine_conceitos_termosdesbloqueados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "engine_conceitos",
+      "target": "engine_conceitos_vistos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/engine.test.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_engine_test",
+      "target": "engine_conceitos"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "engine_conceitos_marcarvisto",
+      "target": "engine_conceitos_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "engine_conceitos_vistos",
+      "target": "engine_conceitos_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "engine_conceitos_javisto",
+      "target": "engine_conceitos_vistos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "engine_conceitos_marcarvisto",
+      "target": "engine_conceitos_vistos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/conceitos.js",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "engine_conceitos_termosdesbloqueados",
+      "target": "engine_conceitos_vistos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/eventos.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "engine_eventos",
+      "target": "engine_eventos_sortear",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/formato.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "engine_formato",
+      "target": "engine_formato_fmt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/formato.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "engine_formato",
+      "target": "engine_formato_fmtcompacto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/formato.js",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "engine_formato",
+      "target": "engine_formato_fmttempo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/formato.js",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "engine_formato",
+      "target": "engine_formato_sparkline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_boardde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_enviarremoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_ler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L241",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_lerremoto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_nick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_nomelimpo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_ordenar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_registro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_salvar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_salvarnick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_scorede",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L206",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "engine_placar",
+      "target": "engine_placar_vitoria",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "engine_placar_ler",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "engine_placar_nick",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "engine_placar_salvar",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "engine_placar_salvarnick",
+      "target": "engine_placar_storagepadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_boardde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_scorede",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "engine_placar_registro",
+      "target": "engine_placar_nomelimpo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "engine_placar_ler",
+      "target": "engine_placar_ordenar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L242",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "engine_placar_online",
+      "target": "engine_placar_cfgpadrao",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_online",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L228",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_cabecalhos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "engine_placar_enviarremoto",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/placar.js",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "engine_placar_lerremoto",
+      "target": "engine_placar_urltabela",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_addlog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L210",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_aportarnegocio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_chaveszeradas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L289",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_cobrir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L344",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_fecharmes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_ganhoreinvestimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_mover",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_novojogo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_parcelafinanciamento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L185",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_patrimonio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L239",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_reinvestirnegocio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_rendapassiva",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_sacarnegocio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_sacarportfolio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "engine_regras",
+      "target": "engine_regras_saldodevedor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "engine_regras_novojogo",
+      "target": "engine_regras_chaveszeradas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "engine_regras_novojogo",
+      "target": "engine_regras_parcelafinanciamento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "engine_regras_cobrir",
+      "target": "engine_regras_addlog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "engine_regras_fecharmes",
+      "target": "engine_regras_addlog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L470",
+      "weight": 1.0,
+      "source": "engine_regras_fecharmes",
+      "target": "engine_regras_rendapassiva",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "engine_regras_patrimonio",
+      "target": "engine_regras_saldodevedor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L431",
+      "weight": 1.0,
+      "source": "engine_regras_fecharmes",
+      "target": "engine_regras_patrimonio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "engine_regras_reinvestirnegocio",
+      "target": "engine_regras_ganhoreinvestimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L455",
+      "weight": 1.0,
+      "source": "engine_regras_fecharmes",
+      "target": "engine_regras_cobrir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/regras.js",
+      "source_location": "L433",
+      "weight": 1.0,
+      "source": "engine_regras_fecharmes",
+      "target": "engine_regras_sacarportfolio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_comment_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "package",
+      "target": "package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_test",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_test_engine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "package_scripts",
+      "target": "package_scripts_test_unit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_redux",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "package_dependencies",
+      "target": "package_dependencies_reduxjs_toolkit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_jsdom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_testing_library_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_typescript",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitejs_plugin_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "package_devdependencies",
+      "target": "package_devdependencies_vitest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_peculium_fluxo_financeiro",
-      "confidence_score": 1.0
+      "target": "readme_peculium_fluxo_financeiro"
     },
     {
       "relation": "contains",
@@ -4187,9 +5420,9 @@
       "source_file": "README.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_arquitetura",
-      "confidence_score": 1.0
+      "target": "readme_arquitetura"
     },
     {
       "relation": "contains",
@@ -4197,9 +5430,9 @@
       "source_file": "README.md",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_como_rodar",
-      "confidence_score": 1.0
+      "target": "readme_como_rodar"
     },
     {
       "relation": "contains",
@@ -4207,9 +5440,9 @@
       "source_file": "README.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_como_testar",
-      "confidence_score": 1.0
+      "target": "readme_como_testar"
     },
     {
       "relation": "contains",
@@ -4217,9 +5450,9 @@
       "source_file": "README.md",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_placar_global_supabase",
-      "confidence_score": 1.0
+      "target": "readme_placar_global_supabase"
     },
     {
       "relation": "contains",
@@ -4227,9 +5460,9 @@
       "source_file": "README.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
-      "confidence_score": 1.0
+      "target": "readme_prop\u00f3sito_do_jogo_nesta_ordem"
     },
     {
       "relation": "contains",
@@ -4237,9 +5470,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_receitas_r\u00e1pidas",
-      "confidence_score": 1.0
+      "target": "readme_receitas_r\u00e1pidas"
     },
     {
       "relation": "contains",
@@ -4247,9 +5480,9 @@
       "source_file": "README.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_arquitetura",
-      "target": "readme_engine_regras_do_jogo_zero_ui",
-      "confidence_score": 1.0
+      "target": "readme_engine_regras_do_jogo_zero_ui"
     },
     {
       "relation": "contains",
@@ -4257,9 +5490,9 @@
       "source_file": "README.md",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_arquitetura",
-      "target": "readme_navega\u00e7\u00e3o_e_tema",
-      "confidence_score": 1.0
+      "target": "readme_navega\u00e7\u00e3o_e_tema"
     },
     {
       "relation": "contains",
@@ -4267,9 +5500,9 @@
       "source_file": "README.md",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_arquitetura",
-      "target": "readme_src_app_react",
-      "confidence_score": 1.0
+      "target": "readme_src_app_react"
     },
     {
       "relation": "contains",
@@ -4277,9 +5510,9 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_ativocard",
-      "target": "src_components_ativocard_ativocard",
-      "confidence_score": 1.0
+      "target": "src_components_ativocard_ativocard"
     },
     {
       "relation": "contains",
@@ -4287,9 +5520,9 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_ativocard",
-      "target": "src_components_ativocard_linha",
-      "confidence_score": 1.0
+      "target": "src_components_ativocard_linha"
     },
     {
       "relation": "imports_from",
@@ -4319,9 +5552,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_efeitos_test_rngneutro",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_efeitos_test_rngneutro"
     },
     {
       "relation": "imports_from",
@@ -4330,9 +5563,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks"
     },
     {
       "relation": "imports",
@@ -4341,9 +5574,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks_aportarpctcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_aportarpctcomconceito"
     },
     {
       "relation": "imports",
@@ -4352,9 +5585,9 @@
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks_confirmarmodal",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_confirmarmodal"
     },
     {
       "relation": "contains",
@@ -4362,9 +5595,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_aportarpctcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_aportarpctcomconceito"
     },
     {
       "relation": "contains",
@@ -4372,9 +5605,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_cancelarmodal",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_cancelarmodal"
     },
     {
       "relation": "contains",
@@ -4382,9 +5615,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_comecarcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_comecarcomconceito"
     },
     {
       "relation": "contains",
@@ -4392,9 +5625,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_confirmarmodal",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_confirmarmodal"
     },
     {
       "relation": "contains",
@@ -4402,9 +5635,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_executarcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_executarcomconceito"
     },
     {
       "relation": "contains",
@@ -4412,9 +5645,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_thunk",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_thunk"
     },
     {
       "relation": "imports_from",
@@ -4434,9 +5667,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks_aportarpctcomconceito",
-      "target": "src_features_conceitos_thunks_executarcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_executarcomconceito"
     },
     {
       "relation": "calls",
@@ -4445,9 +5678,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks_comecarcomconceito",
-      "target": "src_features_conceitos_thunks_executarcomconceito",
-      "confidence_score": 1.0
+      "target": "src_features_conceitos_thunks_executarcomconceito"
     },
     {
       "relation": "imports",
@@ -5642,122 +6875,6 @@
       "confidence_score": 1.0,
       "source": "src_components_menu_regrascard",
       "target": "src_features_ui_textos_regras"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L78",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos",
-      "target": "engine_conceitos_javisto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L82",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos",
-      "target": "engine_conceitos_marcarvisto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L69",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos",
-      "target": "engine_conceitos_storagepadrao"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L93",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos",
-      "target": "engine_conceitos_termosdesbloqueados"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L73",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos",
-      "target": "engine_conceitos_vistos"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/engine.test.js",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_engine_test",
-      "target": "engine_conceitos"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L83",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos_marcarvisto",
-      "target": "engine_conceitos_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L74",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos_vistos",
-      "target": "engine_conceitos_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L79",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos_javisto",
-      "target": "engine_conceitos_vistos"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L85",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos_marcarvisto",
-      "target": "engine_conceitos_vistos"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/conceitos.js",
-      "source_location": "L95",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_conceitos_termosdesbloqueados",
-      "target": "engine_conceitos_vistos"
     },
     {
       "relation": "imports_from",
@@ -9287,931 +10404,14 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_comment_type"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_dependencies"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_devdependencies"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_name"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_private"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_scripts"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_build"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_dev"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_preview"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_test"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_test_engine"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_test_unit"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react_dom"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react_redux"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_reduxjs_toolkit"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_jsdom"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_testing_library_react"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react_dom"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_typescript"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vite"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vitejs_plugin_react"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vitest"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": ".mcp.json",
       "source_location": "L1",
       "weight": 1.0,
       "source": "mcp",
       "target": "mcp_mcp_server_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/eventos.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_eventos",
-      "target": "engine_eventos_sortear"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/formato.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_formato",
-      "target": "engine_formato_fmt"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/formato.js",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_formato",
-      "target": "engine_formato_fmtcompacto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/formato.js",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_formato",
-      "target": "engine_formato_fmttempo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/formato.js",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_formato",
-      "target": "engine_formato_sparkline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_boardde"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L117",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_cabecalhos"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L110",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_cfgpadrao"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L133",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_enviarremoto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L101",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_ler"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L146",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_lerremoto"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_nick"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_nomelimpo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L112",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_online"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L85",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_ordenar"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L62",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_registro"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L91",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_salvar"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_salvarnick"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_scorede"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_storagepadrao"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L127",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_urltabela"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L83",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar",
-      "target": "engine_placar_vitoria"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L102",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_ler",
-      "target": "engine_placar_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_nick",
-      "target": "engine_placar_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L92",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_salvar",
-      "target": "engine_placar_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_salvarnick",
-      "target": "engine_placar_storagepadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L63",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_registro",
-      "target": "engine_placar_boardde"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L79",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_registro",
-      "target": "engine_placar_scorede"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L75",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_registro",
-      "target": "engine_placar_nomelimpo"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L105",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_ler",
-      "target": "engine_placar_ordenar"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L134",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_enviarremoto",
-      "target": "engine_placar_cfgpadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L147",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_lerremoto",
-      "target": "engine_placar_cfgpadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L113",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_online",
-      "target": "engine_placar_cfgpadrao"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L136",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_enviarremoto",
-      "target": "engine_placar_online"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_lerremoto",
-      "target": "engine_placar_online"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L140",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_enviarremoto",
-      "target": "engine_placar_cabecalhos"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L151",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_lerremoto",
-      "target": "engine_placar_cabecalhos"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L138",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_enviarremoto",
-      "target": "engine_placar_urltabela"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/placar.js",
-      "source_location": "L151",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_placar_lerremoto",
-      "target": "engine_placar_urltabela"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L107",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_addlog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L141",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_aportarnegocio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_chaveszeradas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L189",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_cobrir"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L221",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_fecharmes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L136",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_ganhoreinvestimento"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L173",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_mover"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_novojogo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L116",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_parcelafinanciamento"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L128",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_patrimonio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L157",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_reinvestirnegocio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L111",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_rendapassiva"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_sacarnegocio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L205",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_sacarportfolio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L121",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras",
-      "target": "engine_regras_saldodevedor"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L93",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_novojogo",
-      "target": "engine_regras_chaveszeradas"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L71",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_novojogo",
-      "target": "engine_regras_parcelafinanciamento"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L197",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_cobrir",
-      "target": "engine_regras_addlog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L237",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_fecharmes",
-      "target": "engine_regras_addlog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L347",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_fecharmes",
-      "target": "engine_regras_rendapassiva"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L131",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_patrimonio",
-      "target": "engine_regras_saldodevedor"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L308",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_fecharmes",
-      "target": "engine_regras_patrimonio"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L165",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_reinvestirnegocio",
-      "target": "engine_regras_ganhoreinvestimento"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L332",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_fecharmes",
-      "target": "engine_regras_cobrir"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "engine/regras.js",
-      "source_location": "L310",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "engine_regras_fecharmes",
-      "target": "engine_regras_sacarportfolio"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8e46e9e0a0b2d386622dcdb6ce1e41bd1251f83a"
+  "built_at_commit": "e57934e15e8587e69f0b16409fe95e9fbdb0707b"
 }

@@ -1,5 +1,9 @@
-// Definição dos ativos investíveis. O módulo é a própria lista.
-// ret = retorno médio mensal, vol = volatilidade, div = rendimento pago em caixa (renda passiva).
+/**
+ * @module ativos
+ * Definição dos 5 ativos investíveis (lista exportada pelo UMD).
+ * Campos: `ret` retorno médio mensal, `vol` volatilidade, `div` rendimento em caixa,
+ * `risco`/`riscoCor` para UI. A ordem de liquidação forçada está em config.liquidacao.
+ */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) module.exports = factory();
   else { root.Fluxo = root.Fluxo || {}; root.Fluxo.ativos = factory(); }

@@ -1,7 +1,9 @@
-// Dicionário central de conceitos educacionais.
-// `termos` alimenta o glossário; `tooltips` liga ações do jogo a conceitos
-// (cada tooltip visto desbloqueia seus termos no glossário).
-// Adicionar conceito novo = adicionar entrada aqui; a lógica do jogo não muda.
+/**
+ * @file Dicionário central de conceitos educacionais.
+ * `termos` alimenta o glossário; `tooltips` liga ações do jogo a conceitos.
+ * Adicionar conceito novo = entrada aqui; a lógica do jogo não muda.
+ * @typedef {import('./typedefs.jsdoc').StorageLike} StorageLike
+ */
 (function (root, factory) {
   if (typeof module !== 'undefined' && module.exports) module.exports = factory();
   else { root.Fluxo = root.Fluxo || {}; root.Fluxo.conceitos = factory(); }
@@ -66,19 +68,39 @@
     },
   };
 
+  /** @returns {StorageLike|null} Browser localStorage or null if unavailable. */
   function storagePadrao() {
     try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch (e) { return null; }
   }
 
+  /**
+   * Lista ids de conceitos/tooltips já vistos pelo jogador.
+   *
+   * @param {StorageLike|null} [storage] - Injectable storage.
+   * @returns {string[]} Seen concept ids.
+   */
   function vistos(storage) {
     const st = storage || storagePadrao();
     try { return JSON.parse((st && st.getItem(CHAVE)) || '[]'); } catch (e) { return []; }
   }
 
+  /**
+   * Verifica se um conceito ou tooltip já foi visto.
+   *
+   * @param {string} id - Concept or tooltip id.
+   * @param {StorageLike|null} [storage] - Injectable storage.
+   * @returns {boolean} True if already seen.
+   */
   function jaVisto(id, storage) {
     return vistos(storage).includes(id);
   }
 
+  /**
+   * Marca conceito como visto e persiste no storage.
+   *
+   * @param {string} id - Concept or tooltip id.
+   * @param {StorageLike|null} [storage] - Injectable storage.
+   */
   function marcarVisto(id, storage) {
     const st = storage || storagePadrao();
     if (!st) return;
@@ -88,8 +110,14 @@
     try { st.setItem(CHAVE, JSON.stringify(v)); } catch (e) { /* sem storage */ }
   }
 
-  // Termos desbloqueados = os de curiosidade (`sempre`) + a união dos termos
-  // dos tooltips já vistos.
+  /**
+   * Retorna ids de termos do glossário desbloqueados.
+   *
+   * Inclui termos `sempre: true` mais termos ligados aos tooltips já vistos.
+   *
+   * @param {StorageLike|null} [storage] - Injectable storage.
+   * @returns {string[]} Unlocked glossary term ids.
+   */
   function termosDesbloqueados(storage) {
     const lista = Object.keys(termos).filter(function (id) { return termos[id].sempre; });
     for (const id of vistos(storage)) {

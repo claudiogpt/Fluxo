@@ -5,38 +5,38 @@
     "semantic_hash": ""
   },
   "engine/ativos.js": {
-    "mtime": 1783317945.7373874,
-    "ast_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6",
-    "semantic_hash": "9c09fcc2b9e61be381222f0a9cf3a2d6"
+    "mtime": 1785275449.0405612,
+    "ast_hash": "5ecaf398aa1e2f290e291cf482abd63a",
+    "semantic_hash": ""
   },
   "engine/conceitos.js": {
-    "mtime": 1785132025.0603914,
-    "ast_hash": "57308a285e992bb589b8db8e2c194aca",
+    "mtime": 1785275449.0375612,
+    "ast_hash": "7ac01f68fcbdf67ce6d7cae45a202f6f",
     "semantic_hash": ""
   },
   "engine/config.js": {
-    "mtime": 1783918339.3528628,
-    "ast_hash": "06c516b6504bd004008e73b0686337f3",
-    "semantic_hash": "06c516b6504bd004008e73b0686337f3"
+    "mtime": 1785275449.0375612,
+    "ast_hash": "b658185be8b1599df5d889eef6148d2d",
+    "semantic_hash": ""
   },
   "engine/eventos.js": {
-    "mtime": 1783359013.5305095,
-    "ast_hash": "58f04869dd93c802364636e67e4bd1ed",
-    "semantic_hash": "58f04869dd93c802364636e67e4bd1ed"
+    "mtime": 1785275449.0375612,
+    "ast_hash": "ada5dc41aca8a1719e6b5f6d22cf62cc",
+    "semantic_hash": ""
   },
   "engine/formato.js": {
-    "mtime": 1783916711.494111,
-    "ast_hash": "644e3e4d1dc96de43b44493e05fd52ae",
-    "semantic_hash": "644e3e4d1dc96de43b44493e05fd52ae"
+    "mtime": 1785275449.0395613,
+    "ast_hash": "fb556ab74cb32b0a716d21ce1eebb7e1",
+    "semantic_hash": ""
   },
   "engine/placar.js": {
-    "mtime": 1783968545.5954669,
-    "ast_hash": "3171aadec906a8d475203e445c94a657",
+    "mtime": 1785275449.0375612,
+    "ast_hash": "640a9a96aee1698575f8eb3450b8fb34",
     "semantic_hash": ""
   },
   "engine/regras.js": {
-    "mtime": 1783968454.0158982,
-    "ast_hash": "ad30a5371b863a1c90c2bd711e3530f3",
+    "mtime": 1785275449.035561,
+    "ast_hash": "78452df676e268ba65845ac008a2d0cb",
     "semantic_hash": ""
   },
   "tests/engine.test.js": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1784083639.1359365,
-    "ast_hash": "593cf6ba6f1fb0aaca39432bb7a406f7",
+    "mtime": 1785276500.8867323,
+    "ast_hash": "17859e756e98c4e0b73127f3deb83db9",
     "semantic_hash": ""
   },
   "supabase/.temp/linked-project.json": {
@@ -417,6 +417,16 @@
   "src/components/ControleAporte.test.tsx": {
     "mtime": 1785266138.2108676,
     "ast_hash": "e4eb7e6f64d3b04b78c99c5a63a4f890",
+    "semantic_hash": ""
+  },
+  "engine/typedefs.jsdoc.js": {
+    "mtime": 1785275449.0345612,
+    "ast_hash": "52c724a0e306a0d8214bda64f5970462",
+    "semantic_hash": ""
+  },
+  "docs/DOCSTYLE.md": {
+    "mtime": 1785275449.0405612,
+    "ast_hash": "5536ce8c2bc4003b7dd90b83ae798f92",
     "semantic_hash": ""
   }
 }

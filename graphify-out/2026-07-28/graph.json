@@ -4,74 +4,114 @@
   "graph": {},
   "nodes": [
     {
-      "label": "ControleAporte.test.tsx",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.test.tsx",
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_components_controleaporte_test",
-      "community": 26,
-      "norm_label": "controleaporte.test.tsx"
+      "id": "readme",
+      "community": 15,
+      "norm_label": "readme.md"
     },
     {
-      "label": "montar()",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "src_components_controleaporte_test_montar",
-      "community": 26,
-      "norm_label": "montar()"
-    },
-    {
-      "label": "arrastar()",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "src_components_controleaporte_test_arrastar",
-      "community": 26,
-      "norm_label": "arrastar()"
-    },
-    {
-      "label": "ControleAporte.tsx",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.tsx",
+      "label": "Peculium \u2014 Fluxo Financeiro",
+      "file_type": "document",
+      "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_components_controleaporte",
-      "community": 26,
-      "norm_label": "controleaporte.tsx"
+      "id": "readme_peculium_fluxo_financeiro",
+      "community": 15,
+      "norm_label": "peculium \u2014 fluxo financeiro"
     },
     {
-      "label": "btnTampa",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L23",
+      "label": "Prop\u00f3sito do jogo (nesta ordem)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L7",
       "_origin": "ast",
-      "id": "src_components_controleaporte_btntampa",
-      "community": 26,
-      "norm_label": "btntampa"
+      "id": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
+      "community": 15,
+      "norm_label": "proposito do jogo (nesta ordem)"
     },
     {
-      "label": "btnConfirmar",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L33",
+      "label": "Como rodar",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L13",
       "_origin": "ast",
-      "id": "src_components_controleaporte_btnconfirmar",
-      "community": 26,
-      "norm_label": "btnconfirmar"
+      "id": "readme_como_rodar",
+      "community": 15,
+      "norm_label": "como rodar"
     },
     {
-      "label": "ControleAporte()",
-      "file_type": "code",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L43",
+      "label": "Como testar",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L20",
       "_origin": "ast",
-      "id": "src_components_controleaporte_controleaporte",
-      "community": 26,
-      "norm_label": "controleaporte()"
+      "id": "readme_como_testar",
+      "community": 15,
+      "norm_label": "como testar"
+    },
+    {
+      "label": "Arquitetura",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "readme_arquitetura",
+      "community": 15,
+      "norm_label": "arquitetura"
+    },
+    {
+      "label": "`engine/` \u2014 regras do jogo, zero UI",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "readme_engine_regras_do_jogo_zero_ui",
+      "community": 15,
+      "norm_label": "`engine/` \u2014 regras do jogo, zero ui"
+    },
+    {
+      "label": "`src/` \u2014 app React",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "readme_src_app_react",
+      "community": 15,
+      "norm_label": "`src/` \u2014 app react"
+    },
+    {
+      "label": "Navega\u00e7\u00e3o e tema",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "readme_navega\u00e7\u00e3o_e_tema",
+      "community": 15,
+      "norm_label": "navegacao e tema"
+    },
+    {
+      "label": "Placar global (Supabase)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "readme_placar_global_supabase",
+      "community": 15,
+      "norm_label": "placar global (supabase)"
+    },
+    {
+      "label": "Receitas r\u00e1pidas",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "readme_receitas_r\u00e1pidas",
+      "community": 15,
+      "norm_label": "receitas rapidas"
     },
     {
       "label": "AtivoCard.tsx",
@@ -79,49 +119,49 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "src_components_ativocard",
       "community": 26,
-      "norm_label": "ativocard.tsx",
-      "id": "src_components_ativocard"
+      "norm_label": "ativocard.tsx"
     },
     {
       "label": "Linha",
       "file_type": "code",
       "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L10",
+      "source_location": "L8",
       "_origin": "ast",
+      "id": "src_components_ativocard_linha",
       "community": 26,
-      "norm_label": "linha",
-      "id": "src_components_ativocard_linha"
-    },
-    {
-      "label": "btnMais",
-      "file_type": "code",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "btnmais",
-      "id": "src_components_ativocard_btnmais"
-    },
-    {
-      "label": "btnMenos",
-      "file_type": "code",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "btnmenos",
-      "id": "src_components_ativocard_btnmenos"
+      "norm_label": "linha"
     },
     {
       "label": "AtivoCard()",
       "file_type": "code",
       "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L22",
+      "source_location": "L10",
       "_origin": "ast",
+      "id": "src_components_ativocard_ativocard",
       "community": 26,
-      "norm_label": "ativocard()",
-      "id": "src_components_ativocard_ativocard"
+      "norm_label": "ativocard()"
+    },
+    {
+      "label": "efeitos.test.ts",
+      "file_type": "code",
+      "source_file": "src/features/conceitos/efeitos.test.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_conceitos_efeitos_test",
+      "community": 30,
+      "norm_label": "efeitos.test.ts"
+    },
+    {
+      "label": "rngNeutro()",
+      "file_type": "code",
+      "source_file": "src/features/conceitos/efeitos.test.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_features_conceitos_efeitos_test_rngneutro",
+      "community": 30,
+      "norm_label": "rngneutro()"
     },
     {
       "label": "thunks.ts",
@@ -129,9 +169,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "thunks.ts",
-      "id": "src_features_conceitos_thunks"
+      "id": "src_features_conceitos_thunks",
+      "community": 30,
+      "norm_label": "thunks.ts"
     },
     {
       "label": "Thunk",
@@ -139,9 +179,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "thunk",
-      "id": "src_features_conceitos_thunks_thunk"
+      "id": "src_features_conceitos_thunks_thunk",
+      "community": 30,
+      "norm_label": "thunk"
     },
     {
       "label": "executarComConceito()",
@@ -149,59 +189,119 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "executarcomconceito()",
-      "id": "src_features_conceitos_thunks_executarcomconceito"
-    },
-    {
-      "label": "moverComConceito()",
-      "file_type": "code",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 2,
-      "norm_label": "movercomconceito()",
-      "id": "src_features_conceitos_thunks_movercomconceito"
+      "id": "src_features_conceitos_thunks_executarcomconceito",
+      "community": 30,
+      "norm_label": "executarcomconceito()"
     },
     {
       "label": "aportarPctComConceito()",
       "file_type": "code",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L40",
+      "source_location": "L28",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "aportarpctcomconceito()",
-      "id": "src_features_conceitos_thunks_aportarpctcomconceito"
+      "id": "src_features_conceitos_thunks_aportarpctcomconceito",
+      "community": 30,
+      "norm_label": "aportarpctcomconceito()"
     },
     {
       "label": "comecarComConceito()",
       "file_type": "code",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L52",
+      "source_location": "L40",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "comecarcomconceito()",
-      "id": "src_features_conceitos_thunks_comecarcomconceito"
+      "id": "src_features_conceitos_thunks_comecarcomconceito",
+      "community": 30,
+      "norm_label": "comecarcomconceito()"
     },
     {
       "label": "confirmarModal()",
       "file_type": "code",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L62",
+      "source_location": "L50",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "confirmarmodal()",
-      "id": "src_features_conceitos_thunks_confirmarmodal"
+      "id": "src_features_conceitos_thunks_confirmarmodal",
+      "community": 30,
+      "norm_label": "confirmarmodal()"
     },
     {
       "label": "cancelarModal()",
       "file_type": "code",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L72",
+      "source_location": "L60",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "cancelarmodal()",
-      "id": "src_features_conceitos_thunks_cancelarmodal"
+      "id": "src_features_conceitos_thunks_cancelarmodal",
+      "community": 30,
+      "norm_label": "cancelarmodal()"
+    },
+    {
+      "label": "ControleAporte.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "controleaporte.test.tsx",
+      "id": "src_components_controleaporte_test"
+    },
+    {
+      "label": "montar()",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "montar()",
+      "id": "src_components_controleaporte_test_montar"
+    },
+    {
+      "label": "arrastar()",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "arrastar()",
+      "id": "src_components_controleaporte_test_arrastar"
+    },
+    {
+      "label": "ControleAporte.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "controleaporte.tsx",
+      "id": "src_components_controleaporte"
+    },
+    {
+      "label": "btnTampa",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "btntampa",
+      "id": "src_components_controleaporte_btntampa"
+    },
+    {
+      "label": "btnConfirmar",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "btnconfirmar",
+      "id": "src_components_controleaporte_btnconfirmar"
+    },
+    {
+      "label": "ControleAporte()",
+      "file_type": "code",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 35,
+      "norm_label": "controleaporte()",
+      "id": "src_components_controleaporte_controleaporte"
     },
     {
       "label": "gameSlice.ts",
@@ -229,7 +329,7 @@
       "source_file": "src/features/game/gameSlice.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 2,
+      "community": 30,
       "norm_label": "valordepct()",
       "id": "src_features_game_gameslice_valordepct"
     },
@@ -269,7 +369,7 @@
       "source_file": "src/features/game/percentual.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 30,
       "norm_label": "percentual.test.ts",
       "id": "src_features_game_percentual_test"
     },
@@ -832,116 +932,6 @@
       "community": 27,
       "norm_label": "regras",
       "id": "src_features_ui_textos_regras"
-    },
-    {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "readme.md",
-      "id": "readme"
-    },
-    {
-      "label": "Peculium \u2014 Fluxo Financeiro",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "peculium \u2014 fluxo financeiro",
-      "id": "readme_peculium_fluxo_financeiro"
-    },
-    {
-      "label": "Prop\u00f3sito do jogo (nesta ordem)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "proposito do jogo (nesta ordem)",
-      "id": "readme_prop\u00f3sito_do_jogo_nesta_ordem"
-    },
-    {
-      "label": "Como rodar",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "como rodar",
-      "id": "readme_como_rodar"
-    },
-    {
-      "label": "Como testar",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "como testar",
-      "id": "readme_como_testar"
-    },
-    {
-      "label": "Arquitetura",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "arquitetura",
-      "id": "readme_arquitetura"
-    },
-    {
-      "label": "`engine/` \u2014 regras do jogo, zero UI",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "`engine/` \u2014 regras do jogo, zero ui",
-      "id": "readme_engine_regras_do_jogo_zero_ui"
-    },
-    {
-      "label": "`src/` \u2014 app React",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "`src/` \u2014 app react",
-      "id": "readme_src_app_react"
-    },
-    {
-      "label": "Navega\u00e7\u00e3o e tema",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L71",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "navegacao e tema",
-      "id": "readme_navega\u00e7\u00e3o_e_tema"
-    },
-    {
-      "label": "Placar global (Supabase)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L79",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "placar global (supabase)",
-      "id": "readme_placar_global_supabase"
-    },
-    {
-      "label": "Receitas r\u00e1pidas",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L85",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "receitas rapidas",
-      "id": "readme_receitas_r\u00e1pidas"
     },
     {
       "label": "conceitos.js",
@@ -3299,7 +3289,7 @@
       "source_file": "src/engine/index.ts",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 2,
+      "community": 20,
       "norm_label": "placar",
       "id": "src_engine_index_placar"
     },
@@ -3442,26 +3432,6 @@
       "community": 12,
       "norm_label": "selectmodalconceito()",
       "id": "src_features_conceitos_conceitosslice_selectmodalconceito"
-    },
-    {
-      "label": "efeitos.test.ts",
-      "file_type": "code",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 2,
-      "norm_label": "efeitos.test.ts",
-      "id": "src_features_conceitos_efeitos_test"
-    },
-    {
-      "label": "rngNeutro()",
-      "file_type": "code",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 2,
-      "norm_label": "rngneutro()",
-      "id": "src_features_conceitos_efeitos_test_rngneutro"
     },
     {
       "label": "useGameLoop.ts",
@@ -4202,128 +4172,104 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L10",
+      "source_file": "README.md",
+      "source_location": "L1",
       "weight": 1.0,
-      "source": "src_components_controleaporte_test",
-      "target": "src_components_controleaporte",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "src_components_controleaporte_test",
-      "target": "src_components_controleaporte_controleaporte",
+      "source": "readme",
+      "target": "readme_peculium_fluxo_financeiro",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L24",
+      "source_file": "README.md",
+      "source_location": "L28",
       "weight": 1.0,
-      "source": "src_components_controleaporte_test",
-      "target": "src_components_controleaporte_test_arrastar",
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_arquitetura",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.test.tsx",
-      "source_location": "L12",
+      "source_file": "README.md",
+      "source_location": "L13",
       "weight": 1.0,
-      "source": "src_components_controleaporte_test",
-      "target": "src_components_controleaporte_test_montar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_components_controleaporte"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L33",
-      "weight": 1.0,
-      "source": "src_components_controleaporte",
-      "target": "src_components_controleaporte_btnconfirmar",
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_como_rodar",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "src_components_controleaporte",
-      "target": "src_components_controleaporte_btntampa",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ControleAporte.tsx",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "src_components_controleaporte",
-      "target": "src_components_controleaporte_controleaporte",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_components_controleaporte_controleaporte"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_components_ativocard_ativocard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_components_ativocard_btnmais"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
+      "source_file": "README.md",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_components_ativocard_btnmenos"
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_como_testar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_placar_global_supabase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_prop\u00f3sito_do_jogo_nesta_ordem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "readme_peculium_fluxo_financeiro",
+      "target": "readme_receitas_r\u00e1pidas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_engine_regras_do_jogo_zero_ui",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_navega\u00e7\u00e3o_e_tema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "readme_arquitetura",
+      "target": "readme_src_app_react",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4331,31 +4277,19 @@
       "source_file": "src/components/AtivoCard.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_ativocard",
-      "target": "src_components_ativocard_linha"
+      "target": "src_components_ativocard_ativocard",
+      "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L5",
+      "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_ativocard",
-      "target": "src_features_conceitos_thunks"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_ativocard",
-      "target": "src_features_conceitos_thunks_movercomconceito"
+      "target": "src_components_ativocard_linha",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -4369,17 +4303,6 @@
       "target": "src_components_ativocard"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/AtivoCard.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "src_components_ativocard_ativocard",
-      "target": "src_features_conceitos_thunks_movercomconceito"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -4391,15 +4314,67 @@
       "target": "src_components_ativocard_ativocard"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/conceitos/efeitos.test.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_features_conceitos_efeitos_test",
+      "target": "src_features_conceitos_efeitos_test_rngneutro",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/conceitos/efeitos.test.ts",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks"
+      "target": "src_features_conceitos_thunks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/conceitos/efeitos.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_features_conceitos_efeitos_test",
+      "target": "src_features_conceitos_thunks_aportarpctcomconceito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/conceitos/efeitos.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_features_conceitos_efeitos_test",
+      "target": "src_features_conceitos_thunks_confirmarmodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/conceitos/thunks.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "src_features_conceitos_thunks",
+      "target": "src_features_conceitos_thunks_aportarpctcomconceito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/conceitos/thunks.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_features_conceitos_thunks",
+      "target": "src_features_conceitos_thunks_cancelarmodal",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4407,39 +4382,19 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L40",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_aportarpctcomconceito"
+      "target": "src_features_conceitos_thunks_comecarcomconceito",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L72",
+      "source_location": "L50",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_cancelarmodal"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L52",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_comecarcomconceito"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L62",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_confirmarmodal"
+      "target": "src_features_conceitos_thunks_confirmarmodal",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4447,19 +4402,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_executarcomconceito"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_movercomconceito"
+      "target": "src_features_conceitos_thunks_executarcomconceito",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -4467,20 +4412,9 @@
       "source_file": "src/features/conceitos/thunks.ts",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks",
-      "target": "src_features_conceitos_thunks_thunk"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_thunks",
-      "target": "src_features_game_gameslice"
+      "target": "src_features_conceitos_thunks_thunk",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -4498,44 +4432,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L44",
+      "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks_aportarpctcomconceito",
-      "target": "src_features_conceitos_thunks_executarcomconceito"
+      "target": "src_features_conceitos_thunks_executarcomconceito",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L55",
+      "source_location": "L43",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_features_conceitos_thunks_comecarcomconceito",
-      "target": "src_features_conceitos_thunks_executarcomconceito"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/thunks.ts",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_thunks_movercomconceito",
-      "target": "src_features_conceitos_thunks_executarcomconceito"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks_movercomconceito"
+      "target": "src_features_conceitos_thunks_executarcomconceito",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -4552,17 +4464,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_thunks_confirmarmodal"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/game/percentual.test.ts",
       "source_location": "L7",
       "weight": 1.0,
@@ -4574,12 +4475,73 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L4",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_game_gameslice"
+      "source": "src_components_controleaporte_test",
+      "target": "src_components_controleaporte"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte_test",
+      "target": "src_components_controleaporte_controleaporte"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte_test",
+      "target": "src_components_controleaporte_test_arrastar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.test.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte_test",
+      "target": "src_components_controleaporte_test_montar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte",
+      "target": "src_components_controleaporte_btnconfirmar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte",
+      "target": "src_components_controleaporte_btntampa"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ControleAporte.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_controleaporte",
+      "target": "src_components_controleaporte_controleaporte"
     },
     {
       "relation": "contains",
@@ -5680,106 +5642,6 @@
       "confidence_score": 1.0,
       "source": "src_components_menu_regrascard",
       "target": "src_features_ui_textos_regras"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme",
-      "target": "readme_peculium_fluxo_financeiro"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_arquitetura"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_como_rodar"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_como_testar"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L79",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_placar_global_supabase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_prop\u00f3sito_do_jogo_nesta_ordem"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L85",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_peculium_fluxo_financeiro",
-      "target": "readme_receitas_r\u00e1pidas"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_arquitetura",
-      "target": "readme_engine_regras_do_jogo_zero_ui"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L71",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_arquitetura",
-      "target": "readme_navega\u00e7\u00e3o_e_tema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L53",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_arquitetura",
-      "target": "readme_src_app_react"
     },
     {
       "relation": "contains",
@@ -8015,17 +7877,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_store_index"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/prefs/prefsSlice.test.ts",
       "source_location": "L2",
       "weight": 1.0,
@@ -8094,17 +7945,6 @@
       "confidence_score": 1.0,
       "source": "src_store_index",
       "target": "src_store_index_store"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_store_index_makestore"
     },
     {
       "relation": "imports",
@@ -9302,17 +9142,6 @@
       "target": "src_engine_index"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_engine_index"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -9322,17 +9151,6 @@
       "confidence_score": 1.0,
       "source": "src_features_conceitos_conceitosslice",
       "target": "src_engine_index_conceitos"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_engine_index_placar"
     },
     {
       "relation": "contains",
@@ -9455,16 +9273,6 @@
       "confidence_score": 1.0,
       "source": "src_features_conceitos_conceitosslice_selectjavisto",
       "target": "src_features_conceitos_conceitosslice_comostorage"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/conceitos/efeitos.test.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_features_conceitos_efeitos_test",
-      "target": "src_features_conceitos_efeitos_test_rngneutro"
     },
     {
       "relation": "contains",
@@ -10405,5 +10213,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ce9196cbd63afe5332a1f9b3a290e790508c8c27"
+  "built_at_commit": "8e46e9e0a0b2d386622dcdb6ce1e41bd1251f83a"
 }
