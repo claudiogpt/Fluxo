@@ -864,9 +864,9 @@ test('realista: fecharMes não muta o estado recebido (nem as posições)', () =
 
 // ---------- modo realista: mercado e ordens (F1) ----------
 
-// 28 draws no mercado (2 por fator comum × 4 + 2 por ativo de renda variável
-// × 10) e 1 no sorteio de evento. O 0.99 final mantém o mês sem evento.
-const rngRealista = () => rngFixo(...Array(28).fill(0.5), 0.99);
+// 32 draws no mercado (4 na macro + 2 por fator comum × 4 + 2 por ativo de
+// renda variável × 10) e 1 no sorteio de evento. O 0.99 final tira o evento.
+const rngRealista = () => rngFixo(...Array(32).fill(0.5), 0.99);
 
 function realistaEmAndamento(props) {
   const s = jogoEmAndamento(Object.assign({ modo: 'realista' }, props || {}));
@@ -874,12 +874,12 @@ function realistaEmAndamento(props) {
   return s;
 }
 
-test('realista: o mercado consome exatamente 28 draws de rng', () => {
+test('realista: o mercado consome exatamente 32 draws de rng', () => {
   const s = realistaEmAndamento();
   let n = 0;
   const rng = () => { n++; return 0.5; };
   realista.mercado(s, rng);
-  assert.equal(n, 28);
+  assert.equal(n, 32);
 });
 
 test('realista: renda fixa rende pelo indexador, sem sortear nada', () => {
@@ -907,7 +907,14 @@ test('realista: ativos da mesma classe caem juntos (fator comum)', () => {
   const s = realistaEmAndamento();
   for (const k of ['ac_blue', 'ac_small', 'cr_btc']) s.ativos[k] = 10000;
   // fator da bolsa bem negativo, fatores seguintes e ruídos próprios neutros
-  const rng = rngFixo(0.5, 0.5, /* juros */ 0, 0, /* bolsaBR */ 0.5, 0.5, /* intl */ 1, 1, /* cripto */ 0.5);
+  const rng = rngFixo(
+    0.5, 0.5, 0.5, 0.5,          // macro: Selic e IPCA parados
+    0.5, 0.5,                    // fator juros
+    0, 0,                        // fator bolsaBR: queda forte
+    0.5, 0.5,                    // fator intl
+    1, 1,                        // fator cripto: alta forte
+    0.5                          // ruídos próprios: neutros
+  );
   realista.mercado(s, rng);
   assert.ok(s.varMes.ac_blue < 0, 'blue chips deviam cair');
   assert.ok(s.varMes.ac_small < s.varMes.ac_blue, 'small cap cai mais (vol maior)');
@@ -982,4 +989,118 @@ test('realista: um mês fechado credita a renda em caixa e conta no patrimônio'
   assert.ok(depois.caixa > caixaAntes + depois.salario - depois.custo - 1);
   assert.ok(regras.rendaPassiva(depois) > 0);
   assert.ok(regras.patrimonio(depois) > 0);
+});
+
+// ---------- modo realista: macro viva (F2) ----------
+
+test('realista: a Selic caminha até o alvo (reversão à média), sem ruído', () => {
+  const s = realistaEmAndamento();
+  const m = s.realista.macro;
+  m.selicAlvo = m.selic + 0.04;          // COPOM sinalizou juro mais alto
+  const antes = m.selic;
+  realista.macroMes(s, rngFixo(0.5));    // 0.5 → ruído zero
+  const passo = 0.04 * config.realista.reversao;
+  assert.ok(Math.abs(m.selic - (antes + passo)) < 1e-12);
+  assert.ok(Math.abs(m.dPre - passo) < 1e-12);
+  // e não chega lá de uma vez: um choque de juros dura meses
+  assert.ok(m.selic < m.selicAlvo);
+});
+
+test('realista: juro sobe e o prefixado longo CAI — mas a curva sobe', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_pre', 10000));
+  s.realista.macro.selicAlvo = s.realista.macro.selic + 0.06; // choque de alta
+  realista.mercado(s, rngRealista());
+  const p = s.realista.posicoes.rf_pre;
+  assert.ok(s.ativos.rf_pre < 10000, 'o preço de mercado devia cair');
+  assert.ok(p.curva > 10000, 'a curva ignora a marcação e segue rendendo');
+  assert.ok(p.curva > s.ativos.rf_pre, 'quem segurar até o vencimento recebe a curva');
+});
+
+test('realista: juro CAI e o prefixado longo dispara (o outro lado da moeda)', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_pre', 10000));
+  s.realista.macro.selicAlvo = s.realista.macro.selic - 0.06; // ciclo de corte
+  realista.mercado(s, rngRealista());
+  assert.ok(s.ativos.rf_pre > 10000 * 1.01, 'queda de juro valoriza o prefixado');
+});
+
+test('realista: quanto mais longo o papel, mais dói o mesmo choque de juros', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_pre', 10000));   // duration 3
+  Object.assign(s, realista.mover(s, 'rf_ipca', 10000));  // duration 6
+  s.realista.macro.selicAlvo = s.realista.macro.selic + 0.06;
+  realista.mercado(s, rngRealista());
+  // o IPCA+ tem o dobro da duration: sofre mais marcação que o prefixado
+  assert.ok(s.varMes.rf_ipca < s.varMes.rf_pre);
+});
+
+test('realista: inflação junto com o juro protege o IPCA+ (juro REAL parado)', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_ipca', 10000));
+  const m = s.realista.macro;
+  m.selicAlvo = m.selic + 0.06;
+  m.ipcaAlvo = m.ipca + 0.06;  // inflação sobe na mesma medida
+  realista.mercado(s, rngRealista());
+  // dReal ≈ 0 → quase nenhuma marcação, e o cupom + IPCA seguem pagando
+  assert.ok(Math.abs(m.dReal) < 1e-12);
+  assert.ok(s.ativos.rf_ipca > 10000);
+});
+
+test('realista: o pós-fixado não sofre marcação a mercado — nunca', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_selic', 10000));
+  s.realista.macro.selicAlvo = s.realista.macro.selic + 0.08;
+  realista.mercado(s, rngRealista());
+  assert.ok(s.ativos.rf_selic > 10000, 'pós-fixado só sobe: é o ponto dele');
+  assert.equal(s.varMes.rf_selic, realista.mensal(s.realista.macro.selic));
+});
+
+test('realista: juro em alta machuca a bolsa, e a small cap apanha mais', () => {
+  const s = realistaEmAndamento();
+  for (const k of ['ac_blue', 'ac_small']) s.ativos[k] = 10000;
+  s.realista.macro.selicAlvo = s.realista.macro.selic + 0.10;
+  realista.mercado(s, rngRealista());
+  assert.ok(s.varMes.ac_small < s.varMes.ac_blue, 'beta maior, tombo maior');
+});
+
+test('realista: o custo de vida sobe pelo IPCA do jogo, não pela dificuldade', () => {
+  const s = realistaEmAndamento();
+  s.realista.macro.ipca = 0.12;      // inflação de 12% a.a.
+  s.realista.macro.ipcaAlvo = 0.12;  // e ancorada aí
+  const custoAntes = s.custo;
+  const depois = regras.fecharMes(s, { rng: rngRealista() });
+  const esperado = Math.round(custoAntes * (1 + realista.mensal(depois.realista.macro.ipca)));
+  assert.equal(depois.custo, esperado);
+  // e isso é bem mais do que o 1.005 fixo do hardcore
+  assert.ok(depois.custo > Math.round(custoAntes * 1.005));
+});
+
+test('realista: eventos de choque atingem a CLASSE inteira, sem criar NaN', () => {
+  const s = realistaEmAndamento();
+  s.mes = 6; // eventos só começam em config.mesMinimoEvento
+  for (const k of ['ac_blue', 'ac_small', 'ac_div', 'fii_tijolo', 'cr_btc']) s.ativos[k] = 1000;
+  // rng que garante evento (0) e cai no primeiro da roleta: o crash da bolsa
+  eventos.sortear(s, s.log, { rng: rngFixo(0, 0.001), addLog: regras.addLog });
+  assert.ok(s.log.some(l => l.texto.includes('CRASH DA BOLSA')));
+  // as TRÊS ações caíram 30%, o FII 12%, e a cripto não se mexeu
+  for (const k of ['ac_blue', 'ac_small', 'ac_div']) assert.equal(Math.round(s.ativos[k]), 700, k);
+  assert.equal(Math.round(s.ativos.fii_tijolo), 880);
+  assert.equal(s.ativos.cr_btc, 1000);
+  // e nenhuma chave dos modos antigos foi inventada no caminho
+  assert.equal('acoes' in s.ativos, false);
+  assert.equal('fiis' in s.ativos, false);
+});
+
+test('realista: nenhum mês produz NaN no patrimônio (guarda de regressão)', () => {
+  // Foi assim que o bug do crash apareceu: undefined * 0.7 = NaN, e o NaN
+  // some dentro da soma do patrimônio sem estourar em lugar nenhum.
+  let s = jogoEmAndamento({ modo: 'realista' });
+  for (let i = 0; i < 60; i++) {
+    if (s.caixa > 500) s = { ...s, ...regras.mover(s, 'ac_blue', 400) };
+    s = regras.fecharMes(s, { rng: Math.random });
+    assert.ok(Number.isFinite(regras.patrimonio(s)), 'patrimônio virou NaN no mês ' + s.mes);
+    for (const k in s.ativos) assert.ok(Number.isFinite(s.ativos[k]), k + ' virou NaN no mês ' + s.mes);
+    if (s.fim) break;
+  }
 });

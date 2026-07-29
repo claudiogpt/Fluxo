@@ -114,14 +114,58 @@
    *  é o que transforma "correlação" de texto de tooltip em mecânica. */
   const FATORES = ['juros', 'bolsaBR', 'intl', 'cripto'];
 
+  /** Prende um número entre dois limites. */
+  function limitar(v, min, max) {
+    return v < min ? min : v > max ? max : v;
+  }
+
+  /**
+   * Move a Selic e o IPCA do mês.
+   *
+   * A taxa não passeia sem rumo nem fica parada: ela caminha uma fração do
+   * caminho até o ALVO (reversão à média) e leva um empurrão aleatório. Quem
+   * mexe no alvo são os eventos de COPOM — é isso que faz um choque de juros
+   * durar meses em vez de um turno.
+   *
+   * Grava `dPre` (variação da Selic) e `dReal` (variação do juro real), que
+   * são as entradas da marcação a mercado dos títulos.
+   *
+   * Consome 4 draws: 2 no ruído da Selic, 2 no do IPCA.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {() => number} rng - Injected randomness.
+   */
+  function macroMes(s, rng) {
+    const cfg = config.realista;
+    const m = s.realista.macro;
+
+    const selicAntes = m.selic;
+    const ipcaAntes = m.ipca;
+    m.selic = limitar(
+      m.selic + (m.selicAlvo - m.selic) * cfg.reversao + cfg.volSelic * ruido(rng),
+      cfg.selicMin, cfg.selicMax
+    );
+    m.ipca = limitar(
+      m.ipca + (m.ipcaAlvo - m.ipca) * cfg.reversao + cfg.volIpca * ruido(rng),
+      cfg.ipcaMin, cfg.ipcaMax
+    );
+
+    m.dPre = m.selic - selicAntes;
+    // Juro real ≈ juro nominal − inflação. É o que precifica o IPCA+: se a
+    // inflação sobe junto com a Selic, o título indexado nem sente.
+    m.dReal = m.dPre - (m.ipca - ipcaAntes);
+  }
+
   /**
    * Aplica o retorno do mês a todos os ativos do catálogo.
    *
    * Renda fixa não sorteia nada: rende pelo indexador (Selic corrente, IPCA ou
-   * a taxa travada na compra). Renda variável combina o fator comum da sua
-   * classe com um ruído próprio — a parte que só acontece com ela.
+   * a taxa travada na compra) e sofre marcação a mercado conforme a duration.
+   * Renda variável combina o fator comum da sua classe com um ruído próprio,
+   * mais a sensibilidade a juros (`beta`).
    *
-   * Consome 2 draws por fator (4) + 2 por ativo de renda variável (10) = 28.
+   * Consome 4 draws na macro + 2 por fator (8) + 2 por ativo de renda variável
+   * (20) = 32.
    *
    * @param {GameState} s - Working copy of game state.
    * @param {() => number} rng - Injected randomness.
@@ -130,29 +174,40 @@
   function mercado(s, rng) {
     const r = s.realista;
     const m = r.macro;
+    macroMes(s, rng);
     const fatores = {};
     for (const f of FATORES) fatores[f] = ruido(rng);
 
     let renda = 0;
     for (const d of catalogo.defs) {
       const p = r.posicoes[d.key];
-      let ret;
+      // `accrual` é o que o papel rende POR CONTRATO — é ele que move a curva.
+      // `mtm` é a marcação a mercado, que só mexe no preço de hoje.
+      let accrual;
+      let mtm = 0;
       if (d.indexador === 'selic') {
-        ret = mensal(m.selic) * d.fatorIndex;
+        accrual = mensal(m.selic) * d.fatorIndex;
       } else if (d.indexador === 'ipca') {
-        ret = mensal(m.ipca) + d.taxaContratada / 12;
+        accrual = mensal(m.ipca) + d.taxaContratada / 12;
+        mtm = -d.duration * m.dReal;
       } else if (d.indexador === 'pre') {
-        ret = d.taxaContratada / 12;
+        accrual = d.taxaContratada / 12;
+        // A lição inteira em uma linha: juro sobe, preço do título longo cai.
+        // Quanto mais longo (duration), mais dói — e a perda só vira real se
+        // você vender antes do vencimento.
+        mtm = -d.duration * m.dPre;
       } else {
         // 60% do movimento é a classe inteira, 40% é o papel — dois ativos da
         // mesma categoria andam juntos sem serem clones um do outro.
-        ret = d.ret + d.vol * (0.6 * fatores[d.fator] + 0.4 * ruido(rng));
+        accrual = d.ret + d.vol * (0.6 * fatores[d.fator] + 0.4 * ruido(rng));
+        // Juro alto machuca bolsa: desconta o fluxo futuro e ainda concorre
+        // com a renda fixa. Small cap e FII de tijolo apanham mais (beta).
+        mtm = d.beta * m.dPre;
       }
+      const ret = accrual + mtm;
       s.ativos[d.key] *= (1 + ret);
       s.varMes[d.key] = ret;
-      // A curva é o valor sem marcação a mercado: o que o papel vale se você
-      // segurar até o fim. Na F1 ainda não há marcação, então anda com o saldo.
-      p.curva = s.ativos[d.key];
+      p.curva *= (1 + accrual);
       renda += s.ativos[d.key] * d.div;
     }
     r.mesRenda = renda;
@@ -192,19 +247,21 @@
       p.custo = custoAnt + v;
       if (p.mesEntrada === null) p.mesEntrada = s.mes;
       a[key] += v;
-      p.curva = a[key];
+      // Comprar HOJE é comprar pelo preço de hoje: o dinheiro novo entra na
+      // curva pelo mesmo valor, sem herdar o ágio ou o deságio do que já havia.
+      p.curva += v;
       return { ativos: a, caixa: s.caixa - v, realista: r };
     }
 
     v = Math.min(-v, a[key]);
     if (v < 1) return {};
-    // Resgate proporcional: sai a mesma fatia do custo. `mesMedio` NÃO muda —
-    // o que sai tem a mesma idade média do que fica.
+    // Resgate proporcional: sai a mesma fatia do custo e da curva. `mesMedio`
+    // NÃO muda — o que sai tem a mesma idade média do que fica.
     const fracao = v / a[key];
     p.custo = p.custo * (1 - fracao);
+    p.curva = p.curva * (1 - fracao);
     a[key] -= v;
-    p.curva = a[key];
-    if (a[key] < 1) { p.mesEntrada = null; p.custo = 0; p.mesMedio = 0; }
+    if (a[key] < 1) { p.mesEntrada = null; p.custo = 0; p.mesMedio = 0; p.curva = 0; }
     return { ativos: a, caixa: s.caixa + v, realista: r };
   }
 
@@ -234,9 +291,9 @@
       const fracao = bruto / s.ativos[key];
       const p = r.posicoes[key];
       p.custo = p.custo * (1 - fracao);
+      p.curva = p.curva * (1 - fracao);
       s.ativos[key] -= bruto;
-      if (s.ativos[key] < 1) { p.mesEntrada = null; p.custo = 0; p.mesMedio = 0; }
-      p.curva = s.ativos[key];
+      if (s.ativos[key] < 1) { p.mesEntrada = null; p.custo = 0; p.mesMedio = 0; p.curva = 0; }
       deficit -= liquido;
       const perda = Math.round((1 - d.desagio) * 100);
       avisar('⚠ ' + d.nome + ' liquidado às pressas' + (perda > 0 ? ' com ' + perda + '% de perda' : ' — sem perdas') + '.',
@@ -245,5 +302,5 @@
     return deficit;
   }
 
-  return { novoEstado, clonar, posicaoZerada, mercado, mover, cobrir, mensal };
+  return { novoEstado, clonar, posicaoZerada, macroMes, mercado, mover, cobrir, mensal };
 });

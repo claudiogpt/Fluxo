@@ -17,6 +17,7 @@ import {
   selectAtivosLista,
   selectAtivosPorCategoria,
   selectCategoriasLista,
+  selectMacro,
   selectImovelCard,
   selectNegocioCard,
   selectPainel,
@@ -36,9 +37,9 @@ const rngNeutro = () => {
   let i = 0;
   return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
 };
-// Realista: 28 draws (4 fatores comuns ×2 + 10 ativos de renda variável ×2).
+// Realista: 32 draws (4 na macro + 4 fatores comuns ×2 + 10 de renda variável ×2).
 const rngRealista = () => {
-  const vals = [...Array(28).fill(0.5), 0.99];
+  const vals = [...Array(32).fill(0.5), 0.99];
   let i = 0;
   return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
 };
@@ -138,6 +139,31 @@ describe('modos no store', () => {
     store.dispatch(fecharMes({ rng: rngRealista() }));
     expect(store.getState().game.mes).toBe(1);
     expect(selectPainel(store.getState()).rpFmt).not.toBe('R$ 0');
+  });
+
+  it('realista: a macro entra no view-model e o prefixado mostra a curva', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(comecar());
+    const macro0 = selectMacro(store.getState())!;
+    expect(macro0.selicFmt).toBe('13,65%');
+    expect(macro0.ciclo).toMatch(/ancorado/);
+
+    // compra prefixado e leva um mês de juro em alta (ruído da Selic no máximo)
+    store.dispatch(mover({ key: 'rf_pre' as never, valor: 5000 }));
+    const rngJuroSobe = () => {
+      const vals = [1, 1, 0.5, 0.5, ...Array(28).fill(0.5), 0.99];
+      let i = 0;
+      return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
+    };
+    store.dispatch(fecharMes({ rng: rngJuroSobe() }));
+
+    // o preço caiu, mas a curva subiu — e o card mostra as duas contas
+    const linha = selectAtivosPorCategoria(store.getState()).rf.find((a) => a.key === 'rf_pre')!;
+    expect(linha.curvaNota).toMatch(/na curva/);
+    expect(store.getState().game.ativos.rf_pre).toBeLessThan(5000);
+    expect(store.getState().game.realista!.posicoes.rf_pre.curva).toBeGreaterThan(5000);
+    expect(selectMacro(store.getState())!.setaSelic).toBe('▲');
   });
 
   it('realista: modos antigos seguem com a lista plana e sem categorias', () => {

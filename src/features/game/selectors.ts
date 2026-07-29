@@ -32,6 +32,10 @@ export interface LinhaAtivo {
   valorFmt: string;
   varFmt: string;
   varCor: string;
+  /** Só no realista, e só quando a marcação a mercado abriu diferença: o que
+   *  o papel vale HOJE contra o que vale se você segurar até o vencimento. */
+  curvaNota?: string;
+  curvaCor?: string;
 }
 
 /** Uma linha de card, montada a partir da definição + saldo + variação. */
@@ -92,14 +96,60 @@ export const selectCategoriasLista = createSelector(
 export const selectAtivosPorCategoria = createSelector(
   [selectRealista, selectAtivosMapa, selectVarMes],
   (realista, ativos, varMes) => {
-    const mapa: Record<string, ReturnType<typeof linhaDe>[]> = {};
+    const mapa: Record<string, LinhaAtivo[]> = {};
     if (!realista) return mapa;
     for (const c of catalogo.categorias) {
-      mapa[c.id] = catalogo.daCategoria(c.id).map((d) => linhaDe(d, ativos[d.key], varMes[d.key] || 0));
+      mapa[c.id] = catalogo.daCategoria(c.id).map((d) => {
+        const saldo = ativos[d.key];
+        const linha = linhaDe(d, saldo, varMes[d.key] || 0);
+        // A marcação a mercado só é uma lição se o jogador VÊ as duas contas:
+        // o preço de hoje e o valor no vencimento.
+        const curva = realista.posicoes[d.key].curva;
+        const dif = curva - saldo;
+        if (d.duration > 0 && saldo >= 1 && Math.abs(dif) >= 1) {
+          // `fmt` do valor ABSOLUTO: o sinal já está dito em palavras, e
+          // "paga R$ -123 a mais" é o tipo de frase que ninguém lê duas vezes.
+          const modulo = fmt(Math.abs(dif));
+          linha.curvaNota = dif > 0
+            ? `na curva: ${fmt(curva)} — vender hoje custa ${modulo} de prejuízo`
+            : `na curva: ${fmt(curva)} — o mercado paga ${modulo} a mais hoje`;
+          linha.curvaCor = dif > 0 ? 'var(--aviso)' : 'var(--sucesso)';
+        }
+        return linha;
+      });
     }
     return mapa;
   }
 );
+
+// ---- macro (Selic e IPCA) ----
+
+export const selectMacro = createSelector([selectRealista], (r) => {
+  if (!r) return null;
+  const m = r.macro;
+  const pct = (v: number) => (v * 100).toFixed(2).replace('.', ',') + '%';
+  // Juro real é razão, não subtração: (1+nominal)/(1+inflação) − 1.
+  const real = (1 + m.selic) / (1 + m.ipca) - 1;
+  // A tendência é a distância até o ALVO, não o passo do último mês: é o alvo
+  // que diz pra onde o juro caminha nos próximos meses. Dizer "COPOM sinaliza
+  // alta" quando foi só o ruído mensal seria mentir pro jogador.
+  const sobe = m.selicAlvo > m.selic + 0.002;
+  const cai = m.selicAlvo < m.selic - 0.002;
+  return {
+    selicFmt: pct(m.selic),
+    alvoFmt: pct(m.selicAlvo),
+    ipcaFmt: pct(m.ipca),
+    realFmt: pct(real),
+    realCor: real > 0 ? 'var(--sucesso)' : 'var(--perigo)',
+    setaSelic: m.dPre > 0.0001 ? '▲' : m.dPre < -0.0001 ? '▼' : '=',
+    selicCor: m.dPre > 0.0001 ? 'var(--alerta)' : m.dPre < -0.0001 ? 'var(--sucesso)' : 'var(--texto-fraco)',
+    ciclo: sobe
+      ? `Juro abaixo do alvo (${pct(m.selicAlvo)}): a tendência é subir — prefixado longo e bolsa sofrem, pós-fixado comemora.`
+      : cai
+        ? `Juro acima do alvo (${pct(m.selicAlvo)}): a tendência é cair — prefixado longo se valoriza, pós-fixado rende menos.`
+        : 'Juro ancorado no alvo. O ciclo só vira quando o COPOM mexer.',
+  };
+});
 
 // ---- painel de status ----
 

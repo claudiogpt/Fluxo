@@ -7,6 +7,7 @@ import { AtivoCard } from '../components/AtivoCard';
 import { CarteiraCategorias } from '../components/CarteiraCategorias';
 import { ImovelCard } from '../components/ImovelCard';
 import { Leaderboard } from '../components/Leaderboard';
+import { MacroCard } from '../components/MacroCard';
 import { NegocioCard } from '../components/NegocioCard';
 import { PainelStatus } from '../components/PainelStatus';
 import { TerminalEventos } from '../components/TerminalEventos';
@@ -69,6 +70,7 @@ export function GameView() {
         <div className="jogo-painel jogo-conteudo" data-ativa={marca('ativos')} style={{ gap: 10 }}>
           <NegocioCard />
           <ImovelCard />
+          <MacroCard />
           {/* No realista `ativos` vem vazia: a carteira é navegada por
               categoria. Nos outros modos a CarteiraCategorias é que não
               renderiza nada — cada um se apaga sozinho, sem `if (modo ===)`. */}

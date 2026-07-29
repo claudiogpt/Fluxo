@@ -482,9 +482,13 @@
       if (s.pendente) s.caixa -= s.pendente;
     }
 
-    // inflação de base
+    // inflação de base — no realista quem corrói o custo de vida é o IPCA do
+    // próprio jogo, que se move: a inflação deixa de ser um número fixo da
+    // dificuldade e passa a ser a mesma que o Tesouro IPCA+ está pagando.
     const dif = config.dificuldades[s.hard ? 'hardcore' : 'normal'];
-    s.custo = Math.round(s.custo * dif.inflacaoBase);
+    s.custo = Math.round(s.custo * (s.realista
+      ? 1 + realista.mensal(s.realista.macro.ipca)
+      : dif.inflacaoBase));
 
     // progressão de carreira anual (só faz sentido com salário)
     if (s.salario > 0 && s.mes % 12 === 0 && s.semSalario === 0) {

@@ -97,8 +97,11 @@
       selicBaixa: 0.06,
       ipcaInicial: 0.045,
       reversao: 0.08,          // fração do gap percorrida por mês
-      volSelic: 0.003,
-      volIpca: 0.002,
+      // 0,5 p.p. de ruído por mês é a ordem de grandeza de uma reunião do
+      // COPOM de verdade (0,25 a 0,50). Com 0,3 o juro mal se mexia e a
+      // marcação a mercado nunca vencia o rendimento do papel.
+      volSelic: 0.005,
+      volIpca: 0.003,
       selicMin: 0.02,
       selicMax: 0.22,
       ipcaMin: 0.005,

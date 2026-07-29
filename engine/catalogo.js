@@ -57,7 +57,7 @@
     },
     {
       key: 'rf_ipca', nome: 'TESOURO IPCA+', ticker: 'NTN-B 2035', categoria: 'rf',
-      indexador: 'ipca', fatorIndex: 1, taxaContratada: 0.06, duration: 6,
+      indexador: 'ipca', fatorIndex: 1, taxaContratada: 0.06, duration: 7,
       fator: null, beta: 0, ret: 0, vol: 0, div: 0,
       tributacao: 'rf', isencao: false, carencia: 0, venceEm: 120,
       taxaAdm: 0, corretagem: 0, spread: 0, comeCotas: false, desagio: 0.94,
@@ -66,7 +66,7 @@
     },
     {
       key: 'rf_pre', nome: 'TESOURO PREFIXADO', ticker: 'LTN 2029', categoria: 'rf',
-      indexador: 'pre', fatorIndex: 1, taxaContratada: 0.114, duration: 3,
+      indexador: 'pre', fatorIndex: 1, taxaContratada: 0.114, duration: 4,
       fator: null, beta: 0, ret: 0, vol: 0, div: 0,
       tributacao: 'rf', isencao: false, carencia: 0, venceEm: 60,
       taxaAdm: 0, corretagem: 0, spread: 0, comeCotas: false, desagio: 0.96,
