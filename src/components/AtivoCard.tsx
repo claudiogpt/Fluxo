@@ -30,7 +30,7 @@ export function AtivoCard({ a }: { a: Linha }) {
         {/* o imposto ANTES da venda: depois vira constatação, não decisão */}
         {a.irNota && <div style={{ fontSize: 10, color: a.irCor, marginTop: 2 }}>{a.irNota}</div>}
       </div>
-      <ControleAporte ativo={a.key as AtivoKey} />
+      <ControleAporte ativo={a.key as AtivoKey} bloqueio={a.bloqueio} />
     </div>
   );
 }

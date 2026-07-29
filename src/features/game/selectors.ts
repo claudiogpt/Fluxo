@@ -2,7 +2,7 @@
 // Só formatação/derivação — dados prontos pros componentes; callbacks ficam
 // nos componentes (dispatch). Cores e textos copiados 1:1 do original.
 import { createSelector } from '@reduxjs/toolkit';
-import { ativos as ativosDef, catalogo, config, formato, regras } from '../../engine';
+import { ativos as ativosDef, catalogo, config, formato, realista as realista_, regras } from '../../engine';
 import type { CatalogoDef, EstadoRealista, GameState } from '../../engine/types';
 import { corDoEngine } from './cores';
 
@@ -40,6 +40,8 @@ export interface LinhaAtivo {
    *  venda de propósito — depois não é mais decisão, é constatação. */
   irNota?: string;
   irCor?: string;
+  /** Só no realista: papel em carência não pode ser vendido. */
+  bloqueio?: { travado: boolean; motivo: string };
 }
 
 /** Uma linha de card, montada a partir da definição + saldo + variação. */
@@ -144,6 +146,7 @@ export const selectAtivosPorCategoria = createSelector(
           linha.irNota = notaDeIR(d, lucro, mes - pos.mesMedio, realista);
           linha.irCor = lucro > 0 && linha.irNota?.startsWith('IR') ? 'var(--aviso)' : 'var(--texto-rotulo)';
         }
+        linha.bloqueio = realista_.bloqueio({ realista, mes }, d);
         // A marcação a mercado só é uma lição se o jogador VÊ as duas contas:
         // o preço de hoje e o valor no vencimento.
         const curva = realista.posicoes[d.key].curva;
@@ -163,6 +166,26 @@ export const selectAtivosPorCategoria = createSelector(
     return mapa;
   }
 );
+
+// ---- custos da partida ----
+
+export const selectCustosMes = createSelector([selectRealista], (r) => {
+  if (!r) return null;
+  const mes = r.mesCustos.adm + r.mesCustos.corretagem + r.mesCustos.comeCotas + r.mesCustos.ir;
+  const total = r.custosTotais.adm + r.custosTotais.corretagem + r.custosTotais.comeCotas + r.custosTotais.ir;
+  if (total < 1) return null;
+  const parte = (rotulo: string, v: number) => (v >= 1 ? `${rotulo} ${fmt(v)}` : null);
+  return {
+    mesFmt: fmt(mes),
+    totalFmt: fmt(total),
+    linhas: [
+      parte('taxa adm', r.custosTotais.adm),
+      parte('corretagem', r.custosTotais.corretagem),
+      parte('come-cotas', r.custosTotais.comeCotas),
+      parte('IR', r.custosTotais.ir),
+    ].filter(Boolean).join(' · '),
+  };
+});
 
 // ---- macro (Selic e IPCA) ----
 

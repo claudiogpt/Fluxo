@@ -452,6 +452,11 @@
     if (s.realista) {
       // O realista tem mercado próprio: indexadores, fatores comuns e macro.
       divTotal = realista.mercado(s, rng);
+      // Depois do mercado: taxa de administração e come-cotas saem do saldo já
+      // rendido, e os papéis com prazo vencem pelo valor na curva.
+      const avisar = function (msg, cor) { addLog(s, logs, msg, cor, s.mes); };
+      realista.custosDoMes(s, avisar);
+      realista.vencimentos(s, avisar);
     } else {
       for (const d of defsDoModo(s)) {
         const r = d.ret + d.vol * (rng() + rng() - 1);

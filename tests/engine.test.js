@@ -959,7 +959,9 @@ test('realista.mover: mantém o contrato do mover clássico (clamp e no-op)', ()
   let s = realistaEmAndamento();
   s.caixa = 300;
   Object.assign(s, realista.mover(s, 'ac_blue', 99999)); // clampa no caixa
-  assert.equal(s.ativos.ac_blue, 300);
+  // a corretagem sai do mesmo caixa: quem manda "tudo" não pode ficar devendo
+  // a taxa, então o clamp é (caixa − corretagem)
+  assert.equal(s.ativos.ac_blue, 300 - catalogo.def('ac_blue').corretagem);
   assert.equal(s.caixa, 0);
   assert.deepEqual(realista.mover(s, 'ac_blue', 0.5), {}, 'abaixo de R$ 1 é no-op');
   assert.deepEqual(realista.mover(s, 'nao_existe', 100), {}, 'chave fora do catálogo é no-op');
@@ -1180,6 +1182,7 @@ test('realista: LCI é isenta e prejuízo não gera imposto', () => {
   let s = realistaEmAndamento();
   Object.assign(s, realista.mover(s, 'rf_lci', 10000));
   s.ativos.rf_lci = 13000;
+  s.mes = catalogo.def('rf_lci').carencia; // passada a carência de 3 meses
   const lci = { ...s, ...realista.mover(s, 'rf_lci', -13000) };
   assert.equal(lci.realista.ultimaVenda.imposto, 0);
   assert.equal(lci.caixa, s.caixa + 13000);
@@ -1203,4 +1206,116 @@ test('realista: venda parcial tributa só o lucro proporcional', () => {
   // metade do saldo = metade do custo (5.000) → lucro de 5.000 → IR de 750
   assert.equal(Math.round(meia.realista.ultimaVenda.imposto), 750);
   assert.equal(Math.round(meia.realista.posicoes.rf_cdb.custo), 5000);
+});
+
+// ---------- modo realista: liquidez e custos (F4 + F5) ----------
+
+test('realista: LCI trava na carência e libera no mês certo', () => {
+  let s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_lci', 5000));
+  const d = catalogo.def('rf_lci');
+
+  const b0 = realista.bloqueio(s, d);
+  assert.equal(b0.travado, true);
+  assert.match(b0.motivo, /libera em 3 meses/);
+  assert.deepEqual(realista.mover(s, 'rf_lci', -1000), {}, 'venda na carência é no-op');
+
+  s.mes = 2;
+  assert.equal(realista.bloqueio(s, d).travado, true);
+  s.mes = 3;
+  assert.equal(realista.bloqueio(s, d).travado, false);
+  const solto = { ...s, ...realista.mover(s, 'rf_lci', -1000) };
+  assert.ok(solto.caixa > s.caixa);
+});
+
+test('realista: aportar de novo NÃO reinicia a carência do que já estava lá', () => {
+  let s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_lci', 2000));
+  s.mes = 2;
+  Object.assign(s, realista.mover(s, 'rf_lci', 2000));
+  assert.equal(s.realista.posicoes.rf_lci.mesEntrada, 0);
+  s.mes = 3;
+  assert.equal(realista.bloqueio(s, catalogo.def('rf_lci')).travado, false);
+});
+
+test('realista: nem a liquidação forçada quebra a carência', () => {
+  const s = realistaEmAndamento();
+  s.mes = 1;
+  s.ativos.rf_lci = 50000;
+  s.ativos.cr_btc = 5000;
+  s.realista.posicoes.rf_lci.mesEntrada = 0;
+  realista.cobrir(s, 3000, () => {});
+  assert.equal(s.ativos.rf_lci, 50000, 'a LCI travada não podia ser tocada');
+  assert.ok(s.ativos.cr_btc < 5000, 'sobrou vender a cripto, com deságio');
+});
+
+test('realista: no vencimento o principal volta pelo valor NA CURVA', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 100000;
+  Object.assign(s, realista.mover(s, 'rf_cdb', 10000));
+  const d = catalogo.def('rf_cdb');
+  // simula o papel marcado abaixo da curva na véspera do vencimento
+  s.ativos.rf_cdb = 14000;
+  s.realista.posicoes.rf_cdb.curva = 15000;
+  s.mes = d.venceEm;
+  const caixaAntes = s.caixa;
+
+  const avisos = [];
+  realista.vencimentos(s, (m) => avisos.push(m));
+  assert.equal(s.ativos.rf_cdb, 0);
+  // recebeu a curva (15.000) menos o IR de 15% sobre 5.000 de lucro
+  assert.equal(Math.round(s.caixa - caixaAntes), 15000 - 750);
+  assert.match(avisos[0], /VENCEU/);
+  assert.deepEqual(s.realista.posicoes.rf_cdb, { custo: 0, mesMedio: 0, mesEntrada: null, curva: 0 });
+});
+
+test('realista: corretagem sai do caixa por ordem e aparece nos custos', () => {
+  let s = realistaEmAndamento();
+  const caixa0 = s.caixa;
+  Object.assign(s, realista.mover(s, 'ac_blue', 1000)); // corretagem R$ 5
+  assert.equal(s.caixa, caixa0 - 1000 - 5);
+  assert.equal(s.realista.custosTotais.corretagem, 5);
+
+  // cripto cobra spread proporcional em vez de taxa fixa
+  const antes = s.caixa;
+  Object.assign(s, realista.mover(s, 'cr_btc', 1000));
+  assert.equal(s.caixa, antes - 1000 - 1000 * catalogo.def('cr_btc').spread);
+});
+
+test('realista: taxa de administração sai do SALDO todo mês', () => {
+  const s = realistaEmAndamento();
+  s.ativos.int_ouro = 12000; // taxa de 0,4% a.a.
+  s.realista.posicoes.int_ouro.custo = 12000;
+  s.realista.posicoes.int_ouro.curva = 12000;
+  realista.custosDoMes(s, () => {});
+  const esperado = 12000 * (catalogo.def('int_ouro').taxaAdm / 12);
+  assert.ok(Math.abs(s.realista.custosTotais.adm - esperado) < 1e-9);
+  assert.ok(Math.abs(s.ativos.int_ouro - (12000 - esperado)) < 1e-9);
+  assert.equal(s.caixa, 100000, 'a taxa não sai do caixa: sai do saldo');
+});
+
+test('realista: come-cotas morde a cada semestre e sobe a base de custo', () => {
+  const s = realistaEmAndamento();
+  s.ativos.int_ouro = 20000;
+  s.realista.posicoes.int_ouro.custo = 10000; // R$ 10.000 de lucro
+
+  s.mes = 5;
+  realista.custosDoMes(s, () => {});
+  assert.equal(s.realista.custosTotais.comeCotas, 0, 'mês 5 não é semestre');
+
+  s.mes = 6;
+  // a taxa de administração é cobrada ANTES, então o come-cotas incide sobre o
+  // saldo já líquido dela — é a ordem real, e o teste tem que respeitá-la
+  const saldoAntes = s.ativos.int_ouro;
+  realista.custosDoMes(s, () => {});
+  const lucro = saldoAntes * (1 - catalogo.def('int_ouro').taxaAdm / 12) - 10000;
+  assert.ok(Math.abs(s.realista.custosTotais.comeCotas - lucro * 0.15) < 1e-6);
+  // a base subiu pro saldo: o lucro já tributado não é cobrado duas vezes
+  assert.equal(s.realista.posicoes.int_ouro.custo, s.ativos.int_ouro);
+
+  s.mes = 12;
+  const cobradoAntes = s.realista.custosTotais.comeCotas;
+  realista.custosDoMes(s, () => {});
+  const novo = s.realista.custosTotais.comeCotas - cobradoAntes;
+  assert.ok(novo < lucro * 0.15 * 0.05, 'sem lucro novo, quase nada a cobrar');
 });

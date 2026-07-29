@@ -40,7 +40,15 @@ const btnConfirmar = {
   borderRadius: 4,
 } as const;
 
-export function ControleAporte({ ativo }: { ativo: AtivoKey }) {
+/** `bloqueio` é opcional: os call sites dos modos clássicos não passam nada e
+ *  continuam idênticos. Só o realista tem papel que não se pode vender. */
+export function ControleAporte({
+  ativo,
+  bloqueio,
+}: {
+  ativo: AtivoKey;
+  bloqueio?: { travado: boolean; motivo: string };
+}) {
   const { caixa, ativos } = useSelector(selectGame);
   const dispatch = useDispatch<AppDispatch>();
   const [pct, setPct] = useState(0);
@@ -48,16 +56,26 @@ export function ControleAporte({ ativo }: { ativo: AtivoKey }) {
   // O mesmo percentual vale duas coisas diferentes — por isso cada botão
   // carrega o próprio valor, em vez de um readout único e ambíguo.
   const doAporte = valorDePct(caixa, pct);
-  const doResgate = valorDePct(ativos[ativo], pct);
+  const travado = !!bloqueio?.travado;
+  // Travado, o resgate vale zero: é o que desabilita os dois botões de venda
+  // sem precisar de uma segunda condição espalhada pelo JSX.
+  const doResgate = travado ? 0 : valorDePct(ativos[ativo], pct);
 
   return (
     <div style={{ gridColumn: '1/-1', borderTop: '1px solid var(--borda-suave)', paddingTop: 10, display: 'grid', gap: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <button
           type="button"
+          disabled={travado}
           onClick={() => dispatch(resgatarPct({ key: ativo, pct: 100 }))}
-          title="Resgatar tudo deste ativo"
-          style={{ ...btnTampa, background: 'var(--perigo-fundo)', border: '1px solid var(--perigo-borda)', color: 'var(--perigo)' }}
+          title={travado ? bloqueio!.motivo : 'Resgatar tudo deste ativo'}
+          style={{
+            ...btnTampa,
+            background: travado ? 'transparent' : 'var(--perigo-fundo)',
+            border: `1px solid ${travado ? 'var(--borda)' : 'var(--perigo-borda)'}`,
+            color: travado ? 'var(--texto-apagado)' : 'var(--perigo)',
+            cursor: travado ? 'default' : 'pointer',
+          }}
         >
           ZERAR
         </button>
@@ -117,6 +135,14 @@ export function ControleAporte({ ativo }: { ativo: AtivoKey }) {
           RESGATAR {formato.fmt(doResgate)}
         </button>
       </div>
+
+      {/* o motivo fica visível: botão desabilitado sem explicação é bug pro
+          jogador, não regra de jogo */}
+      {travado && (
+        <div style={{ fontSize: 10, letterSpacing: 0.5, color: 'var(--aviso)' }}>
+          🔒 {bloqueio!.motivo}
+        </div>
+      )}
     </div>
   );
 }

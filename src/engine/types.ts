@@ -257,6 +257,19 @@ export interface RealistaApi {
   novoEstado(macroInicial?: 'alta' | 'baixa'): EstadoRealista;
   clonar(r: EstadoRealista): EstadoRealista;
   posicaoZerada(): PosicaoRealista;
+  /** Taxa anual → taxa equivalente do mês. */
+  mensal(anual: number): number;
+  aliquotaRF(meses: number): number;
+  /** Carência: só precisa de `realista` e `mes` do estado. */
+  bloqueio(s: Pick<GameState, 'realista' | 'mes'>, d: CatalogoDef): { travado: boolean; motivo: string };
+  mercado(s: GameState, rng: () => number): number;
+  macroMes(s: GameState, rng: () => number): void;
+  mover(s: GameState, key: string, valor: number): Partial<GameState>;
+  cobrir(s: GameState, deficit: number, avisar: (msg: string, cor: string) => void): number;
+  custosDoMes(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  vencimentos(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  fecharContaDoMes(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  impostoDeVenda(s: GameState, d: CatalogoDef, valor: number, lucro: number): { imposto: number; aliquota: number; isento: boolean };
 }
 
 export interface FormatoApi {

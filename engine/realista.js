@@ -311,6 +311,117 @@
     return 'R$ ' + Math.round(v).toLocaleString('pt-BR');
   }
 
+  // ---------- liquidez ----------
+
+  /**
+   * Diz se a posição está travada e por quê.
+   *
+   * Liquidez é a mecânica que transforma "quanto rende" em "quanto rende E
+   * quando posso sair". A LCI paga menos que o CDB e ainda trava 3 meses — o
+   * jogador tem que decidir se o líquido compensa o cadeado.
+   *
+   * @param {GameState} s - Current game state.
+   * @param {Object} d - Catalog definition.
+   * @returns {{travado: boolean, motivo: string}} Lock status.
+   */
+  function bloqueio(s, d) {
+    const p = s.realista.posicoes[d.key];
+    if (!d.carencia || p.mesEntrada === null) return { travado: false, motivo: '' };
+    const falta = d.carencia - (s.mes - p.mesEntrada);
+    if (falta <= 0) return { travado: false, motivo: '' };
+    return {
+      travado: true,
+      motivo: 'em carência: libera em ' + falta + (falta === 1 ? ' mês' : ' meses'),
+    };
+  }
+
+  /**
+   * Vence os papéis com prazo: o principal volta pro caixa pelo valor NA CURVA.
+   *
+   * É o outro lado da marcação a mercado — quem segurou até o fim recebe o que
+   * foi contratado, e a oscilação do meio do caminho não importou. O IR é
+   * cobrado aqui também: vencimento é resgate.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {(msg: string, cor: string) => void} avisar - Log callback.
+   */
+  function vencimentos(s, avisar) {
+    const r = s.realista;
+    for (const d of catalogo.defs) {
+      if (!d.venceEm) continue;
+      const p = r.posicoes[d.key];
+      if (p.mesEntrada === null || s.ativos[d.key] < 1) continue;
+      if (s.mes - p.mesEntrada < d.venceEm) continue;
+
+      // No vencimento o preço converge pra curva: some qualquer ágio/deságio.
+      const bruto = p.curva;
+      const lucro = bruto - p.custo;
+      const ir = impostoDeVenda(s, d, bruto, lucro);
+      s.caixa += bruto - ir.imposto;
+      r.mesCustos.ir += ir.imposto;
+      r.custosTotais.ir += ir.imposto;
+      s.ativos[d.key] = 0;
+      r.posicoes[d.key] = posicaoZerada();
+      avisar('◆ ' + d.nome + ' VENCEU: +' + fmtBR(bruto - ir.imposto) + ' no caixa'
+        + (ir.imposto >= 1 ? ' (já descontado o IR)' : '') + '. Quem segurou recebeu a taxa contratada.', '#22d47e');
+    }
+  }
+
+  // ---------- custos ----------
+
+  /**
+   * Cobra os custos do mês: taxa de administração e, a cada semestre,
+   * come-cotas.
+   *
+   * A taxa de administração sai do SALDO, não do caixa — é assim que ela é
+   * invisível na vida real, e é por isso que o jogo precisa mostrá-la somada.
+   *
+   * O come-cotas antecipa 15% do lucro acumulado e sobe a base de custo, que é
+   * exatamente o efeito real: você paga antes e não paga de novo na venda.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {(msg: string, cor: string) => void} avisar - Log callback.
+   */
+  function custosDoMes(s, avisar) {
+    const cfg = config.realista;
+    const r = s.realista;
+    let adm = 0;
+    let comeCotas = 0;
+
+    for (const d of catalogo.defs) {
+      const saldo = s.ativos[d.key];
+      if (saldo < 1) continue;
+      const p = r.posicoes[d.key];
+
+      if (d.taxaAdm > 0) {
+        const custo = saldo * (d.taxaAdm / 12);
+        s.ativos[d.key] -= custo;
+        p.curva -= custo;
+        adm += custo;
+      }
+
+      if (d.comeCotas && s.mes > 0 && s.mes % cfg.comeCotasMeses === 0) {
+        const lucro = s.ativos[d.key] - p.custo;
+        if (lucro > 0) {
+          const imposto = lucro * cfg.irComeCotas;
+          s.ativos[d.key] -= imposto;
+          p.curva -= imposto;
+          // A base sobe pro que sobrou: o lucro já tributado não é cobrado de novo.
+          p.custo = s.ativos[d.key];
+          comeCotas += imposto;
+        }
+      }
+    }
+
+    r.mesCustos.adm += adm;
+    r.custosTotais.adm += adm;
+    r.mesCustos.comeCotas += comeCotas;
+    r.custosTotais.comeCotas += comeCotas;
+    if (comeCotas >= 1) {
+      avisar('▣ COME-COTAS: −' + fmtBR(comeCotas) + ' antecipados de IR nos fundos. Semestral, sem você fazer nada.', '#ffc24b');
+    }
+  }
+
   // ---------- ordens ----------
 
   /**
@@ -335,23 +446,36 @@
     let v = valor;
 
     if (v > 0) {
-      v = Math.min(v, s.caixa);
+      // A corretagem sai do caixa junto com a ordem, então ela limita o quanto
+      // dá pra comprar: quem manda "tudo" não pode ficar devendo a taxa.
+      const taxaFixa = d.corretagem || 0;
+      v = Math.min(v, s.caixa - taxaFixa);
       if (v < 1) return {};
+      const custoOrdem = taxaFixa + v * (d.spread || 0);
       // Custo médio: o que entra puxa a idade média da posição pra cima do mês
       // atual, proporcionalmente ao tamanho do aporte.
       const custoAnt = p.custo;
       p.mesMedio = custoAnt + v > 0 ? (p.mesMedio * custoAnt + s.mes * v) / (custoAnt + v) : s.mes;
       p.custo = custoAnt + v;
+      // O mesEntrada só é (re)marcado quando a posição estava vazia: comprar
+      // mais não reinicia a carência do que já estava lá.
       if (p.mesEntrada === null) p.mesEntrada = s.mes;
       a[key] += v;
       // Comprar HOJE é comprar pelo preço de hoje: o dinheiro novo entra na
       // curva pelo mesmo valor, sem herdar o ágio ou o deságio do que já havia.
       p.curva += v;
-      return { ativos: a, caixa: s.caixa - v, realista: r };
+      r.mesCustos.corretagem += custoOrdem;
+      r.custosTotais.corretagem += custoOrdem;
+      return { ativos: a, caixa: s.caixa - v - custoOrdem, realista: r };
     }
+
+    // Carência: o engine se recusa a vender o que está travado. A UI desabilita
+    // o botão antes (`bloqueio`), mas a regra mora aqui.
+    if (bloqueio(s, d).travado) return {};
 
     v = Math.min(-v, a[key]);
     if (v < 1) return {};
+    const custoSaida = (d.corretagem || 0) + v * (d.spread || 0);
     // Resgate proporcional: sai a mesma fatia do custo e da curva. `mesMedio`
     // NÃO muda — o que sai tem a mesma idade média do que fica.
     const fracao = v / a[key];
@@ -369,6 +493,8 @@
     if (r.vendasMes[classeDe(d)] !== undefined) r.vendasMes[classeDe(d)] += v;
     r.mesCustos.ir += ir.imposto;
     r.custosTotais.ir += ir.imposto;
+    r.mesCustos.corretagem += custoSaida;
+    r.custosTotais.corretagem += custoSaida;
     r.ultimaVenda = {
       key: key, bruto: v, lucro: lucro, imposto: ir.imposto,
       aliquota: ir.aliquota, isento: ir.isento, mes: s.mes,
@@ -376,7 +502,7 @@
 
     // O que cai no caixa é o LÍQUIDO. É a diferença entre o que a tela promete
     // e o que o banco credita — a lição inteira do IR em uma linha.
-    return { ativos: a, caixa: s.caixa + v - ir.imposto, realista: r };
+    return { ativos: a, caixa: s.caixa + v - ir.imposto - custoSaida, realista: r };
   }
 
   /** Classe do teto mensal de isenção a que este papel pertence. */
@@ -405,6 +531,9 @@
       if (deficit <= 0) break;
       if (s.ativos[key] < 1) continue;
       const d = catalogo.def(key);
+      // Nem a urgência quebra a carência: papel travado não vira dinheiro. É
+      // por isso que uma reserva LÍQUIDA não é a mesma coisa que patrimônio.
+      if (bloqueio(s, d).travado) continue;
       const bruto = Math.min(s.ativos[key], deficit / d.desagio);
       const liquido = bruto * d.desagio;
       const fracao = bruto / s.ativos[key];
@@ -421,5 +550,5 @@
     return deficit;
   }
 
-  return { novoEstado, clonar, posicaoZerada, macroMes, mercado, mover, cobrir, mensal, aliquotaRF, impostoDeVenda, fecharContaDoMes };
+  return { novoEstado, clonar, posicaoZerada, macroMes, mercado, mover, cobrir, mensal, aliquotaRF, impostoDeVenda, fecharContaDoMes, bloqueio, vencimentos, custosDoMes };
 });
