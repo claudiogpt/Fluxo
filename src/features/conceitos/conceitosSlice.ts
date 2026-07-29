@@ -82,6 +82,11 @@ export const selectContador = createSelector([selectTermosDesbloqueados], (desbl
   `${desbloqueados.length}/${Object.keys(conceitos.termos).length} termos desbloqueados`
 );
 
+/** Mesmo dado, sem a frase: cabe no botão do cabeçalho em tela estreita. */
+export const selectContadorCurto = createSelector([selectTermosDesbloqueados], (desbloqueados) =>
+  `${desbloqueados.length}/${Object.keys(conceitos.termos).length}`
+);
+
 /** View-model do ConceitoModal — porta o modalConceito do renderVals. */
 export const selectModalConceito = (s: ComConceitos) => {
   const m = s.conceitos.modal;

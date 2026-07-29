@@ -43,8 +43,9 @@ export function App() {
 
       {/* O glossário flutuante existe só DURANTE a partida: é consulta rápida
           sem sair da mesa. No menu ele é uma página (rota 'glossario').
-          O `bottom` vem do tema.css e não inline: no estreito ele sobe pra não
-          sentar em cima da barra de ação fixa. */}
+          Em tela estreita o tema.css esconde este botão — lá o glossário fica
+          no cabeçalho, ao lado do MENU (PainelStatus), pra não pairar sobre o
+          jogo. O `[G]` continua abrindo nos dois casos, é a mesma action. */}
       {emJogo && (
         <div className="glossario-flutuante" style={{ position: 'fixed', right: 16, zIndex: 70 }}>
           <button
