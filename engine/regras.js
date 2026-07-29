@@ -386,6 +386,10 @@
     // argumento e este mês passaria a mutar a entrada. Ver realista.clonar.
     if (st.realista) s.realista = realista.clonar(st.realista);
     const logs = s.log;
+    // Fecha a conta do mês que está terminando ANTES de virar o número: o IR
+    // pago nas vendas deste mês aparece no log com o mês em que aconteceu, e
+    // os tetos de isenção zeram pro mês seguinte.
+    if (s.realista) realista.fecharContaDoMes(s, function (msg, cor) { addLog(s, logs, msg, cor, s.mes); });
     s.mes += 1;
     s.pendente = 0;
     s.liquidacaoNoMes = false;

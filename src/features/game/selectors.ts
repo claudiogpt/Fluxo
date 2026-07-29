@@ -3,7 +3,7 @@
 // nos componentes (dispatch). Cores e textos copiados 1:1 do original.
 import { createSelector } from '@reduxjs/toolkit';
 import { ativos as ativosDef, catalogo, config, formato, regras } from '../../engine';
-import type { CatalogoDef, GameState } from '../../engine/types';
+import type { CatalogoDef, EstadoRealista, GameState } from '../../engine/types';
 import { corDoEngine } from './cores';
 
 type ComGame = { game: GameState };
@@ -36,6 +36,10 @@ export interface LinhaAtivo {
    *  o papel vale HOJE contra o que vale se você segurar até o vencimento. */
   curvaNota?: string;
   curvaCor?: string;
+  /** Só no realista: quanto o leão morde se você vender AGORA. Vem antes da
+   *  venda de propósito — depois não é mais decisão, é constatação. */
+  irNota?: string;
+  irCor?: string;
 }
 
 /** Uma linha de card, montada a partir da definição + saldo + variação. */
@@ -90,18 +94,56 @@ export const selectCategoriasLista = createSelector(
   }
 );
 
+const selectMes = (s: ComGame) => s.game.mes;
+
+/** O que o leão morde se a venda for AGORA — a decisão precisa dessa conta
+ *  antes, não depois. Mostra também quando a alíquota vai cair, que é o que
+ *  transforma "esperar" numa estratégia visível. */
+function notaDeIR(d: CatalogoDef, lucro: number, mesesNaMao: number, r: EstadoRealista): string {
+  if (d.tributacao === 'isento') return 'isento de IR';
+  if (lucro <= 0) return 'sem lucro a tributar';
+
+  if (d.tributacao === 'rf') {
+    const faixas = config.realista.aliquotasRF;
+    const atual = faixas.find(([ate]) => mesesNaMao < ate) ?? faixas[faixas.length - 1];
+    const proxima = faixas.find(([ate]) => ate > (atual[0] ?? 0));
+    const cai = proxima && atual[0] < 9999
+      ? ` · cai pra ${(proxima[1] * 100).toFixed(1).replace('.', ',')}% em ${Math.ceil(atual[0] - mesesNaMao)} ${Math.ceil(atual[0] - mesesNaMao) === 1 ? 'mês' : 'meses'}`
+      : '';
+    return `IR ${(atual[1] * 100).toFixed(1).replace('.', ',')}% sobre ${fmt(lucro)} de lucro${cai}`;
+  }
+
+  if (d.tributacao === 'fii') return `IR 20% sobre ${fmt(lucro)} de lucro (FII não tem isenção na venda)`;
+
+  const cripto = d.tributacao === 'cripto';
+  const teto = cripto ? config.realista.isencaoCripto : config.realista.isencaoAcoes;
+  const jaVendido = r.vendasMes[cripto ? 'cripto' : 'acoes'];
+  const taxa = cripto ? config.realista.irCripto : config.realista.irAcoes;
+  if (!d.isencao) return `IR ${taxa * 100}% sobre ${fmt(lucro)} — sem a isenção das ações BR`;
+  const folga = teto - jaVendido;
+  return folga > 0
+    ? `isento até ${fmt(folga)} vendidos neste mês · depois IR ${taxa * 100}%`
+    : `IR ${taxa * 100}% sobre ${fmt(lucro)} — o teto do mês já foi usado`;
+}
+
 /** Um Record pronto em vez de um selector com argumento: memoizar por
  *  parâmetro exigiria uma fábrica por categoria, e trocar de subtela
  *  invalidaria o cache a cada clique. */
 export const selectAtivosPorCategoria = createSelector(
-  [selectRealista, selectAtivosMapa, selectVarMes],
-  (realista, ativos, varMes) => {
+  [selectRealista, selectAtivosMapa, selectVarMes, selectMes],
+  (realista, ativos, varMes, mes) => {
     const mapa: Record<string, LinhaAtivo[]> = {};
     if (!realista) return mapa;
     for (const c of catalogo.categorias) {
       mapa[c.id] = catalogo.daCategoria(c.id).map((d) => {
         const saldo = ativos[d.key];
         const linha = linhaDe(d, saldo, varMes[d.key] || 0);
+        const pos = realista.posicoes[d.key];
+        const lucro = saldo - pos.custo;
+        if (saldo >= 1) {
+          linha.irNota = notaDeIR(d, lucro, mes - pos.mesMedio, realista);
+          linha.irCor = lucro > 0 && linha.irNota?.startsWith('IR') ? 'var(--aviso)' : 'var(--texto-rotulo)';
+        }
         // A marcação a mercado só é uma lição se o jogador VÊ as duas contas:
         // o preço de hoje e o valor no vencimento.
         const curva = realista.posicoes[d.key].curva;

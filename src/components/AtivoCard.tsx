@@ -27,6 +27,8 @@ export function AtivoCard({ a }: { a: Linha }) {
         <div style={{ fontSize: 11, fontWeight: 600, color: a.varCor }}>{a.varFmt}</div>
         {/* marcação a mercado: o preço de hoje contra o valor no vencimento */}
         {a.curvaNota && <div style={{ fontSize: 10, color: a.curvaCor, marginTop: 2 }}>{a.curvaNota}</div>}
+        {/* o imposto ANTES da venda: depois vira constatação, não decisão */}
+        {a.irNota && <div style={{ fontSize: 10, color: a.irCor, marginTop: 2 }}>{a.irNota}</div>}
       </div>
       <ControleAporte ativo={a.key as AtivoKey} />
     </div>

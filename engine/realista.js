@@ -75,6 +75,8 @@
       // Acumulado da partida inteira — é o número que ensina o peso dos custos.
       custosTotais: { adm: 0, corretagem: 0, comeCotas: 0, ir: 0 },
       mesRenda: 0,
+      // Última venda tributada — a UI usa pra explicar o que foi retido.
+      ultimaVenda: null,
       // Contadores de efeito temporário de evento (choque de inflação,
       // vacância no FII, suspensão da isenção). Nascem aqui para o shape do
       // que passa por structuredClone não mudar quando os eventos chegarem.
@@ -105,6 +107,7 @@
       vendasMes: { ...r.vendasMes },
       mesCustos: { ...r.mesCustos },
       custosTotais: { ...r.custosTotais },
+      ultimaVenda: r.ultimaVenda ? { ...r.ultimaVenda } : null,
     };
   }
 
@@ -214,6 +217,100 @@
     return renda;
   }
 
+  // ---------- imposto de renda ----------
+
+  /**
+   * Alíquota da tabela regressiva da renda fixa.
+   *
+   * O prazo é medido do MÊS MÉDIO dos aportes, não do primeiro: quem foi
+   * comprando aos poucos carrega uma idade média, e é ela que a Receita
+   * enxergaria se cada aporte fosse um lote.
+   *
+   * @param {number} meses - Months since the position's weighted average entry.
+   * @returns {number} Tax rate (0.225 … 0.15).
+   */
+  function aliquotaRF(meses) {
+    for (const [ate, taxa] of config.realista.aliquotasRF) {
+      if (meses < ate) return taxa;
+    }
+    return config.realista.aliquotasRF[config.realista.aliquotasRF.length - 1][1];
+  }
+
+  /**
+   * Imposto devido ao vender `valor` de um papel.
+   *
+   * Regras que o jogo ensina, todas do mundo real:
+   * - renda fixa: tabela regressiva, 22,5% caindo a 15% depois de 2 anos;
+   * - ações: 15% do LUCRO, isento se as vendas do mês couberem no teto — e o
+   *   teto é sobre o VALOR VENDIDO, não sobre o lucro (o erro clássico);
+   * - FII: 20% e nenhuma isenção, por mais que o aluguel mensal seja isento;
+   * - cripto: 15%, com teto de isenção próprio e bem maior;
+   * - LCI/LCA: nada.
+   *
+   * Prejuízo não gera imposto — e, por simplificação assumida, também não gera
+   * crédito a compensar: o jogo não tem declaração anual.
+   *
+   * @param {GameState} s - Current game state.
+   * @param {Object} d - Catalog definition.
+   * @param {number} valor - Gross amount being sold.
+   * @param {number} lucro - Realized profit inside that amount.
+   * @returns {{imposto: number, aliquota: number, isento: boolean}} Tax breakdown.
+   */
+  function impostoDeVenda(s, d, valor, lucro) {
+    const cfg = config.realista;
+    const r = s.realista;
+    if (d.tributacao === 'isento' || lucro <= 0) return { imposto: 0, aliquota: 0, isento: true };
+
+    if (d.tributacao === 'rf') {
+      const p = r.posicoes[d.key];
+      const taxa = aliquotaRF(s.mes - p.mesMedio);
+      return { imposto: lucro * taxa, aliquota: taxa, isento: false };
+    }
+
+    if (d.tributacao === 'fii') {
+      return { imposto: lucro * cfg.irFii, aliquota: cfg.irFii, isento: false };
+    }
+
+    // ações e cripto: teto MENSAL de vendas, e a venda atual conta pro teto
+    const classe = d.tributacao === 'cripto' ? 'cripto' : 'acoes';
+    const teto = d.tributacao === 'cripto' ? cfg.isencaoCripto : cfg.isencaoAcoes;
+    const taxa = d.tributacao === 'cripto' ? cfg.irCripto : cfg.irAcoes;
+    // ETF e BDR não têm a isenção das ações brasileiras — daí o campo `isencao`
+    const vendidoNoMes = r.vendasMes[classe] + valor;
+    if (d.isencao && r.mesesSemIsencao <= 0 && vendidoNoMes <= teto) {
+      return { imposto: 0, aliquota: 0, isento: true };
+    }
+    return { imposto: lucro * taxa, aliquota: taxa, isento: false };
+  }
+
+  /**
+   * Encerra a conta do mês: registra no log o que foi pago de imposto e zera
+   * os contadores mensais (tetos de isenção e custos do mês).
+   *
+   * Roda ANTES do `s.mes += 1` do `fecharMes`, para o log sair com o mês em
+   * que as vendas de fato aconteceram.
+   *
+   * @param {GameState} s - Working copy of game state.
+   * @param {(msg: string, cor: string) => void} avisar - Log callback.
+   */
+  function fecharContaDoMes(s, avisar) {
+    const r = s.realista;
+    const ir = r.mesCustos.ir;
+    if (ir >= 1) {
+      avisar('▣ IMPOSTO DE RENDA: −' + fmtBR(ir) + ' retidos nas vendas do mês. Lucro bruto não é lucro no bolso.', '#ffc24b');
+    }
+    r.vendasMes = { acoes: 0, fii: 0, cripto: 0 };
+    r.mesCustos = { adm: 0, corretagem: 0, comeCotas: 0, ir: 0 };
+    if (r.mesesSemIsencao > 0) r.mesesSemIsencao -= 1;
+    if (r.mesesVacancia > 0) r.mesesVacancia -= 1;
+    if (r.choqueInflacao > 0) r.choqueInflacao -= 1;
+  }
+
+  /** Formata reais sem depender do módulo formato (evita mais uma dependência UMD). */
+  function fmtBR(v) {
+    return 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+  }
+
   // ---------- ordens ----------
 
   /**
@@ -258,11 +355,33 @@
     // Resgate proporcional: sai a mesma fatia do custo e da curva. `mesMedio`
     // NÃO muda — o que sai tem a mesma idade média do que fica.
     const fracao = v / a[key];
-    p.custo = p.custo * (1 - fracao);
+    const custoSaido = p.custo * fracao;
+    const lucro = v - custoSaido;
+    const ir = impostoDeVenda(s, d, v, lucro);
+
+    p.custo = p.custo - custoSaido;
     p.curva = p.curva * (1 - fracao);
     a[key] -= v;
     if (a[key] < 1) { p.mesEntrada = null; p.custo = 0; p.mesMedio = 0; p.curva = 0; }
-    return { ativos: a, caixa: s.caixa + v, realista: r };
+
+    // A venda entra no contador do mês mesmo quando isenta: é ela que pode
+    // empurrar a PRÓXIMA venda pra fora do teto.
+    if (r.vendasMes[classeDe(d)] !== undefined) r.vendasMes[classeDe(d)] += v;
+    r.mesCustos.ir += ir.imposto;
+    r.custosTotais.ir += ir.imposto;
+    r.ultimaVenda = {
+      key: key, bruto: v, lucro: lucro, imposto: ir.imposto,
+      aliquota: ir.aliquota, isento: ir.isento, mes: s.mes,
+    };
+
+    // O que cai no caixa é o LÍQUIDO. É a diferença entre o que a tela promete
+    // e o que o banco credita — a lição inteira do IR em uma linha.
+    return { ativos: a, caixa: s.caixa + v - ir.imposto, realista: r };
+  }
+
+  /** Classe do teto mensal de isenção a que este papel pertence. */
+  function classeDe(d) {
+    return d.tributacao === 'cripto' ? 'cripto' : d.tributacao === 'fii' ? 'fii' : 'acoes';
   }
 
   /**
@@ -302,5 +421,5 @@
     return deficit;
   }
 
-  return { novoEstado, clonar, posicaoZerada, macroMes, mercado, mover, cobrir, mensal };
+  return { novoEstado, clonar, posicaoZerada, macroMes, mercado, mover, cobrir, mensal, aliquotaRF, impostoDeVenda, fecharContaDoMes };
 });

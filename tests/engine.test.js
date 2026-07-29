@@ -1104,3 +1104,103 @@ test('realista: nenhum mês produz NaN no patrimônio (guarda de regressão)', (
     if (s.fim) break;
   }
 });
+
+// ---------- modo realista: imposto de renda (F3) ----------
+
+test('realista: tabela regressiva da renda fixa cai com o tempo na mão', () => {
+  assert.equal(realista.aliquotaRF(0), 0.225);
+  assert.equal(realista.aliquotaRF(5.9), 0.225);
+  assert.equal(realista.aliquotaRF(6), 0.20);
+  assert.equal(realista.aliquotaRF(11), 0.20);
+  assert.equal(realista.aliquotaRF(12), 0.175);
+  assert.equal(realista.aliquotaRF(23), 0.175);
+  assert.equal(realista.aliquotaRF(24), 0.15);
+  assert.equal(realista.aliquotaRF(600), 0.15);
+});
+
+test('realista: vender CDB cedo paga 22,5%; segurar 2 anos paga 15%', () => {
+  let s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_cdb', 10000));
+  s.ativos.rf_cdb = 12000; // R$ 2.000 de lucro
+  const caixaAntes = s.caixa;
+
+  // saída no mês 3: alíquota máxima
+  s.mes = 3;
+  const cedo = { ...s, ...realista.mover(s, 'rf_cdb', -12000) };
+  assert.equal(Math.round(cedo.caixa - caixaAntes), 12000 - Math.round(2000 * 0.225));
+  assert.equal(Math.round(cedo.realista.custosTotais.ir), 450);
+
+  // mesma venda no mês 30: alíquota mínima
+  s.mes = 30;
+  const tarde = { ...s, ...realista.mover(s, 'rf_cdb', -12000) };
+  assert.equal(Math.round(tarde.caixa - caixaAntes), 12000 - Math.round(2000 * 0.15));
+});
+
+test('realista: ações são isentas até o teto MENSAL de vendas, não de lucro', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 200000;
+  Object.assign(s, realista.mover(s, 'ac_blue', 30000));
+  s.ativos.ac_blue = 60000; // dobrou: R$ 30.000 de lucro
+
+  // 1ª venda: R$ 15.000 vendidos, dentro do teto de R$ 20.000 → isenta
+  const v1 = { ...s, ...realista.mover(s, 'ac_blue', -15000) };
+  assert.equal(v1.realista.mesCustos.ir, 0);
+  assert.equal(v1.realista.vendasMes.acoes, 15000);
+  assert.equal(v1.realista.ultimaVenda.isento, true);
+
+  // 2ª venda no MESMO mês: estoura o teto → 15% sobre o lucro dela
+  const v2 = { ...v1, ...realista.mover(v1, 'ac_blue', -10000) };
+  assert.ok(v2.realista.mesCustos.ir > 0);
+  assert.equal(v2.realista.ultimaVenda.aliquota, 0.15);
+
+  // virou o mês: o teto zera e a venda seguinte volta a ser isenta
+  const proximo = regras.fecharMes(v2, { rng: rngRealista() });
+  assert.equal(proximo.realista.vendasMes.acoes, 0);
+  assert.equal(proximo.realista.mesCustos.ir, 0);
+  assert.ok(proximo.log.some(l => l.texto.includes('IMPOSTO DE RENDA')));
+});
+
+test('realista: FII paga 20% na venda mesmo com aluguel isento; ETF não tem isenção', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 100000;
+  Object.assign(s, realista.mover(s, 'fii_tijolo', 10000));
+  Object.assign(s, realista.mover(s, 'int_sp500', 10000));
+  s.ativos.fii_tijolo = 11000;
+  s.ativos.int_sp500 = 11000;
+
+  const fii = { ...s, ...realista.mover(s, 'fii_tijolo', -11000) };
+  assert.equal(Math.round(fii.realista.ultimaVenda.imposto), 200); // 20% de 1.000
+  // ETF é vendinha pequena, mas não tem a isenção das ações brasileiras
+  const etf = { ...s, ...realista.mover(s, 'int_sp500', -11000) };
+  assert.equal(Math.round(etf.realista.ultimaVenda.imposto), 150); // 15% de 1.000
+  assert.equal(etf.realista.ultimaVenda.isento, false);
+});
+
+test('realista: LCI é isenta e prejuízo não gera imposto', () => {
+  let s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'rf_lci', 10000));
+  s.ativos.rf_lci = 13000;
+  const lci = { ...s, ...realista.mover(s, 'rf_lci', -13000) };
+  assert.equal(lci.realista.ultimaVenda.imposto, 0);
+  assert.equal(lci.caixa, s.caixa + 13000);
+
+  let t = realistaEmAndamento();
+  Object.assign(t, realista.mover(t, 'ac_blue', 10000));
+  t.ativos.ac_blue = 6000; // prejuízo
+  const perda = { ...t, ...realista.mover(t, 'ac_blue', -6000) };
+  assert.equal(perda.realista.ultimaVenda.imposto, 0);
+});
+
+test('realista: venda parcial tributa só o lucro proporcional', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 100000;
+  s.mes = 40; // fora das faixas altas: 15%
+  Object.assign(s, realista.mover(s, 'rf_cdb', 10000));
+  s.realista.posicoes.rf_cdb.mesMedio = 0;
+  s.ativos.rf_cdb = 20000; // 100% de lucro
+
+  const meia = { ...s, ...realista.mover(s, 'rf_cdb', -10000) };
+  // metade do saldo = metade do custo (5.000) → lucro de 5.000 → IR de 750
+  assert.equal(Math.round(meia.realista.ultimaVenda.imposto), 750);
+  assert.equal(Math.round(meia.realista.posicoes.rf_cdb.custo), 5000);
+});
