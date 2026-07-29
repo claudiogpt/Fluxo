@@ -4,6 +4,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Provider } from 'react-redux';
+import { confirmarModal } from '../features/conceitos/thunks';
 import { comecar, escolherModo } from '../features/game/gameSlice';
 import { makeStore } from '../store';
 import { GameView } from './GameView';
@@ -99,6 +100,15 @@ describe('carteira por categoria (modo realista)', () => {
     fireEvent.click(screen.getByRole('button', { name: /INTERNACIONAL/ }));
     // MAX do primeiro card da categoria: S&P 500
     fireEvent.click(screen.getAllByRole('button', { name: 'MAX' })[0]);
+
+    // O 1º aporte num ativo que carrega conceito passa pelo modal educacional
+    // — no realista o conceito vem do catálogo (aqui, diversificação
+    // geográfica). O overlay mora no App, não no GameView, então o teste
+    // confirma pelo store: a ação fica PENDENTE e só executa no "entendi".
+    expect(store.getState().conceitos.modal?.id).toBe('diversificacaoGeografica');
+    expect(store.getState().game.ativos.int_sp500).toBe(0);
+
+    store.dispatch(confirmarModal());
     expect(store.getState().game.ativos.int_sp500).toBeGreaterThan(0);
     expect(store.getState().game.caixa).toBe(0);
   });

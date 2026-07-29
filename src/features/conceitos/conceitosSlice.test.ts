@@ -9,6 +9,10 @@ import {
   selectTermosDesbloqueados,
 } from './conceitosSlice';
 
+// O glossário cresce a cada conceito novo (o realista trouxe nove): o que o
+// teste afirma é a REGRA de desbloqueio, não o tamanho do dicionário.
+const TOTAL = Object.keys(conceitos.termos).length;
+
 describe('conceitosSlice', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -18,7 +22,7 @@ describe('conceitosSlice', () => {
     const store = makeStore();
     // `peculium` tem `sempre: true` no engine — é o nome do jogo, nasce aberto
     expect(selectTermosDesbloqueados(store.getState())).toEqual(['peculium']);
-    expect(selectContador(store.getState())).toBe('1/9 termos desbloqueados');
+    expect(selectContador(store.getState())).toBe(`1/${TOTAL} termos desbloqueados`);
     const trancados = selectGlossarioLista(store.getState()).filter((t) => t.id !== 'peculium');
     expect(trancados.every((t) => t.nome === '???')).toBe(true);
   });
@@ -27,7 +31,7 @@ describe('conceitosSlice', () => {
     const store = makeStore();
     store.dispatch(marcarVisto('acoes')); // tooltip acoes → termo volatilidade
     expect(selectTermosDesbloqueados(store.getState())).toContain('volatilidade');
-    expect(selectContador(store.getState())).toBe('2/9 termos desbloqueados');
+    expect(selectContador(store.getState())).toBe(`2/${TOTAL} termos desbloqueados`);
     expect(selectJaVisto('acoes')(store.getState())).toBe(true);
     const linha = selectGlossarioLista(store.getState()).find((t) => t.id === 'volatilidade');
     expect(linha?.nome).toBe('Volatilidade');
@@ -42,13 +46,13 @@ describe('conceitosSlice', () => {
     // formato idêntico ao que engine/conceitos.js grava — protótipo lê direto
     expect(localStorage.getItem(conceitos.CHAVE)).toBe(JSON.stringify(['reserva']));
     // tooltip reserva cita cdi + selic → 2 termos, + a curiosidade peculium
-    expect(selectContador(store.getState())).toBe('3/9 termos desbloqueados');
+    expect(selectContador(store.getState())).toBe(`3/${TOTAL} termos desbloqueados`);
   });
 
   it('inicializa a partir do progresso já salvo pelo protótipo', () => {
     localStorage.setItem(conceitos.CHAVE, JSON.stringify(['sequencia']));
     const store = makeStore();
     expect(selectTermosDesbloqueados(store.getState())).toContain('sequenciaRetornos');
-    expect(selectContador(store.getState())).toBe('2/9 termos desbloqueados');
+    expect(selectContador(store.getState())).toBe(`2/${TOTAL} termos desbloqueados`);
   });
 });

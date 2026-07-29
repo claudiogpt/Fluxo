@@ -1319,3 +1319,102 @@ test('realista: come-cotas morde a cada semestre e sobe a base de custo', () => 
   const novo = s.realista.custosTotais.comeCotas - cobradoAntes;
   assert.ok(novo < lucro * 0.15 * 0.05, 'sem lucro novo, quase nada a cobrar');
 });
+
+// ---------- modo realista: eventos e setup (F6) ----------
+
+test('realista: COPOM move o ALVO, não a taxa — o ciclo dura meses', () => {
+  const s = realistaEmAndamento();
+  s.mes = 6;
+  const selicAntes = s.realista.macro.selic;
+  // rng: passa na chance (0), e cai no evento de COPOM APERTA
+  const alvoDoAperto = 10 + 16 + 12 + 10 + 16 + 12 + 12 + 8 + 8 + 6 + 5 + 1;
+  const total = 16 + 12 + 10 + 16 + 12 + 12 + 8 + 8 + 6 + 5 + 14 + 12 + 10 + 10 + 8 + 6 + 5;
+  eventos.sortear(s, s.log, { rng: rngFixo(0, (alvoDoAperto + 0.5) / total, 0.5), addLog: regras.addLog });
+  assert.ok(s.log.some(l => /COPOM/.test(l.texto)), 'devia ter saído um COPOM: ' + s.log[0].texto);
+  assert.notEqual(s.realista.macro.selicAlvo, selicAntes, 'o ALVO tinha que se mexer');
+  assert.equal(s.realista.macro.selic, selicAntes, 'a taxa NÃO anda no mesmo turno');
+});
+
+test('realista: eventos exclusivos não vazam pros outros modos (e vice-versa)', () => {
+  const textos = new Set();
+  for (let i = 0; i < 600; i++) {
+    const s = jogoEmAndamento({ modo: 'classico', dificuldade: 'hardcore' });
+    s.mes = 10;
+    eventos.sortear(s, s.log, { rng: Math.random, addLog: regras.addLog });
+    for (const l of s.log) textos.add(l.texto);
+  }
+  const juntos = [...textos].join(' ');
+  assert.ok(!/COPOM|CRISE CAMBIAL|VACÂNCIA|FGC/.test(juntos), 'evento do realista vazou pro clássico');
+
+  const doRealista = new Set();
+  for (let i = 0; i < 600; i++) {
+    const s = jogoEmAndamento({ modo: 'realista', dificuldade: 'hardcore' });
+    s.mes = 10;
+    eventos.sortear(s, s.log, { rng: Math.random, addLog: regras.addLog });
+    for (const l of s.log) doRealista.add(l.texto);
+  }
+  const txtR = [...doRealista].join(' ');
+  assert.ok(/COPOM/.test(txtR), 'o realista precisa ver COPOM');
+  assert.ok(!/INADIMPLENTE|FORNECEDORES/.test(txtR), 'evento de empresário vazou pro realista');
+});
+
+test('realista: vacância corta o aluguel do FII de tijolo por alguns meses', () => {
+  const s = realistaEmAndamento();
+  s.ativos.fii_tijolo = 100000;
+  const normal = realista.mercado(s, rngRealista());
+
+  const t = realistaEmAndamento();
+  t.ativos.fii_tijolo = 100000;
+  t.realista.mesesVacancia = 4;
+  const comVacancia = realista.mercado(t, rngRealista());
+  assert.ok(comVacancia < normal * 0.75, 'o aluguel tinha que cair de verdade');
+
+  // e o contador anda até zerar
+  realista.fecharContaDoMes(t, () => {});
+  assert.equal(t.realista.mesesVacancia, 3);
+});
+
+test('realista: suspensão da isenção tira o benefício das ações por 12 meses', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 100000;
+  Object.assign(s, realista.mover(s, 'ac_blue', 10000));
+  s.ativos.ac_blue = 15000;
+  s.realista.mesesSemIsencao = 12;
+  const venda = { ...s, ...realista.mover(s, 'ac_blue', -5000) };
+  assert.ok(venda.realista.ultimaVenda.imposto > 0, 'sem isenção, venda pequena paga IR');
+});
+
+test('realista: o cenário macro sobrevive a trocar a dificuldade (props → novoJogo)', () => {
+  const s = regras.novoJogo({ modo: 'realista', macroInicial: 'baixa' });
+  assert.equal(s.realista.macroInicial, 'baixa');
+  // é assim que o gameSlice.recriar reconstrói: relendo do estado anterior
+  const refeito = regras.novoJogo({ modo: 'realista', dificuldade: 'hardcore', macroInicial: s.realista.macroInicial });
+  assert.equal(refeito.realista.macroInicial, 'baixa');
+  assert.equal(refeito.realista.macro.selic, config.realista.selicBaixa);
+});
+
+test('realista: COPOM não corta juro com a inflação apertando o juro real', () => {
+  const s = realistaEmAndamento();
+  s.mes = 6;
+  s.realista.macro.selic = 0.05;
+  s.realista.macro.selicAlvo = 0.05;
+  s.realista.macro.ipca = 0.09; // juro real negativo
+  // roda o sorteio até cair num COPOM, comparando o alvo IMEDIATAMENTE antes
+  // de cada tentativa (um APERTA no meio do caminho move o alvo legitimamente)
+  let viuManter = false;
+  for (let i = 0; i < 500; i++) {
+    const antes = s.log.length;
+    const alvoAntes = s.realista.macro.selicAlvo;
+    eventos.sortear(s, s.log, { rng: Math.random, addLog: regras.addLog });
+    if (s.log.length === antes || !/COPOM/.test(s.log[0].texto)) continue;
+    assert.ok(!/CORTA/.test(s.log[0].texto), 'cortou juro com juro real negativo: ' + s.log[0].texto);
+    if (/MANTÉM/.test(s.log[0].texto)) {
+      assert.equal(s.realista.macro.selicAlvo, alvoAntes, 'manter significa não mexer no alvo');
+      viuManter = true;
+      break;
+    }
+    // foi um APERTA: sobe o juro, então recompõe o cenário de juro real baixo
+    s.realista.macro.ipca = s.realista.macro.selicAlvo + 0.04;
+  }
+  assert.ok(viuManter, 'em 500 sorteios devia ter saído ao menos um COPOM MANTÉM');
+});

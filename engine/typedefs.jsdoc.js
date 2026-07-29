@@ -62,7 +62,6 @@
 
 /**
  * @typedef {Object} PosicaoRealista
- * @property {number} saldo
  * @property {number} custo         custo médio de aquisição do que ainda está na mão
  * @property {number} mesMedio      idade média ponderada dos aportes (base do IR regressivo)
  * @property {number|null} mesEntrada

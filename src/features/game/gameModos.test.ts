@@ -6,7 +6,9 @@ import {
   aportarNegocio,
   comecar,
   escolherCenario,
+  escolherDificuldade,
   escolherEstrategia,
+  escolherMacro,
   escolherModo,
   fecharMes,
   mover,
@@ -164,6 +166,25 @@ describe('modos no store', () => {
     expect(store.getState().game.ativos.rf_pre).toBeLessThan(5000);
     expect(store.getState().game.realista!.posicoes.rf_pre.curva).toBeGreaterThan(5000);
     expect(selectMacro(store.getState())!.setaSelic).toBe('▲');
+  });
+
+  it('realista: o cenário macro do setup sobrevive a trocar a dificuldade', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(escolherMacro('baixa'));
+    expect(selectSetupPagina(store.getState()).macro?.valor).toBe('baixa');
+
+    // `recriar` refaz o estado do zero a cada clique de menu: sem a linha
+    // macroInicial no spread, esta escolha sumiria em silêncio
+    store.dispatch(escolherDificuldade('hardcore'));
+    expect(store.getState().game.realista?.macroInicial).toBe('baixa');
+    expect(selectSetupPagina(store.getState()).macro?.valor).toBe('baixa');
+
+    // e o setup do realista não mostra os ajustes que não são dele
+    const cfg = selectSetupPagina(store.getState());
+    expect(cfg.capitais).toBeNull();
+    expect(cfg.saque).toBeNull();
+    expect(cfg.estrategia).toBeNull();
   });
 
   it('realista: modos antigos seguem com a lista plana e sem categorias', () => {

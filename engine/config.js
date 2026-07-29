@@ -106,6 +106,9 @@
       selicMax: 0.22,
       ipcaMin: 0.005,
       ipcaMax: 0.20,
+      // Regra de reação: com o juro REAL abaixo disso, o COPOM não corta. É o
+      // que impede o absurdo de juro caindo com inflação de dois dígitos.
+      juroRealMinimoPraCortar: 0.02,
 
       // Imposto de renda. A tabela regressiva é [mesesAté, alíquota]: quem
       // segura por mais tempo paga menos — a lição inteira em quatro linhas.

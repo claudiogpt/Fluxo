@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { conceitos } from '../engine';
 import { makeStore } from '../store';
 import { marcarVisto } from '../features/conceitos/conceitosSlice';
 import { Glossario } from './Glossario';
@@ -11,15 +12,19 @@ describe('Glossario', () => {
     localStorage.clear();
   });
 
-  it('mostra os 8 termos de jogo bloqueados como ??? quando nada foi visto', () => {
+  it('mostra todo termo de jogo bloqueado como ??? quando nada foi visto', () => {
     const store = makeStore();
     render(
       <Provider store={store}>
         <Glossario fechar={() => {}} />
       </Provider>
     );
-    expect(screen.getAllByText('???')).toHaveLength(8); // peculium nasce aberto
-    expect(screen.getByText('1/9 termos desbloqueados')).toBeTruthy();
+    // derivado do engine, não contado à mão: o glossário cresce a cada
+    // conceito novo e um número literal aqui só cria manutenção
+    const total = Object.keys(conceitos.termos).length;
+    const sempre = Object.values(conceitos.termos).filter((t) => (t as { sempre?: boolean }).sempre).length;
+    expect(screen.getAllByText('???')).toHaveLength(total - sempre);
+    expect(screen.getByText(`${sempre}/${total} termos desbloqueados`)).toBeTruthy();
     expect(screen.getByText('Peculium')).toBeTruthy();
   });
 
@@ -34,8 +39,11 @@ describe('Glossario', () => {
       store.dispatch(marcarVisto('acoes')); // cita o termo volatilidade
     });
     expect(screen.getByText('Volatilidade')).toBeTruthy();
-    expect(screen.getAllByText('???')).toHaveLength(7);
-    expect(screen.getByText('2/9 termos desbloqueados')).toBeTruthy();
+    const total2 = Object.keys(conceitos.termos).length;
+    const sempre2 = Object.values(conceitos.termos).filter((t) => (t as { sempre?: boolean }).sempre).length;
+    const desbloqueados = conceitos.tooltips.acoes.termos.length;
+    expect(screen.getAllByText('???')).toHaveLength(total2 - sempre2 - desbloqueados);
+    expect(screen.getByText(`2/${Object.keys(conceitos.termos).length} termos desbloqueados`)).toBeTruthy();
   });
 
   it('o botão FECHAR chama o callback', () => {

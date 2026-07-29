@@ -148,8 +148,11 @@
       m.selic + (m.selicAlvo - m.selic) * cfg.reversao + cfg.volSelic * ruido(rng),
       cfg.selicMin, cfg.selicMax
     );
+    // Durante um choque de preços a inflação não só sobe: ela fica mais
+    // ERRÁTICA. Por isso a volatilidade dobra enquanto o choque dura.
+    const volIpca = cfg.volIpca * (s.realista.choqueInflacao > 0 ? 2 : 1);
     m.ipca = limitar(
-      m.ipca + (m.ipcaAlvo - m.ipca) * cfg.reversao + cfg.volIpca * ruido(rng),
+      m.ipca + (m.ipcaAlvo - m.ipca) * cfg.reversao + volIpca * ruido(rng),
       cfg.ipcaMin, cfg.ipcaMax
     );
 
@@ -211,7 +214,10 @@
       s.ativos[d.key] *= (1 + ret);
       s.varMes[d.key] = ret;
       p.curva *= (1 + accrual);
-      renda += s.ativos[d.key] * d.div;
+      // Vacância: o galpão vazio não paga aluguel. "Renda garantida" não existe
+      // — é a lição que o dividend yield sozinho nunca conta.
+      const corte = (d.key === 'fii_tijolo' && r.mesesVacancia > 0) ? 0.6 : 1;
+      renda += s.ativos[d.key] * d.div * corte;
     }
     r.mesRenda = renda;
     return renda;

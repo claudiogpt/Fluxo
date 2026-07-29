@@ -83,7 +83,8 @@ export interface EstadoNegocio {
  *  o estado inteiro passa por structuredClone a cada action. O IR sai de
  *  `custo` (custo médio) e `mesMedio` (idade média ponderada dos aportes). */
 export interface PosicaoRealista {
-  saldo: number;
+  // sem `saldo`: o saldo mora em GameState.ativos[key], como em todo modo.
+  // Duas cópias do mesmo número divergiriam na primeira liquidação forçada.
   custo: number;
   mesMedio: number;
   /** mês do 1º aporte; null = nunca comprado (não há carência a contar) */
@@ -300,6 +301,7 @@ export interface ConfigApi {
     selicAlta: number; selicBaixa: number; ipcaInicial: number;
     reversao: number; volSelic: number; volIpca: number;
     selicMin: number; selicMax: number; ipcaMin: number; ipcaMax: number;
+    juroRealMinimoPraCortar: number;
     /** [mesesAté, alíquota] — regressiva: segurar por mais tempo paga menos */
     aliquotasRF: [number, number][];
     irAcoes: number; irFii: number; irCripto: number; irComeCotas: number;

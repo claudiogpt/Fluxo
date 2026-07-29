@@ -116,6 +116,20 @@ export const selectSetupPagina = createSelector([(s: ComGame) => s.game], (s) =>
             : 'aluguel ' + fmt(im.aluguel) + '/mês — sobra mais no bolso; disciplina decide se rende mais que o tijolo',
         }
       : null) as GrupoVM | null,
+    // Mesma regra dos outros: olha se o ENGINE montou o sub-estado, não o nome
+    // do modo. O cenário macro é a escolha que muda o jogo inteiro no realista.
+    macro: (s.realista
+      ? {
+          valor: s.realista.macroInicial,
+          opcoes: [
+            { id: 'alta', rotulo: 'SELIC ALTA' },
+            { id: 'baixa', rotulo: 'SELIC BAIXA' },
+          ],
+          dica: s.realista.macroInicial === 'alta'
+            ? 'Selic em ' + (config.realista.selicAlta * 100).toFixed(2).replace('.', ',') + '%: renda fixa paga muito bem e a bolsa apanha. Prefixado longo é aposta em queda de juro.'
+            : 'Selic em ' + (config.realista.selicBaixa * 100).toFixed(2).replace('.', ',') + '%: o pós-fixado rende pouco e vale correr risco. Prefixado longo é aposta em juro parado.',
+        }
+      : null) as GrupoVM | null,
     resumo:
       'capital inicial ' +
       fmt(s.caixa) +

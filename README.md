@@ -47,6 +47,8 @@ Funções puras sobre um objeto de estado plano. UMD: `window.Fluxo.*` no browse
 | `formato.js` | `fmt` (R$), `fmtCompacto`, `fmtTempo`, `sparkline`. |
 | `placar.js` | Placar global: um board por modo, Supabase via REST, fallback localStorage. |
 | `conceitos.js` | Dicionário central educacional: termos do glossário + tooltips e a regra de desbloqueio. |
+| `catalogo.js` | Catálogo do modo **realista**: 15 ativos em 5 categorias, com indexador, prazo, tributação e custos de cada papel. |
+| `realista.js` | Mecânicas do modo realista: macro viva, IR na venda, carência/vencimento e custos. `regras.js` delega pra cá quando `s.realista` existe. |
 
 A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo — é isso que torna as regras testáveis. Semântica das transições: `fecharMes` muta e retorna o estado completo; as demais retornam parciais pra merge.
 
@@ -72,6 +74,8 @@ A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo — �
 
 O menu é uma **pilha de rotas** no `uiSlice` (`home → modos → setup`, etc.), não um router: o app é um `index.html` estático, não há partida linkável (o jogo é não determinístico) e `game.tela` — que pertence ao engine — já decide menu vs. jogo. `ESC` sobe um nível; a pilha nunca esvazia.
 
+O modo **realista** é o carro-chefe: carteira de 15 ativos navegada por categoria (drill-down), Selic e IPCA que se movem e arrastam os papéis com eles, marcação a mercado, IR na venda, carência e custos. Fidelidade ao mundo real ganha de balanceamento neste modo — é decisão de produto, não descuido. A regra de vitória, porém, é a mesma dos outros (renda passiva ≥ custo de vida), o que mantém o placar comparável.
+
 Detalhe que morde: **`cenarios` é um MODO no engine** (`regras.js` só monta o cenário quando `modo === 'cenarios'`), mas na UI virou um botão de primeiro nível. Por isso `selectModosLista` esconde esse id e `escolherCenario` entra no modo junto — sem isso, escolher um cenário vindo de outro modo começaria uma partida clássica em silêncio.
 
 Toda cor vive em `src/tema.css`, em ~38 tokens semânticos; tema, fonte e escala são atributos no `<html>` (`data-tema`, `data-fonte`, `data-escala`). Nenhum outro arquivo do `src/` pode ter cor literal — **há um teste que reprova o commit se tiver** (`features/game/cores.test.ts`), inclusive checando que toda cor emitida pelo engine tem token correspondente.
@@ -87,6 +91,7 @@ Nota do free tier: o projeto **pausa após ~7 dias sem uso** (o jogo cai gracios
 - **Mudar balanceamento**: `engine/config.js`.
 - **Adicionar um botão no menu**: inclua o id novo em `RotaId` (`src/features/ui/uiSlice.ts`) — o `tsc` vai acusar o `Record` incompleto em `MenuRouter.tsx`, que é o seu lembrete de criar a página; depois entre com o item em `ITENS_HOME` (`menuItens.ts`). Um item com `disponivel: false` já sai como "EM BREVE".
 - **Adicionar/ajustar uma cor**: `src/tema.css`, nos DOIS temas. Se a cor vem do engine (`riscoCor`, cor de log), mapeie em `src/features/game/cores.ts`.
+- **Adicionar um ativo ao modo realista**: uma entrada em `engine/catalogo.js` (e a chave em `ordemLiquidacao`). A UI o exibe sozinha, dentro da categoria dele. Se o `conceito` da definição casar com um tooltip de `conceitos.js`, o 1º aporte já dispara a interceptação educacional.
 - **Adicionar um modo de jogo**: entre em `config.modos` com `disponivel: false` ("EM BREVE" automático na página de modos). Mecânica: trate o `modo` em `engine/regras.js` + testes; UI: selectors em `src/features/game/selectors.ts` e, se precisar, um card novo em `src/components/`. Ajustes próprios do modo entram como mais um bloco condicional em `selectSetupPagina` + `PaginaSetup.tsx`. O placar do modo é automático se ele terminar com `s.fim`; ajuste `scoreDe` em `engine/placar.js` se a métrica não for "menos meses".
 - **Adicionar um conceito educacional**: nova entrada em `engine/conceitos.js` (`tooltips` + `termos`). Gatilho por clique: intercepte com `executarComConceito` em `src/features/conceitos/thunks.ts`; gatilho por estado: adicione a condição no listener 3 de `src/store/listeners.ts`. Glossário atualiza sozinho.
 - **Adicionar um ativo**: `engine/ativos.js` (+ ordem de liquidação em `config.js`). A UI o exibe automaticamente, e o card **não cresce**: a alocação é um trilho percentual (`src/components/ControleAporte.tsx`), não uma fileira de botões de valor fixo.

@@ -119,7 +119,7 @@
       fator: 'bolsaBR', beta: -3, ret: 0.016, vol: 0.07, div: 0.005,
       tributacao: 'acoes', isencao: true, carencia: 0, venceEm: null,
       taxaAdm: 0, corretagem: 5, spread: 0, comeCotas: false, desagio: 0.9,
-      risco: 'ALTO', riscoCor: '#ff9d4b', conceito: 'volatilidade',
+      risco: 'ALTO', riscoCor: '#ff9d4b', conceito: 'acoes',
       dica: 'As maiores empresas da bolsa. Caem 30% sem pedir licença — volatilidade só vira perda quando você é forçado a vender.',
     },
     {
@@ -128,7 +128,7 @@
       fator: 'bolsaBR', beta: -6, ret: 0.022, vol: 0.11, div: 0.001,
       tributacao: 'acoes', isencao: true, carencia: 0, venceEm: null,
       taxaAdm: 0, corretagem: 5, spread: 0, comeCotas: false, desagio: 0.85,
-      risco: 'ALTO', riscoCor: '#ff9d4b', conceito: 'volatilidade',
+      risco: 'ALTO', riscoCor: '#ff9d4b', conceito: 'acoes',
       dica: 'Empresas pequenas: crescem mais rápido e apanham muito mais de juro alto. É a bolsa com o volume no máximo.',
     },
     {
@@ -177,7 +177,7 @@
       fator: 'cripto', beta: -2, ret: 0.030, vol: 0.20, div: 0,
       tributacao: 'cripto', isencao: true, carencia: 0, venceEm: null,
       taxaAdm: 0, corretagem: 0, spread: 0.005, comeCotas: false, desagio: 0.85,
-      risco: 'EXTREMO', riscoCor: '#ff4d5e', conceito: 'volatilidade',
+      risco: 'EXTREMO', riscoCor: '#ff4d5e', conceito: 'cripto',
       dica: 'Pode dobrar, pode derreter 45% num mês, e não paga renda nenhuma. Vendas até R$ 35 mil no mês são isentas.',
     },
     {
@@ -186,7 +186,7 @@
       fator: 'cripto', beta: -2.5, ret: 0.032, vol: 0.26, div: 0,
       tributacao: 'cripto', isencao: true, carencia: 0, venceEm: null,
       taxaAdm: 0, corretagem: 0, spread: 0.005, comeCotas: false, desagio: 0.82,
-      risco: 'EXTREMO', riscoCor: '#ff4d5e', conceito: 'volatilidade',
+      risco: 'EXTREMO', riscoCor: '#ff4d5e', conceito: 'cripto',
       dica: 'Anda colado no bitcoin e oscila ainda mais. Duas criptos na carteira não são diversificação: é a mesma aposta em dobro.',
     },
   ];
