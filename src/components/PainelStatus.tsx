@@ -2,6 +2,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPainel } from '../features/game/selectors';
 import { voltarMenu } from '../features/game/gameSlice';
+import { selectContadorCurto } from '../features/conceitos/conceitosSlice';
+import { alternarGlossario } from '../features/ui/uiSlice';
 import type { AppDispatch } from '../store';
 
 const card = {
@@ -13,8 +15,20 @@ const card = {
 
 const rotulo = { color: 'var(--texto-rotulo)', fontSize: 10, letterSpacing: 1 } as const;
 
+const botaoTopo = {
+  background: 'transparent',
+  border: '1px solid var(--borda)',
+  color: 'var(--texto-rotulo)',
+  fontSize: 10,
+  letterSpacing: 1,
+  padding: '5px 10px',
+  borderRadius: 3,
+  cursor: 'pointer',
+} as const;
+
 export function PainelStatus() {
   const p = useSelector(selectPainel);
+  const glossarioCurto = useSelector(selectContadorCurto);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
@@ -39,12 +53,23 @@ export function PainelStatus() {
         <svg width={180} height={34} viewBox="0 0 180 34" style={{ display: 'block', flex: 'none', maxWidth: '100%' }} aria-hidden="true">
           <polyline points={p.sparkPoints} fill="none" stroke={p.sparkCor} strokeWidth={1.5} />
         </svg>
-        <button
-          onClick={() => dispatch(voltarMenu())}
-          style={{ background: 'transparent', border: '1px solid var(--borda)', color: 'var(--texto-rotulo)', fontSize: 10, letterSpacing: 1, padding: '5px 10px', borderRadius: 3, cursor: 'pointer' }}
-        >
-          ◂ MENU
-        </button>
+        {/* No largo `.acoes-topo` é `display: contents` — o wrapper some do
+            layout e o MENU segue solto na linha, como antes. No estreito ele
+            vira uma faixa própria, centralizada, com o glossário ao lado (e aí
+            o botão flutuante some, em vez de pairar sobre o jogo). */}
+        <div className="acoes-topo">
+          <button onClick={() => dispatch(voltarMenu())} style={botaoTopo}>
+            ◂ MENU
+          </button>
+          <button
+            className="glossario-topo"
+            onClick={() => dispatch(alternarGlossario())}
+            style={{ ...botaoTopo, alignItems: 'center', gap: 6 }}
+            aria-label="Abrir glossário"
+          >
+            📖 {glossarioCurto}
+          </button>
+        </div>
         <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
           <div style={rotulo}>PATRIMÔNIO TOTAL</div>
           <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--texto-forte)' }}>{p.patrimonioFmt}</div>

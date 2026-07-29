@@ -223,6 +223,17 @@ textarea {
   bottom: 16px;
 }
 
+/* `contents` faz o wrapper sumir do layout: no largo o MENU continua sendo um
+   filho direto do flex do cabeçalho, exatamente como antes de existir a faixa
+   mobile. E o glossário do topo não aparece — no largo quem serve é o botão
+   flutuante, que ali não tem barra de ação pra atrapalhar. */
+.acoes-topo {
+  display: contents;
+}
+.glossario-topo {
+  display: none;
+}
+
 /* Repartição dos botões da barra de ação. Vive aqui, e não inline, porque no
    estreito precisa mudar — e estilo inline venceria a media query. */
 .jogo-acoes > button {
@@ -278,12 +289,21 @@ textarea {
   .jogo-atalhos {
     display: none;
   }
-  /* O flutuante do glossário sobe pra não sentar em cima da barra de ação.
-     152px cobre o PIOR caso medido: sandbox tem 3 botões e a barra quebra em
-     duas linhas (131px). Com 2 botões ela fica em 72px e sobra folga — é o
-     preço de não medir a barra em JS só pra posicionar um botão. */
+  /* No estreito o glossário sai de cima do jogo e vira botão de cabeçalho, ao
+     lado do MENU: a tela é pequena demais pra ter um elemento pairando sobre o
+     conteúdo. Isso também aposenta o antigo `bottom: 152px`, número mágico que
+     existia só pra desviar da barra de ação fixa. */
   .glossario-flutuante {
-    bottom: 152px;
+    display: none;
+  }
+  .acoes-topo {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+  }
+  .glossario-topo {
+    display: inline-flex;
   }
   /* uma linha só, e o rótulo sem quebrar dentro do botão — é o que mantém a
      barra em ~72px e o deslocamento do glossário acima previsível */
