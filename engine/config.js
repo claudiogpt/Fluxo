@@ -25,7 +25,7 @@
       { id: 'sandbox', nome: 'SANDBOX', descricao: 'Sem falência e sem pressa: escolha o capital inicial e teste estratégias à vontade.', disponivel: true },
       { id: 'empresario', nome: 'EMPRESÁRIO', descricao: 'Sem salário: viva do seu negócio. Reinvestir pra crescer ou sacar pra investir? PJ não é seu bolso.', disponivel: true },
       { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Situações da vida real pra atravessar com as decisões certas de alocação.', disponivel: true },
-      { id: 'realista', nome: 'REALISTA', descricao: 'A carteira completa: 15 ativos em 5 categorias, com imposto, liquidez, custos e a Selic se movendo embaixo de você.', disponivel: false },
+      { id: 'realista', nome: 'REALISTA', descricao: 'A carteira completa: 15 ativos em 5 categorias, com imposto, liquidez, custos e a Selic se movendo embaixo de você.', disponivel: true },
     ],
 
     // Placar global (Supabase). Preencha url e anonKey pra ligar o online;

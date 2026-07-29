@@ -290,6 +290,8 @@
    * @returns {Partial<GameState>} Fields to merge, or `{}` if noop.
    */
   function mover(s, key, valor) {
+    // O realista precisa manter custo médio e idade dos aportes junto da ordem.
+    if (s.realista) return realista.mover(s, key, valor);
     const a = { ...s.ativos };
     let v = valor;
     if (v > 0) {
@@ -315,6 +317,11 @@
    * @returns {number} Remaining uncovered amount (> 0 = still broke).
    */
   function cobrir(s, deficit, logs) {
+    // config.liquidacao só conhece as 5 chaves antigas: no realista ele não
+    // acharia nada, cobriria R$ 0 e o jogador quebraria com a carteira cheia.
+    if (s.realista) {
+      return realista.cobrir(s, deficit, function (msg, cor) { addLog(s, logs, msg, cor, s.mes); });
+    }
     for (const [k, fator, msg] of config.liquidacao) {
       if (deficit <= 0) break;
       if (s.ativos[k] < 1) continue;
@@ -438,11 +445,16 @@
 
     // retornos de mercado
     let divTotal = 0;
-    for (const d of defsDoModo(s)) {
-      const r = d.ret + d.vol * (rng() + rng() - 1);
-      s.ativos[d.key] *= (1 + r);
-      s.varMes[d.key] = r;
-      divTotal += s.ativos[d.key] * d.div;
+    if (s.realista) {
+      // O realista tem mercado próprio: indexadores, fatores comuns e macro.
+      divTotal = realista.mercado(s, rng);
+    } else {
+      for (const d of defsDoModo(s)) {
+        const r = d.ret + d.vol * (rng() + rng() - 1);
+        s.ativos[d.key] *= (1 + r);
+        s.varMes[d.key] = r;
+        divTotal += s.ativos[d.key] * d.div;
+      }
     }
     if (divTotal >= 1) { s.caixa += divTotal; addLog(s, logs, '● Renda passiva recebida: +' + fmt(divTotal) + '.', '#22d47e', s.mes); }
 

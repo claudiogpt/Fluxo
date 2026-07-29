@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AtivoCard } from '../components/AtivoCard';
+import { CarteiraCategorias } from '../components/CarteiraCategorias';
 import { ImovelCard } from '../components/ImovelCard';
 import { Leaderboard } from '../components/Leaderboard';
 import { NegocioCard } from '../components/NegocioCard';
@@ -26,6 +27,10 @@ export function GameView() {
   const p = useSelector(selectPainel);
   const dispatch = useDispatch<AppDispatch>();
   const [aba, setAba] = useState<Aba>('ativos');
+  // Categoria aberta no drill-down do realista. Mora aqui pelo mesmo motivo da
+  // aba: é navegação de UI, não regra de negócio — o gameSlice é o espelho do
+  // engine e o uiSlice é a pilha do MENU.
+  const [categoria, setCategoria] = useState<string | null>(null);
 
   const marca = (id: Aba) => (aba === id ? 'sim' : 'nao');
 
@@ -64,6 +69,10 @@ export function GameView() {
         <div className="jogo-painel jogo-conteudo" data-ativa={marca('ativos')} style={{ gap: 10 }}>
           <NegocioCard />
           <ImovelCard />
+          {/* No realista `ativos` vem vazia: a carteira é navegada por
+              categoria. Nos outros modos a CarteiraCategorias é que não
+              renderiza nada — cada um se apaga sozinho, sem `if (modo ===)`. */}
+          <CarteiraCategorias aberta={categoria} aoAbrir={setCategoria} aoVoltar={() => setCategoria(null)} />
           {ativos.map((a) => (
             <AtivoCard key={a.key} a={a} />
           ))}

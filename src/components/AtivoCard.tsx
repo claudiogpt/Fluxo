@@ -2,10 +2,12 @@
 // os 8 botões de valor fixo saíram porque a fileira crescia junto com o número
 // de ativos, e o percentual não cresce.
 import type { AtivoKey } from '../engine/types';
-import { type selectAtivosLista } from '../features/game/selectors';
+import { type LinhaAtivo } from '../features/game/selectors';
 import { ControleAporte } from './ControleAporte';
 
-type Linha = ReturnType<typeof selectAtivosLista>[number];
+// Mesma linha nos dois mundos: a lista plana dos 5 clássicos e a subtela de
+// categoria do realista produzem o mesmo view-model.
+type Linha = LinhaAtivo;
 
 export function AtivoCard({ a }: { a: Linha }) {
   return (

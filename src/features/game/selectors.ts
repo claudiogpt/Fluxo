@@ -2,34 +2,103 @@
 // Só formatação/derivação — dados prontos pros componentes; callbacks ficam
 // nos componentes (dispatch). Cores e textos copiados 1:1 do original.
 import { createSelector } from '@reduxjs/toolkit';
-import { ativos as ativosDef, config, formato, regras } from '../../engine';
-import type { GameState } from '../../engine/types';
+import { ativos as ativosDef, catalogo, config, formato, regras } from '../../engine';
+import type { CatalogoDef, GameState } from '../../engine/types';
 import { corDoEngine } from './cores';
 
 type ComGame = { game: GameState };
 
 export const selectGame = (s: ComGame) => s.game;
 
+// Entradas ESTREITAS pros selectors do realista: `selectGame` inteiro muda a
+// cada tick de 500ms (por causa de `s.agora`), e com 15 ativos + agregação por
+// categoria isso recomputaria duas vezes por segundo à toa.
+const selectAtivosMapa = (s: ComGame) => s.game.ativos;
+const selectVarMes = (s: ComGame) => s.game.varMes;
+const selectRealista = (s: ComGame) => s.game.realista;
+
 const { fmt, fmtTempo, sparkline } = formato;
 
 // ---- cards de ativos ----
 
+/** View-model de um card de ativo — igual pros 5 clássicos e pros 15 do catálogo. */
+export interface LinhaAtivo {
+  key: string;
+  nome: string;
+  ticker: string;
+  dica: string;
+  riscoLabel: string;
+  riscoCor: string;
+  valorFmt: string;
+  varFmt: string;
+  varCor: string;
+}
+
+/** Uma linha de card, montada a partir da definição + saldo + variação. */
+function linhaDe(d: CatalogoDef | (typeof ativosDef)[number], v: number, r: number): LinhaAtivo {
+  return {
+    key: d.key,
+    nome: d.nome,
+    ticker: d.ticker,
+    dica: d.dica,
+    riscoLabel: d.risco,
+    riscoCor: corDoEngine(d.riscoCor),
+    valorFmt: fmt(v),
+    varFmt: v < 1 ? '—' : (r >= 0 ? '▲ +' : '▼ ') + (r * 100).toFixed(1) + '% no mês',
+    varCor: v < 1 ? 'var(--texto-apagado)' : r >= 0 ? 'var(--sucesso)' : 'var(--perigo)',
+  };
+}
+
+/** Lista plana dos 5 ativos clássicos. Vazia no realista: lá a carteira é
+ *  navegada por categoria (selectCategoriasLista + selectAtivosPorCategoria). */
 export const selectAtivosLista = createSelector([selectGame], (s) =>
-  ativosDef.map((d) => {
-    const v = s.ativos[d.key];
-    const r = s.varMes[d.key] || 0;
-    return {
-      key: d.key,
-      nome: d.nome,
-      ticker: d.ticker,
-      dica: d.dica,
-      riscoLabel: d.risco,
-      riscoCor: corDoEngine(d.riscoCor),
-      valorFmt: fmt(v),
-      varFmt: v < 1 ? '—' : (r >= 0 ? '▲ +' : '▼ ') + (r * 100).toFixed(1) + '% no mês',
-      varCor: v < 1 ? 'var(--texto-apagado)' : r >= 0 ? 'var(--sucesso)' : 'var(--perigo)',
-    };
-  })
+  s.realista ? [] : ativosDef.map((d) => linhaDe(d, s.ativos[d.key], s.varMes[d.key] || 0))
+);
+
+// ---- carteira do realista (drill-down por categoria) ----
+
+export const selectCategoriasLista = createSelector(
+  [selectRealista, selectAtivosMapa, selectVarMes],
+  (realista, ativos, varMes) => {
+    if (!realista) return null;
+    return catalogo.categorias.map((c) => {
+      const defs = catalogo.daCategoria(c.id);
+      const total = defs.reduce((t, d) => t + ativos[d.key], 0);
+      const renda = defs.reduce((t, d) => t + ativos[d.key] * d.div, 0);
+      // Variação da categoria = média PONDERADA pelo saldo. Sem posição, a
+      // categoria não tem variação própria pra mostrar — mostra o traço.
+      const varPond = total > 0
+        ? defs.reduce((t, d) => t + (varMes[d.key] || 0) * ativos[d.key], 0) / total
+        : 0;
+      const comPosicao = defs.filter((d) => ativos[d.key] >= 1).length;
+      return {
+        id: c.id,
+        nome: c.nome,
+        dica: c.dica,
+        totalFmt: fmt(total),
+        temPosicao: total >= 1,
+        rendaFmt: renda >= 1 ? '+' + fmt(renda) + ' / mês' : 'sem renda em caixa',
+        varFmt: total < 1 ? '—' : (varPond >= 0 ? '▲ +' : '▼ ') + (varPond * 100).toFixed(1) + '%',
+        varCor: total < 1 ? 'var(--texto-apagado)' : varPond >= 0 ? 'var(--sucesso)' : 'var(--perigo)',
+        resumo: comPosicao > 0 ? `${comPosicao} de ${defs.length} com posição` : `${defs.length} ativos`,
+      };
+    });
+  }
+);
+
+/** Um Record pronto em vez de um selector com argumento: memoizar por
+ *  parâmetro exigiria uma fábrica por categoria, e trocar de subtela
+ *  invalidaria o cache a cada clique. */
+export const selectAtivosPorCategoria = createSelector(
+  [selectRealista, selectAtivosMapa, selectVarMes],
+  (realista, ativos, varMes) => {
+    const mapa: Record<string, ReturnType<typeof linhaDe>[]> = {};
+    if (!realista) return mapa;
+    for (const c of catalogo.categorias) {
+      mapa[c.id] = catalogo.daCategoria(c.id).map((d) => linhaDe(d, ativos[d.key], varMes[d.key] || 0));
+    }
+    return mapa;
+  }
 );
 
 // ---- painel de status ----

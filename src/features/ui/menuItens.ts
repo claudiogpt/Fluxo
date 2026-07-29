@@ -19,7 +19,7 @@ export const ITENS_HOME: readonly ItemMenu[] = [
     id: 'modos',
     icone: '▸',
     rotulo: 'MODOS DE JOGO',
-    descricao: 'clássico, sandbox e empresário',
+    descricao: 'clássico, realista, sandbox e empresário',
     disponivel: true,
   },
   {

@@ -13,7 +13,14 @@ import {
   reinvestirNegocio,
   sacarNegocio,
 } from './gameSlice';
-import { selectImovelCard, selectNegocioCard, selectPainel } from './selectors';
+import {
+  selectAtivosLista,
+  selectAtivosPorCategoria,
+  selectCategoriasLista,
+  selectImovelCard,
+  selectNegocioCard,
+  selectPainel,
+} from './selectors';
 import { selectSetupPagina } from './selectorsMenu';
 
 // 10 draws neutros (5 ativos ×2) + 0.99 no sorteio de evento (não sorteia).
@@ -26,6 +33,12 @@ const rngNeutro10 = () => {
 };
 const rngNeutro = () => {
   const vals = [...Array(12).fill(0.5), 0.99];
+  let i = 0;
+  return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
+};
+// Realista: 28 draws (4 fatores comuns ×2 + 10 ativos de renda variável ×2).
+const rngRealista = () => {
+  const vals = [...Array(28).fill(0.5), 0.99];
   let i = 0;
   return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
 };
@@ -97,5 +110,41 @@ describe('modos no store', () => {
     expect(locais.length).toBe(1);
     expect(locais[0].modo).toBe('sandbox');
     expect(locais[0].resultado).toBe('marco');
+  });
+  it('realista: carteira por categoria, ordem com custo médio e mês fechado', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(comecar());
+
+    // 5 categorias, todas zeradas — a lista plana some neste modo
+    const cats0 = selectCategoriasLista(store.getState())!;
+    expect(cats0.map((c) => c.id)).toEqual(['rf', 'fii', 'acoes', 'intl', 'cripto']);
+    expect(cats0.every((c) => !c.temPosicao)).toBe(true);
+    expect(selectAtivosLista(store.getState())).toEqual([]);
+
+    // aportar num ativo do catálogo soma na categoria dele, e só nela
+    store.dispatch(mover({ key: 'fii_tijolo' as never, valor: 2000 }));
+    const cats1 = selectCategoriasLista(store.getState())!;
+    expect(cats1.find((c) => c.id === 'fii')?.totalFmt).toBe('R$ 2.000');
+    expect(cats1.find((c) => c.id === 'acoes')?.temPosicao).toBe(false);
+    expect(store.getState().game.realista?.posicoes.fii_tijolo.custo).toBe(2000);
+
+    // a subtela da categoria lista os ativos daquela categoria
+    const porCat = selectAtivosPorCategoria(store.getState());
+    expect(porCat.fii.map((a) => a.key)).toEqual(['fii_tijolo', 'fii_papel']);
+    expect(porCat.rf.length).toBe(5);
+
+    // fechar o mês roda o mercado do realista (28 draws) e paga aluguel
+    store.dispatch(fecharMes({ rng: rngRealista() }));
+    expect(store.getState().game.mes).toBe(1);
+    expect(selectPainel(store.getState()).rpFmt).not.toBe('R$ 0');
+  });
+
+  it('realista: modos antigos seguem com a lista plana e sem categorias', () => {
+    const store = makeStore();
+    store.dispatch(comecar());
+    expect(selectCategoriasLista(store.getState())).toBeNull();
+    expect(selectAtivosLista(store.getState()).map((a) => a.key))
+      .toEqual(['reserva', 'rendafixa', 'fiis', 'acoes', 'cripto']);
   });
 });

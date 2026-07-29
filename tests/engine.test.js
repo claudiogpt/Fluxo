@@ -57,9 +57,9 @@ test('novoJogo registra dificuldade e modo no estado', () => {
   assert.equal(regras.novoJogo({}).modo, 'classico');
 });
 
-test('config.modos: clássico, sandbox, empresário e cenários disponíveis; speedrun em breve', () => {
+test('config.modos: os cinco modos jogáveis, nesta ordem', () => {
   const disponiveis = config.modos.filter(m => m.disponivel);
-  assert.deepEqual(disponiveis.map(m => m.id), ['classico', 'sandbox', 'empresario', 'cenarios']);
+  assert.deepEqual(disponiveis.map(m => m.id), ['classico', 'sandbox', 'empresario', 'cenarios', 'realista']);
 });
 
 // ---------- modo sandbox ----------
@@ -820,7 +820,8 @@ test('realista: novoJogo monta posições zeradas pros 15 ativos do catálogo', 
   assert.equal(s.custo, Math.round(config.realista.salario * config.realista.custoFator));
   for (const d of catalogo.defs) {
     assert.equal(s.ativos[d.key], 0);
-    assert.deepEqual(s.realista.posicoes[d.key], { saldo: 0, custo: 0, mesMedio: 0, mesEntrada: null, curva: 0 });
+    // sem `saldo` de propósito: o saldo mora em s.ativos, como em todo modo
+    assert.deepEqual(s.realista.posicoes[d.key], { custo: 0, mesMedio: 0, mesEntrada: null, curva: 0 });
   }
 });
 
@@ -843,11 +844,11 @@ test('realista é ADITIVO: os modos antigos seguem com 5 ativos e sem sub-estado
 test('realista.clonar é PROFUNDO: mexer na cópia não toca no original', () => {
   const r = realista.novoEstado('alta');
   const c = realista.clonar(r);
-  c.posicoes.ac_blue.saldo = 999;
+  c.posicoes.ac_blue.custo = 999;
   c.macro.selic = 0.99;
   c.vendasMes.acoes = 5000;
   c.mesCustos.ir = 42;
-  assert.equal(r.posicoes.ac_blue.saldo, 0);
+  assert.equal(r.posicoes.ac_blue.custo, 0);
   assert.equal(r.macro.selic, config.realista.selicAlta);
   assert.equal(r.vendasMes.acoes, 0);
   assert.equal(r.mesCustos.ir, 0);
@@ -859,4 +860,126 @@ test('realista: fecharMes não muta o estado recebido (nem as posições)', () =
   const antes = JSON.parse(JSON.stringify(s));
   regras.fecharMes(s, { rng: rngFixo(...Array(40).fill(0.5), 0.99) });
   assert.deepEqual(JSON.parse(JSON.stringify(s)), antes);
+});
+
+// ---------- modo realista: mercado e ordens (F1) ----------
+
+// 28 draws no mercado (2 por fator comum × 4 + 2 por ativo de renda variável
+// × 10) e 1 no sorteio de evento. O 0.99 final mantém o mês sem evento.
+const rngRealista = () => rngFixo(...Array(28).fill(0.5), 0.99);
+
+function realistaEmAndamento(props) {
+  const s = jogoEmAndamento(Object.assign({ modo: 'realista' }, props || {}));
+  s.caixa = 100000; // capital de teste, pra não esbarrar no clamp do caixa
+  return s;
+}
+
+test('realista: o mercado consome exatamente 28 draws de rng', () => {
+  const s = realistaEmAndamento();
+  let n = 0;
+  const rng = () => { n++; return 0.5; };
+  realista.mercado(s, rng);
+  assert.equal(n, 28);
+});
+
+test('realista: renda fixa rende pelo indexador, sem sortear nada', () => {
+  const s = realistaEmAndamento();
+  s.ativos.rf_selic = 10000;
+  s.ativos.rf_pre = 10000;
+  realista.mercado(s, rngRealista());
+  // pós-fixado: Selic do mês corrente (13,65% a.a. → ~1,07% a.m.)
+  assert.equal(s.varMes.rf_selic, realista.mensal(config.realista.selicAlta));
+  // prefixado: a taxa travada na compra, indiferente à Selic
+  assert.equal(s.varMes.rf_pre, catalogo.def('rf_pre').taxaContratada / 12);
+  // e o pós rende mais que o pré nesta macro de juro alto
+  assert.ok(s.ativos.rf_selic > s.ativos.rf_pre);
+});
+
+test('realista: Selic baixa inverte quem rende mais na renda fixa', () => {
+  const s = jogoEmAndamento({ modo: 'realista', macroInicial: 'baixa' });
+  s.ativos.rf_selic = 10000;
+  s.ativos.rf_pre = 10000;
+  realista.mercado(s, rngRealista());
+  assert.ok(s.ativos.rf_pre > s.ativos.rf_selic);
+});
+
+test('realista: ativos da mesma classe caem juntos (fator comum)', () => {
+  const s = realistaEmAndamento();
+  for (const k of ['ac_blue', 'ac_small', 'cr_btc']) s.ativos[k] = 10000;
+  // fator da bolsa bem negativo, fatores seguintes e ruídos próprios neutros
+  const rng = rngFixo(0.5, 0.5, /* juros */ 0, 0, /* bolsaBR */ 0.5, 0.5, /* intl */ 1, 1, /* cripto */ 0.5);
+  realista.mercado(s, rng);
+  assert.ok(s.varMes.ac_blue < 0, 'blue chips deviam cair');
+  assert.ok(s.varMes.ac_small < s.varMes.ac_blue, 'small cap cai mais (vol maior)');
+  assert.ok(s.varMes.cr_btc > 0, 'cripto tem fator próprio e não acompanha a bolsa');
+});
+
+test('realista.mover: aporte guarda custo médio e idade média dos aportes', () => {
+  let s = realistaEmAndamento();
+  s.mes = 0;
+  Object.assign(s, realista.mover(s, 'ac_blue', 1000));
+  assert.equal(s.ativos.ac_blue, 1000);
+  assert.equal(s.realista.posicoes.ac_blue.custo, 1000);
+  assert.equal(s.realista.posicoes.ac_blue.mesEntrada, 0);
+  // segundo aporte, 10 meses depois e do mesmo tamanho: idade média vai pro meio
+  s.mes = 10;
+  Object.assign(s, realista.mover(s, 'ac_blue', 1000));
+  assert.equal(s.realista.posicoes.ac_blue.custo, 2000);
+  assert.equal(s.realista.posicoes.ac_blue.mesMedio, 5);
+});
+
+test('realista.mover: resgate parcial tira a mesma fatia do custo e não muda a idade', () => {
+  let s = realistaEmAndamento();
+  s.mes = 4;
+  Object.assign(s, realista.mover(s, 'fii_tijolo', 1000));
+  s.ativos.fii_tijolo = 2000; // dobrou de valor
+  s.mes = 12;
+  Object.assign(s, realista.mover(s, 'fii_tijolo', -1000)); // vende metade
+  const p = s.realista.posicoes.fii_tijolo;
+  assert.equal(s.ativos.fii_tijolo, 1000);
+  assert.equal(p.custo, 500);       // metade do custo saiu junto
+  assert.equal(p.mesMedio, 4);      // o que ficou tem a mesma idade do que saiu
+});
+
+test('realista.mover: zerar a posição limpa custo, idade e entrada', () => {
+  let s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'cr_btc', 5000));
+  Object.assign(s, realista.mover(s, 'cr_btc', -5000));
+  assert.deepEqual(s.realista.posicoes.cr_btc, { custo: 0, mesMedio: 0, mesEntrada: null, curva: 0 });
+});
+
+test('realista.mover: mantém o contrato do mover clássico (clamp e no-op)', () => {
+  let s = realistaEmAndamento();
+  s.caixa = 300;
+  Object.assign(s, realista.mover(s, 'ac_blue', 99999)); // clampa no caixa
+  assert.equal(s.ativos.ac_blue, 300);
+  assert.equal(s.caixa, 0);
+  assert.deepEqual(realista.mover(s, 'ac_blue', 0.5), {}, 'abaixo de R$ 1 é no-op');
+  assert.deepEqual(realista.mover(s, 'nao_existe', 100), {}, 'chave fora do catálogo é no-op');
+});
+
+test('realista: liquidação forçada usa a ordem do catálogo, não config.liquidacao', () => {
+  const s = realistaEmAndamento();
+  s.ativos.rf_selic = 1000;
+  s.ativos.cr_eth = 5000;
+  const avisos = [];
+  const falta = realista.cobrir(s, 3000, (msg) => avisos.push(msg));
+  // tolerância de centavo: o cobrir trabalha em ponto flutuante, como o original
+  assert.ok(falta < 0.01, 'a carteira cobria o déficit, sobrou ' + falta);
+  // gastou o pós-fixado inteiro (sem deságio) antes de tocar na cripto
+  assert.equal(s.ativos.rf_selic, 0);
+  assert.ok(s.ativos.cr_eth < 5000 && s.ativos.cr_eth > 0);
+  assert.match(avisos[0], /TESOURO SELIC/);
+  assert.match(avisos[1], /ETHEREUM/);
+});
+
+test('realista: um mês fechado credita a renda em caixa e conta no patrimônio', () => {
+  const s = realistaEmAndamento();
+  Object.assign(s, realista.mover(s, 'fii_tijolo', 50000));
+  const caixaAntes = s.caixa;
+  const depois = regras.fecharMes(s, { rng: rngRealista() });
+  // FII paga aluguel em caixa: entra salário − custo + aluguel
+  assert.ok(depois.caixa > caixaAntes + depois.salario - depois.custo - 1);
+  assert.ok(regras.rendaPassiva(depois) > 0);
+  assert.ok(regras.patrimonio(depois) > 0);
 });
