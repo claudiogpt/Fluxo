@@ -61,6 +61,47 @@
  */
 
 /**
+ * @typedef {Object} PosicaoRealista
+ * @property {number} saldo
+ * @property {number} custo         custo médio de aquisição do que ainda está na mão
+ * @property {number} mesMedio      idade média ponderada dos aportes (base do IR regressivo)
+ * @property {number|null} mesEntrada
+ * @property {number} curva         valor sem marcação a mercado (o que vale no vencimento)
+ */
+
+/**
+ * @typedef {Object} MacroRealista
+ * @property {number} selic
+ * @property {number} selicAlvo
+ * @property {number} ipca
+ * @property {number} ipcaAlvo
+ * @property {number} dPre          variação da Selic no mês (marcação do prefixado)
+ * @property {number} dReal         variação do juro real (marcação do IPCA+)
+ */
+
+/**
+ * @typedef {Object} CustosRealista
+ * @property {number} adm
+ * @property {number} corretagem
+ * @property {number} comeCotas
+ * @property {number} ir
+ */
+
+/**
+ * @typedef {Object} EstadoRealista
+ * @property {'alta'|'baixa'} macroInicial
+ * @property {MacroRealista} macro
+ * @property {Record<string, PosicaoRealista>} posicoes
+ * @property {{acoes: number, fii: number, cripto: number}} vendasMes
+ * @property {CustosRealista} mesCustos
+ * @property {CustosRealista} custosTotais
+ * @property {number} mesRenda
+ * @property {number} choqueInflacao
+ * @property {number} mesesVacancia
+ * @property {number} mesesSemIsencao
+ */
+
+/**
  * @typedef {Object} GameState
  * @property {'intro'|'jogo'} tela
  * @property {Dificuldade} dificuldade
@@ -70,13 +111,14 @@
  * @property {EstadoAposentadoria|null} aposentadoria
  * @property {EstadoImoveis|null} imoveis
  * @property {EstadoNegocio|null} negocio
+ * @property {EstadoRealista|null} realista
  * @property {number} mes
  * @property {number} caixa
  * @property {number} salario
  * @property {number} custo
  * @property {number} semSalario
- * @property {Record<AtivoKey, number>} ativos
- * @property {Record<AtivoKey, number>} varMes
+ * @property {Record<string, number>} ativos
+ * @property {Record<string, number>} varMes
  * @property {number[]} hist
  * @property {LogItem[]} log
  * @property {FimDeJogo|null} fim
@@ -100,6 +142,7 @@
  * @property {string|null} [cenario]
  * @property {'fixo'|'percentual'} [saqueModo]
  * @property {'comprar'|'alugar'} [imoveisEscolha]
+ * @property {'alta'|'baixa'} [macroInicial]
  */
 
 /**

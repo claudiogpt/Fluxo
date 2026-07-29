@@ -25,6 +25,7 @@
       { id: 'sandbox', nome: 'SANDBOX', descricao: 'Sem falência e sem pressa: escolha o capital inicial e teste estratégias à vontade.', disponivel: true },
       { id: 'empresario', nome: 'EMPRESÁRIO', descricao: 'Sem salário: viva do seu negócio. Reinvestir pra crescer ou sacar pra investir? PJ não é seu bolso.', disponivel: true },
       { id: 'cenarios', nome: 'CENÁRIOS', descricao: 'Situações da vida real pra atravessar com as decisões certas de alocação.', disponivel: true },
+      { id: 'realista', nome: 'REALISTA', descricao: 'A carteira completa: 15 ativos em 5 categorias, com imposto, liquidez, custos e a Selic se movendo embaixo de você.', disponivel: false },
     ],
 
     // Placar global (Supabase). Preencha url e anonKey pra ligar o online;
@@ -79,6 +80,44 @@
       aluguel: 1200,           // aluguel do imóvel equivalente (1% do valor)
       valorizacaoMes: 0.015,   // valorização média mensal do imóvel (taxa própria)
       volImovel: 0.01,         // ruído da valorização
+    },
+
+    // Modo realista: o carro-chefe. As propriedades de cada PAPEL (retorno,
+    // carência, tributação) moram em engine/catalogo.js — aqui ficam só os
+    // números que valem pro modo inteiro.
+    realista: {
+      caixaInicial: 5000,
+      salario: 6000,
+      custoFator: 0.62,
+
+      // Ciclo macro. A Selic passeia em direção ao alvo (reversão à média) com
+      // ruído; os eventos de COPOM movem o ALVO, não a taxa — é o que faz um
+      // choque de juros durar meses em vez de um turno.
+      selicAlta: 0.1365,
+      selicBaixa: 0.06,
+      ipcaInicial: 0.045,
+      reversao: 0.08,          // fração do gap percorrida por mês
+      volSelic: 0.003,
+      volIpca: 0.002,
+      selicMin: 0.02,
+      selicMax: 0.22,
+      ipcaMin: 0.005,
+      ipcaMax: 0.20,
+
+      // Imposto de renda. A tabela regressiva é [mesesAté, alíquota]: quem
+      // segura por mais tempo paga menos — a lição inteira em quatro linhas.
+      aliquotasRF: [[6, 0.225], [12, 0.20], [24, 0.175], [9999, 0.15]],
+      irAcoes: 0.15,
+      irFii: 0.20,
+      irCripto: 0.15,
+      irComeCotas: 0.15,
+      isencaoAcoes: 20000,     // teto MENSAL de VENDAS (não de lucro) isentas
+      isencaoCripto: 35000,
+      comeCotasMeses: 6,
+
+      // Custos. `ordemMinima` é só didático: abaixo disso o log avisa que a
+      // corretagem come o aporte, sem bloquear a ordem.
+      ordemMinima: 20,
     },
 
     // Eventos aleatórios só começam a partir deste mês.

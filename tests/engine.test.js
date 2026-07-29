@@ -785,3 +785,78 @@ test('formato: sparkline mapeia o histórico pra polyline 180×34', () => {
   assert.equal(dois.positivo, true);
   assert.equal(formato.sparkline([200, 100]).positivo, false);
 });
+
+// ---------- modo realista: andaime (F0) ----------
+// Nesta fase o modo ainda está desligado no menu (disponivel: false) e as
+// mecânicas não existem — o que se prova aqui é que ele é ADITIVO: monta o
+// sub-estado e o catálogo próprio sem tocar em nenhum modo antigo.
+
+const catalogo = require('../engine/catalogo.js');
+const realista = require('../engine/realista.js');
+
+test('catálogo realista: 15 ativos em 5 categorias, chaves únicas', () => {
+  assert.equal(catalogo.defs.length, 15);
+  assert.equal(catalogo.categorias.length, 5);
+  const keys = catalogo.defs.map(d => d.key);
+  assert.equal(new Set(keys).size, 15);
+  // toda def pertence a uma categoria declarada, e toda categoria tem ativo
+  const ids = catalogo.categorias.map(c => c.id);
+  for (const d of catalogo.defs) assert.ok(ids.includes(d.categoria), d.key + ' sem categoria válida');
+  for (const id of ids) assert.ok(catalogo.daCategoria(id).length > 0, id + ' vazia');
+});
+
+test('catálogo realista: nenhuma chave colide com os 5 ativos clássicos', () => {
+  const classicos = ativos.map(a => a.key);
+  for (const d of catalogo.defs) assert.ok(!classicos.includes(d.key), d.key + ' colide com ativos.js');
+});
+
+test('realista: novoJogo monta posições zeradas pros 15 ativos do catálogo', () => {
+  const s = regras.novoJogo({ modo: 'realista' });
+  assert.equal(s.modo, 'realista');
+  assert.equal(Object.keys(s.ativos).length, 15);
+  assert.equal(Object.keys(s.realista.posicoes).length, 15);
+  assert.equal(s.caixa, config.realista.caixaInicial);
+  assert.equal(s.salario, config.realista.salario);
+  assert.equal(s.custo, Math.round(config.realista.salario * config.realista.custoFator));
+  for (const d of catalogo.defs) {
+    assert.equal(s.ativos[d.key], 0);
+    assert.deepEqual(s.realista.posicoes[d.key], { saldo: 0, custo: 0, mesMedio: 0, mesEntrada: null, curva: 0 });
+  }
+});
+
+test('realista: o cenário macro do setup escolhe a Selic inicial', () => {
+  assert.equal(regras.novoJogo({ modo: 'realista' }).realista.macro.selic, config.realista.selicAlta);
+  assert.equal(regras.novoJogo({ modo: 'realista', macroInicial: 'baixa' }).realista.macro.selic, config.realista.selicBaixa);
+  // alvo nasce colado na taxa: o ciclo só se move quando um COPOM mexer no alvo
+  const m = regras.novoJogo({ modo: 'realista', macroInicial: 'baixa' }).realista.macro;
+  assert.equal(m.selicAlvo, m.selic);
+});
+
+test('realista é ADITIVO: os modos antigos seguem com 5 ativos e sem sub-estado', () => {
+  for (const props of [{}, { modo: 'sandbox' }, { modo: 'empresario' }, { modo: 'cenarios' }, { modo: 'cenarios', cenario: 'imoveis' }]) {
+    const s = regras.novoJogo(props);
+    assert.equal(s.realista, null, JSON.stringify(props));
+    assert.deepEqual(Object.keys(s.ativos), ['reserva', 'rendafixa', 'fiis', 'acoes', 'cripto']);
+  }
+});
+
+test('realista.clonar é PROFUNDO: mexer na cópia não toca no original', () => {
+  const r = realista.novoEstado('alta');
+  const c = realista.clonar(r);
+  c.posicoes.ac_blue.saldo = 999;
+  c.macro.selic = 0.99;
+  c.vendasMes.acoes = 5000;
+  c.mesCustos.ir = 42;
+  assert.equal(r.posicoes.ac_blue.saldo, 0);
+  assert.equal(r.macro.selic, config.realista.selicAlta);
+  assert.equal(r.vendasMes.acoes, 0);
+  assert.equal(r.mesCustos.ir, 0);
+});
+
+test('realista: fecharMes não muta o estado recebido (nem as posições)', () => {
+  const s = jogoEmAndamento({ modo: 'realista' });
+  s.realista.posicoes.rf_selic.saldo = 1000;
+  const antes = JSON.parse(JSON.stringify(s));
+  regras.fecharMes(s, { rng: rngFixo(...Array(40).fill(0.5), 0.99) });
+  assert.deepEqual(JSON.parse(JSON.stringify(s)), antes);
+});
