@@ -77,6 +77,55 @@ export interface EstadoNegocio {
   varReceitaMes: number;
 }
 
+// ---- modo realista ----
+
+/** Uma posição do catálogo realista. Tamanho FIXO: nada de lista de lotes —
+ *  o estado inteiro passa por structuredClone a cada action. O IR sai de
+ *  `custo` (custo médio) e `mesMedio` (idade média ponderada dos aportes). */
+export interface PosicaoRealista {
+  // sem `saldo`: o saldo mora em GameState.ativos[key], como em todo modo.
+  // Duas cópias do mesmo número divergiriam na primeira liquidação forçada.
+  custo: number;
+  mesMedio: number;
+  /** mês do 1º aporte; null = nunca comprado (não há carência a contar) */
+  mesEntrada: number | null;
+  /** valor "na curva": o que o papel valeria sem marcação a mercado */
+  curva: number;
+}
+
+export interface MacroRealista {
+  selic: number;
+  /** para onde o ciclo puxa a Selic; os eventos de COPOM movem o ALVO */
+  selicAlvo: number;
+  ipca: number;
+  ipcaAlvo: number;
+  /** variação da Selic no mês — entrada da marcação a mercado do prefixado */
+  dPre: number;
+  /** variação do juro REAL — marcação do IPCA+ */
+  dReal: number;
+}
+
+export interface CustosRealista {
+  adm: number;
+  corretagem: number;
+  comeCotas: number;
+  ir: number;
+}
+
+export interface EstadoRealista {
+  macroInicial: 'alta' | 'baixa';
+  macro: MacroRealista;
+  posicoes: Record<string, PosicaoRealista>;
+  /** vendas do mês por classe — base dos tetos de isenção, zerada no fecharMes */
+  vendasMes: { acoes: number; fii: number; cripto: number };
+  mesCustos: CustosRealista;
+  custosTotais: CustosRealista;
+  mesRenda: number;
+  choqueInflacao: number;
+  mesesVacancia: number;
+  mesesSemIsencao: number;
+}
+
 export interface GameState {
   tela: 'intro' | 'jogo';
   dificuldade: Dificuldade;
@@ -86,13 +135,17 @@ export interface GameState {
   aposentadoria: EstadoAposentadoria | null;
   imoveis: EstadoImoveis | null;
   negocio: EstadoNegocio | null;
+  realista: EstadoRealista | null;
   mes: number;
   caixa: number;
   salario: number;
   custo: number;
   semSalario: number;
-  ativos: Record<AtivoKey, number>;
-  varMes: Record<AtivoKey, number>;
+  // `string` e não `AtivoKey`: no modo realista as chaves vêm do catálogo de 15
+  // (`rf_selic`, `ac_blue`, …). `AtivoKey` continua valendo nas ACTIONS dos
+  // modos clássicos — o que muda é só o armazenamento, que agora é aberto.
+  ativos: Record<string, number>;
+  varMes: Record<string, number>;
   hist: number[];
   log: LogItem[];
   fim: FimDeJogo | null;
@@ -115,6 +168,7 @@ export interface NovoJogoProps {
   cenario?: string | null;
   saqueModo?: 'fixo' | 'percentual';
   imoveisEscolha?: 'comprar' | 'alugar';
+  macroInicial?: 'alta' | 'baixa';
 }
 
 // ---- regras ----
@@ -149,6 +203,76 @@ export interface AtivoDef {
   div: number;
 }
 
+// ---- catálogo do modo realista ----
+
+export type Indexador = 'selic' | 'ipca' | 'pre' | null;
+export type Tributacao = 'rf' | 'acoes' | 'fii' | 'cripto' | 'isento';
+
+/** Definição de um papel do catálogo realista. Superset do AtivoDef: o que
+ *  descreve o papel (indexador, prazo, tributação, custos) vive aqui; o que
+ *  vale pro modo inteiro (alíquotas, tetos, ciclo macro) vive em config. */
+export interface CatalogoDef {
+  key: string;
+  nome: string;
+  ticker: string;
+  categoria: string;
+  indexador: Indexador;
+  fatorIndex: number;
+  taxaContratada: number;
+  duration: number;
+  fator: string | null;
+  beta: number;
+  ret: number;
+  vol: number;
+  div: number;
+  tributacao: Tributacao;
+  isencao: boolean;
+  carencia: number;
+  venceEm: number | null;
+  taxaAdm: number;
+  corretagem: number;
+  spread: number;
+  comeCotas: boolean;
+  desagio: number;
+  risco: string;
+  riscoCor: string;
+  conceito: string;
+  dica: string;
+}
+
+export interface CategoriaDef {
+  id: string;
+  nome: string;
+  dica: string;
+}
+
+export interface CatalogoApi {
+  categorias: CategoriaDef[];
+  defs: CatalogoDef[];
+  ordemLiquidacao: string[];
+  def(key: string): CatalogoDef | null;
+  daCategoria(categoria: string): CatalogoDef[];
+}
+
+export interface RealistaApi {
+  novoEstado(macroInicial?: 'alta' | 'baixa'): EstadoRealista;
+  clonar(r: EstadoRealista): EstadoRealista;
+  posicaoZerada(): PosicaoRealista;
+  /** Taxa anual → taxa equivalente do mês. */
+  mensal(anual: number): number;
+  aliquotaRF(meses: number): number;
+  /** Carência: só precisa de `realista` e `mes` do estado. */
+  bloqueio(s: Pick<GameState, 'realista' | 'mes'>, d: CatalogoDef): { travado: boolean; motivo: string };
+  mercado(s: GameState, rng: () => number): number;
+  macroMes(s: GameState, rng: () => number): void;
+  mover(s: GameState, key: string, valor: number): Partial<GameState>;
+  cobrir(s: GameState, deficit: number, avisar: (msg: string, cor: string) => void): number;
+  custosDoMes(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  vencimentos(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  fecharContaDoMes(s: GameState, avisar: (msg: string, cor: string) => void): void;
+  impostoDeVenda(s: GameState, d: CatalogoDef, valor: number, lucro: number): { imposto: number; aliquota: number; isento: boolean };
+}
+
 export interface FormatoApi {
   fmt(v: number): string;
   fmtCompacto(v: number): string;
@@ -172,6 +296,18 @@ export interface ConfigApi {
   aposentadoria: { capitalInicial: number; salario: number; turnosAcumulacao: number; turnosSaque: number; taxaSaque: number };
   empresario: { caixaInicial: number; receitaBase: number; custoFixo: number; volReceita: number; reinvestimentoPasso: number; impulsoReceita: number; decaimento: number; mesesFalencia: number };
   imoveis: { salario: number; custoFator: number; capitalInicial: number; valorImovel: number; entradaPct: number; jurosMes: number; prazoMeses: number; aluguel: number; valorizacaoMes: number; volImovel: number };
+  realista: {
+    caixaInicial: number; salario: number; custoFator: number;
+    selicAlta: number; selicBaixa: number; ipcaInicial: number;
+    reversao: number; volSelic: number; volIpca: number;
+    selicMin: number; selicMax: number; ipcaMin: number; ipcaMax: number;
+    juroRealMinimoPraCortar: number;
+    /** [mesesAté, alíquota] — regressiva: segurar por mais tempo paga menos */
+    aliquotasRF: [number, number][];
+    irAcoes: number; irFii: number; irCripto: number; irComeCotas: number;
+    isencaoAcoes: number; isencaoCripto: number; comeCotasMeses: number;
+    ordemMinima: number;
+  };
   placarOnline: { url: string; anonKey: string; tabela: string };
   mesMinimoEvento: number;
   progressaoAnual: number;
@@ -216,6 +352,8 @@ export interface FluxoGlobal {
   conceitos: ConceitosApi;
   regras: RegrasApi;
   ativos: AtivoDef[];
+  catalogo: CatalogoApi;
+  realista: RealistaApi;
   formato: FormatoApi;
   config: ConfigApi;
   placar: PlacarApi;

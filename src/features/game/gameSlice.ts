@@ -47,6 +47,10 @@ function recriar(state: GameState, mudanca: Partial<NovoJogoProps>): GameState {
     cenario: s.cenario ?? undefined,
     saqueModo: s.aposentadoria?.saqueModo,
     imoveisEscolha: s.imoveis?.escolha,
+    // Sem esta linha, escolher o cenário macro e depois clicar em HARDCORE
+    // descartaria a macro em silêncio: `recriar` refaz o estado do zero e só
+    // preserva o que estiver listado aqui.
+    macroInicial: s.realista?.macroInicial,
     ...mudanca,
   };
   // capital custom só faz sentido no sandbox (mesma regra do orquestrador)
@@ -134,6 +138,9 @@ const gameSlice = createSlice({
     escolherEstrategia(state, action: PayloadAction<'comprar' | 'alugar'>) {
       return recriar(state, { imoveisEscolha: action.payload });
     },
+    escolherMacro(state, action: PayloadAction<'alta' | 'baixa'>) {
+      return recriar(state, { macroInicial: action.payload });
+    },
   },
 });
 
@@ -157,6 +164,7 @@ export const {
   escolherCenario,
   escolherSaqueModo,
   escolherEstrategia,
+  escolherMacro,
 } = gameSlice.actions;
 
 export const gameReducer = gameSlice.reducer;

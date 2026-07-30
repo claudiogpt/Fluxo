@@ -12,25 +12,44 @@
       require('./config.js'),
       require('./ativos.js'),
       require('./eventos.js'),
-      require('./formato.js')
+      require('./formato.js'),
+      require('./catalogo.js'),
+      require('./realista.js')
     );
   } else {
     root.Fluxo = root.Fluxo || {};
-    root.Fluxo.regras = factory(root.Fluxo.config, root.Fluxo.ativos, root.Fluxo.eventos, root.Fluxo.formato);
+    root.Fluxo.regras = factory(root.Fluxo.config, root.Fluxo.ativos, root.Fluxo.eventos, root.Fluxo.formato, root.Fluxo.catalogo, root.Fluxo.realista);
   }
-})(typeof window !== 'undefined' ? window : globalThis, function (config, ativos, eventos, formato) {
+})(typeof window !== 'undefined' ? window : globalThis, function (config, ativos, eventos, formato, catalogo, realista) {
 
   const fmt = formato.fmt;
 
   /**
-   * Cria mapa de saldos zerados para todos os ativos definidos.
+   * Cria mapa de saldos zerados para uma lista de definições de ativo.
    *
-   * @returns {Record<AtivoKey, number>} All asset keys at zero.
+   * Recebe as defs em vez de ler `ativos` direto porque o modo realista tem
+   * catálogo próprio (`catalogo.defs`): quem decide a lista é `defsDoModo`.
+   *
+   * @param {Array<{key: string}>} [defs] - Asset definitions (defaults to the classic five).
+   * @returns {Record<string, number>} All asset keys at zero.
    */
-  function chavesZeradas() {
+  function chavesZeradas(defs) {
     const o = {};
-    for (const d of ativos) o[d.key] = 0;
+    for (const d of (defs || ativos)) o[d.key] = 0;
     return o;
+  }
+
+  /**
+   * Lista de ativos que vale para este estado.
+   *
+   * É o único ponto que decide entre os 5 ativos genéricos e o catálogo de 15
+   * do realista — todo laço sobre ativos passa por aqui.
+   *
+   * @param {GameState} s - Current game state.
+   * @returns {Array<Object>} Asset definitions for this mode.
+   */
+  function defsDoModo(s) {
+    return s.realista ? catalogo.defs : ativos;
   }
 
   /**
@@ -53,6 +72,8 @@
     const cenario = modo === 'cenarios' ? ((props && props.cenario) || 'aposentadoria') : null;
     const ehAposentadoria = cenario === 'aposentadoria';
     const ehImoveis = cenario === 'imoveis';
+    const ehRealista = modo === 'realista';
+    const cfgR = config.realista;
     const cfgAp = config.aposentadoria;
     const cfgI = config.imoveis;
     const imoveisEscolha = (props && props.imoveisEscolha) || 'comprar';
@@ -61,12 +82,16 @@
     // O custo de vida continua derivado do salário de referência.
     const salarioRef = ehAposentadoria ? cfgAp.salario
       : ehImoveis ? cfgI.salario
+      : ehRealista ? cfgR.salario
       : ((props && props.salarioInicial) ?? config.salarioDefault);
     const salario = ehEmpresario ? 0 : salarioRef;
     const capitalInicial = (props && props.capitalInicial) ?? null;
     const caixaBase = ehAposentadoria ? cfgAp.capitalInicial
       : ehImoveis ? cfgI.capitalInicial - (imoveisEscolha === 'comprar' ? entradaImovel : 0)
+      : ehRealista ? cfgR.caixaInicial
       : capitalInicial != null ? capitalInicial : dif.caixaInicial;
+    // O modo realista tem catálogo próprio: 15 ativos em vez dos 5 de ativos.js.
+    const defs = ehRealista ? catalogo.defs : ativos;
     return {
       tela: 'intro',
       dificuldade: hard ? 'hardcore' : 'normal',
@@ -106,14 +131,17 @@
         receitaMes: null,
         varReceitaMes: 0,
       } : null,
+      // Modo realista: macro viva + uma posição por ativo do catálogo (saldo,
+      // custo de aquisição e idade média — o que o IR e a carência precisam).
+      realista: ehRealista ? realista.novoEstado(props && props.macroInicial) : null,
       mes: 0,
       caixa: caixaBase,
       salario,
       // No cenário imóveis o custo de vida EXCLUI moradia (a moradia é a decisão do cenário).
-      custo: Math.round(salarioRef * (ehImoveis ? cfgI.custoFator : dif.custoFator)),
+      custo: Math.round(salarioRef * (ehImoveis ? cfgI.custoFator : ehRealista ? cfgR.custoFator : dif.custoFator)),
       semSalario: 0,
-      ativos: chavesZeradas(),
-      varMes: chavesZeradas(),
+      ativos: chavesZeradas(defs),
+      varMes: chavesZeradas(defs),
       hist: [],
       log: [{ id: 0, mes: 'M00', texto: 'Sistema iniciado. Sobreviva. Diversifique. Não conte com sorte.', cor: '#6b7c8c' }],
       fim: null,
@@ -146,7 +174,7 @@
    * @returns {number} Monthly passive income in BRL.
    */
   function rendaPassiva(s) {
-    return ativos.reduce((t, d) => t + s.ativos[d.key] * d.div, 0);
+    return defsDoModo(s).reduce((t, d) => t + s.ativos[d.key] * d.div, 0);
   }
 
   /**
@@ -262,6 +290,8 @@
    * @returns {Partial<GameState>} Fields to merge, or `{}` if noop.
    */
   function mover(s, key, valor) {
+    // O realista precisa manter custo médio e idade dos aportes junto da ordem.
+    if (s.realista) return realista.mover(s, key, valor);
     const a = { ...s.ativos };
     let v = valor;
     if (v > 0) {
@@ -287,6 +317,11 @@
    * @returns {number} Remaining uncovered amount (> 0 = still broke).
    */
   function cobrir(s, deficit, logs) {
+    // config.liquidacao só conhece as 5 chaves antigas: no realista ele não
+    // acharia nada, cobriria R$ 0 e o jogador quebraria com a carteira cheia.
+    if (s.realista) {
+      return realista.cobrir(s, deficit, function (msg, cor) { addLog(s, logs, msg, cor, s.mes); });
+    }
     for (const [k, fator, msg] of config.liquidacao) {
       if (deficit <= 0) break;
       if (s.ativos[k] < 1) continue;
@@ -347,7 +382,14 @@
     if (st.negocio) s.negocio = { ...st.negocio };
     if (st.aposentadoria) s.aposentadoria = { ...st.aposentadoria };
     if (st.imoveis) s.imoveis = { ...st.imoveis };
+    // Spread raso não serve aqui: `posicoes` ficaria compartilhado com o
+    // argumento e este mês passaria a mutar a entrada. Ver realista.clonar.
+    if (st.realista) s.realista = realista.clonar(st.realista);
     const logs = s.log;
+    // Fecha a conta do mês que está terminando ANTES de virar o número: o IR
+    // pago nas vendas deste mês aparece no log com o mês em que aconteceu, e
+    // os tetos de isenção zeram pro mês seguinte.
+    if (s.realista) realista.fecharContaDoMes(s, function (msg, cor) { addLog(s, logs, msg, cor, s.mes); });
     s.mes += 1;
     s.pendente = 0;
     s.liquidacaoNoMes = false;
@@ -407,11 +449,21 @@
 
     // retornos de mercado
     let divTotal = 0;
-    for (const d of ativos) {
-      const r = d.ret + d.vol * (rng() + rng() - 1);
-      s.ativos[d.key] *= (1 + r);
-      s.varMes[d.key] = r;
-      divTotal += s.ativos[d.key] * d.div;
+    if (s.realista) {
+      // O realista tem mercado próprio: indexadores, fatores comuns e macro.
+      divTotal = realista.mercado(s, rng);
+      // Depois do mercado: taxa de administração e come-cotas saem do saldo já
+      // rendido, e os papéis com prazo vencem pelo valor na curva.
+      const avisar = function (msg, cor) { addLog(s, logs, msg, cor, s.mes); };
+      realista.custosDoMes(s, avisar);
+      realista.vencimentos(s, avisar);
+    } else {
+      for (const d of defsDoModo(s)) {
+        const r = d.ret + d.vol * (rng() + rng() - 1);
+        s.ativos[d.key] *= (1 + r);
+        s.varMes[d.key] = r;
+        divTotal += s.ativos[d.key] * d.div;
+      }
     }
     if (divTotal >= 1) { s.caixa += divTotal; addLog(s, logs, '● Renda passiva recebida: +' + fmt(divTotal) + '.', '#22d47e', s.mes); }
 
@@ -439,9 +491,13 @@
       if (s.pendente) s.caixa -= s.pendente;
     }
 
-    // inflação de base
+    // inflação de base — no realista quem corrói o custo de vida é o IPCA do
+    // próprio jogo, que se move: a inflação deixa de ser um número fixo da
+    // dificuldade e passa a ser a mesma que o Tesouro IPCA+ está pagando.
     const dif = config.dificuldades[s.hard ? 'hardcore' : 'normal'];
-    s.custo = Math.round(s.custo * dif.inflacaoBase);
+    s.custo = Math.round(s.custo * (s.realista
+      ? 1 + realista.mensal(s.realista.macro.ipca)
+      : dif.inflacaoBase));
 
     // progressão de carreira anual (só faz sentido com salário)
     if (s.salario > 0 && s.mes % 12 === 0 && s.semSalario === 0) {

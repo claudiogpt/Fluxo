@@ -7,6 +7,7 @@ import {
   escolherCapital,
   escolherDificuldade,
   escolherEstrategia,
+  escolherMacro,
   escolherSaqueModo,
 } from '../../features/game/gameSlice';
 import { selectSetupPagina } from '../../features/game/selectorsMenu';
@@ -46,6 +47,15 @@ export function PaginaSetup() {
           titulo="MODO DE SAQUE"
           grupo={cfg.saque}
           aoEscolher={(id) => dispatch(escolherSaqueModo(id as 'fixo' | 'percentual'))}
+        />
+      )}
+
+      {cfg.macro && (
+        <GrupoOpcoes
+          titulo="CENÁRIO MACRO"
+          grupo={cfg.macro}
+          acento="var(--info)"
+          aoEscolher={(id) => dispatch(escolherMacro(id as 'alta' | 'baixa'))}
         />
       )}
 

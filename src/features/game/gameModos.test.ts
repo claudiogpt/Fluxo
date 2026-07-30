@@ -6,14 +6,24 @@ import {
   aportarNegocio,
   comecar,
   escolherCenario,
+  escolherDificuldade,
   escolherEstrategia,
+  escolherMacro,
   escolherModo,
   fecharMes,
   mover,
   reinvestirNegocio,
   sacarNegocio,
 } from './gameSlice';
-import { selectImovelCard, selectNegocioCard, selectPainel } from './selectors';
+import {
+  selectAtivosLista,
+  selectAtivosPorCategoria,
+  selectCategoriasLista,
+  selectMacro,
+  selectImovelCard,
+  selectNegocioCard,
+  selectPainel,
+} from './selectors';
 import { selectSetupPagina } from './selectorsMenu';
 
 // 10 draws neutros (5 ativos ×2) + 0.99 no sorteio de evento (não sorteia).
@@ -26,6 +36,12 @@ const rngNeutro10 = () => {
 };
 const rngNeutro = () => {
   const vals = [...Array(12).fill(0.5), 0.99];
+  let i = 0;
+  return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
+};
+// Realista: 32 draws (4 na macro + 4 fatores comuns ×2 + 10 de renda variável ×2).
+const rngRealista = () => {
+  const vals = [...Array(32).fill(0.5), 0.99];
   let i = 0;
   return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
 };
@@ -97,5 +113,85 @@ describe('modos no store', () => {
     expect(locais.length).toBe(1);
     expect(locais[0].modo).toBe('sandbox');
     expect(locais[0].resultado).toBe('marco');
+  });
+  it('realista: carteira por categoria, ordem com custo médio e mês fechado', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(comecar());
+
+    // 5 categorias, todas zeradas — a lista plana some neste modo
+    const cats0 = selectCategoriasLista(store.getState())!;
+    expect(cats0.map((c) => c.id)).toEqual(['rf', 'fii', 'acoes', 'intl', 'cripto']);
+    expect(cats0.every((c) => !c.temPosicao)).toBe(true);
+    expect(selectAtivosLista(store.getState())).toEqual([]);
+
+    // aportar num ativo do catálogo soma na categoria dele, e só nela
+    store.dispatch(mover({ key: 'fii_tijolo' as never, valor: 2000 }));
+    const cats1 = selectCategoriasLista(store.getState())!;
+    expect(cats1.find((c) => c.id === 'fii')?.totalFmt).toBe('R$ 2.000');
+    expect(cats1.find((c) => c.id === 'acoes')?.temPosicao).toBe(false);
+    expect(store.getState().game.realista?.posicoes.fii_tijolo.custo).toBe(2000);
+
+    // a subtela da categoria lista os ativos daquela categoria
+    const porCat = selectAtivosPorCategoria(store.getState());
+    expect(porCat.fii.map((a) => a.key)).toEqual(['fii_tijolo', 'fii_papel']);
+    expect(porCat.rf.length).toBe(5);
+
+    // fechar o mês roda o mercado do realista (28 draws) e paga aluguel
+    store.dispatch(fecharMes({ rng: rngRealista() }));
+    expect(store.getState().game.mes).toBe(1);
+    expect(selectPainel(store.getState()).rpFmt).not.toBe('R$ 0');
+  });
+
+  it('realista: a macro entra no view-model e o prefixado mostra a curva', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(comecar());
+    const macro0 = selectMacro(store.getState())!;
+    expect(macro0.selicFmt).toBe('13,65%');
+    expect(macro0.ciclo).toMatch(/ancorado/);
+
+    // compra prefixado e leva um mês de juro em alta (ruído da Selic no máximo)
+    store.dispatch(mover({ key: 'rf_pre' as never, valor: 5000 }));
+    const rngJuroSobe = () => {
+      const vals = [1, 1, 0.5, 0.5, ...Array(28).fill(0.5), 0.99];
+      let i = 0;
+      return () => (i < vals.length ? vals[i++] : vals[vals.length - 1]);
+    };
+    store.dispatch(fecharMes({ rng: rngJuroSobe() }));
+
+    // o preço caiu, mas a curva subiu — e o card mostra as duas contas
+    const linha = selectAtivosPorCategoria(store.getState()).rf.find((a) => a.key === 'rf_pre')!;
+    expect(linha.curvaNota).toMatch(/na curva/);
+    expect(store.getState().game.ativos.rf_pre).toBeLessThan(5000);
+    expect(store.getState().game.realista!.posicoes.rf_pre.curva).toBeGreaterThan(5000);
+    expect(selectMacro(store.getState())!.setaSelic).toBe('▲');
+  });
+
+  it('realista: o cenário macro do setup sobrevive a trocar a dificuldade', () => {
+    const store = makeStore();
+    store.dispatch(escolherModo('realista'));
+    store.dispatch(escolherMacro('baixa'));
+    expect(selectSetupPagina(store.getState()).macro?.valor).toBe('baixa');
+
+    // `recriar` refaz o estado do zero a cada clique de menu: sem a linha
+    // macroInicial no spread, esta escolha sumiria em silêncio
+    store.dispatch(escolherDificuldade('hardcore'));
+    expect(store.getState().game.realista?.macroInicial).toBe('baixa');
+    expect(selectSetupPagina(store.getState()).macro?.valor).toBe('baixa');
+
+    // e o setup do realista não mostra os ajustes que não são dele
+    const cfg = selectSetupPagina(store.getState());
+    expect(cfg.capitais).toBeNull();
+    expect(cfg.saque).toBeNull();
+    expect(cfg.estrategia).toBeNull();
+  });
+
+  it('realista: modos antigos seguem com a lista plana e sem categorias', () => {
+    const store = makeStore();
+    store.dispatch(comecar());
+    expect(selectCategoriasLista(store.getState())).toBeNull();
+    expect(selectAtivosLista(store.getState()).map((a) => a.key))
+      .toEqual(['reserva', 'rendafixa', 'fiis', 'acoes', 'cripto']);
   });
 });

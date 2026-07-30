@@ -2,10 +2,12 @@
 // os 8 botões de valor fixo saíram porque a fileira crescia junto com o número
 // de ativos, e o percentual não cresce.
 import type { AtivoKey } from '../engine/types';
-import { type selectAtivosLista } from '../features/game/selectors';
+import { type LinhaAtivo } from '../features/game/selectors';
 import { ControleAporte } from './ControleAporte';
 
-type Linha = ReturnType<typeof selectAtivosLista>[number];
+// Mesma linha nos dois mundos: a lista plana dos 5 clássicos e a subtela de
+// categoria do realista produzem o mesmo view-model.
+type Linha = LinhaAtivo;
 
 export function AtivoCard({ a }: { a: Linha }) {
   return (
@@ -23,8 +25,12 @@ export function AtivoCard({ a }: { a: Linha }) {
       <div style={{ textAlign: 'right' }}>
         <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--texto-forte)' }}>{a.valorFmt}</div>
         <div style={{ fontSize: 11, fontWeight: 600, color: a.varCor }}>{a.varFmt}</div>
+        {/* marcação a mercado: o preço de hoje contra o valor no vencimento */}
+        {a.curvaNota && <div style={{ fontSize: 10, color: a.curvaCor, marginTop: 2 }}>{a.curvaNota}</div>}
+        {/* o imposto ANTES da venda: depois vira constatação, não decisão */}
+        {a.irNota && <div style={{ fontSize: 10, color: a.irCor, marginTop: 2 }}>{a.irNota}</div>}
       </div>
-      <ControleAporte ativo={a.key as AtivoKey} />
+      <ControleAporte ativo={a.key as AtivoKey} bloqueio={a.bloqueio} />
     </div>
   );
 }
