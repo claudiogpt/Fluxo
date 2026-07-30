@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { makeStore } from '../../store';
 import { comecar, escolherModo, voltarMenu } from '../game/gameSlice';
 import {
-  abrirGlossario,
-  alternarGlossario,
+  abrirBiblioteca,
+  alternarBiblioteca,
   irPara,
   irParaHome,
   selectPodeVoltar,
@@ -55,30 +55,30 @@ describe('uiSlice — pilha de navegação', () => {
     expect(store.getState().ui.pilha).toEqual(['home']);
   });
 
-  it('voltarMenu (do jogo) reseta a pilha e fecha o glossário', () => {
+  it('voltarMenu (do jogo) reseta a pilha e fecha a biblioteca', () => {
     const store = makeStore();
     store.dispatch(irPara('modos'));
     store.dispatch(irPara('setup'));
     store.dispatch(comecar());
-    store.dispatch(abrirGlossario());
+    store.dispatch(abrirBiblioteca());
     store.dispatch(voltarMenu());
     expect(store.getState().ui.pilha).toEqual(['home']);
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    expect(store.getState().ui.bibliotecaAberta).toBe(false);
   });
 
-  it('começar a partida fecha o glossário', () => {
+  it('começar a partida fecha a biblioteca', () => {
     const store = makeStore();
-    store.dispatch(abrirGlossario());
+    store.dispatch(abrirBiblioteca());
     store.dispatch(comecar());
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    expect(store.getState().ui.bibliotecaAberta).toBe(false);
   });
 
-  it('alternarGlossario abre e fecha', () => {
+  it('alternarBiblioteca abre e fecha', () => {
     const store = makeStore();
-    store.dispatch(alternarGlossario());
-    expect(store.getState().ui.glossarioAberto).toBe(true);
-    store.dispatch(alternarGlossario());
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    store.dispatch(alternarBiblioteca());
+    expect(store.getState().ui.bibliotecaAberta).toBe(true);
+    store.dispatch(alternarBiblioteca());
+    expect(store.getState().ui.bibliotecaAberta).toBe(false);
   });
 });
 

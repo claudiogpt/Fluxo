@@ -61,31 +61,10 @@ export const selectTermosDesbloqueados = createSelector([selectVistos], (vistos)
   conceitos.termosDesbloqueados(comoStorage(vistos))
 );
 
-/** Linhas prontas pro Glossário — espelha o view-model do orquestrador DC. */
-export const selectGlossarioLista = createSelector([selectTermosDesbloqueados], (desbloqueados) =>
-  Object.keys(conceitos.termos).map((id) => {
-    const termo = conceitos.termos[id];
-    const desb = desbloqueados.includes(id);
-    return {
-      id,
-      desbloqueado: desb,
-      icone: desb ? '📖' : '🔒',
-      nome: desb ? termo.nome : '???',
-      definicao: desb
-        ? termo.definicao
-        : 'Continue jogando: este conceito aparece quando a decisão certa (ou errada) acontecer.',
-    };
-  })
-);
-
-export const selectContador = createSelector([selectTermosDesbloqueados], (desbloqueados) =>
-  `${desbloqueados.length}/${Object.keys(conceitos.termos).length} termos desbloqueados`
-);
-
-/** Mesmo dado, sem a frase: cabe no botão do cabeçalho em tela estreita. */
-export const selectContadorCurto = createSelector([selectTermosDesbloqueados], (desbloqueados) =>
-  `${desbloqueados.length}/${Object.keys(conceitos.termos).length}`
-);
+// O view-model do glossário (lista e contador) mudou de casa: foi pro
+// bibliotecaSlice, que é quem conhece a UNIÃO dos dois registros de gatilho —
+// os com tooltip (aqui) e os sem (lá). Contar só por este lado passaria a
+// mentir no dia em que um gatilho sem modal destravasse um termo.
 
 /** View-model do ConceitoModal — porta o modalConceito do renderVals. */
 export const selectModalConceito = (s: ComConceitos) => {

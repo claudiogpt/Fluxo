@@ -9,15 +9,16 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { comecar, voltarMenu } from '../game/gameSlice';
 
-export type RotaId = 'home' | 'modos' | 'cenarios' | 'setup' | 'glossario' | 'config' | 'perfil';
+export type RotaId = 'home' | 'modos' | 'cenarios' | 'setup' | 'biblioteca' | 'config' | 'perfil';
 
 export interface UiState {
   /** pilha de navegação; o índice 0 é sempre 'home' e nunca sai */
   pilha: RotaId[];
-  glossarioAberto: boolean;
+  /** a biblioteca sobre a mesa, durante a partida. No menu ela é página. */
+  bibliotecaAberta: boolean;
 }
 
-const inicial: UiState = { pilha: ['home'], glossarioAberto: false };
+const inicial: UiState = { pilha: ['home'], bibliotecaAberta: false };
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -32,33 +33,39 @@ const uiSlice = createSlice({
     irParaHome(state) {
       state.pilha = ['home'];
     },
-    abrirGlossario(state) {
-      state.glossarioAberto = true;
+    abrirBiblioteca(state) {
+      state.bibliotecaAberta = true;
     },
-    fecharGlossario(state) {
-      state.glossarioAberto = false;
+    fecharBiblioteca(state) {
+      state.bibliotecaAberta = false;
     },
-    alternarGlossario(state) {
-      state.glossarioAberto = !state.glossarioAberto;
+    alternarBiblioteca(state) {
+      state.bibliotecaAberta = !state.bibliotecaAberta;
     },
   },
   extraReducers: (builder) => {
     // Voltar do jogo pro menu recomeça na home, sem overlay aberto.
     builder.addCase(voltarMenu, (state) => {
       state.pilha = ['home'];
-      state.glossarioAberto = false;
+      state.bibliotecaAberta = false;
     });
     builder.addCase(comecar, (state) => {
-      state.glossarioAberto = false;
+      state.bibliotecaAberta = false;
     });
   },
 });
 
-export const { irPara, voltar, irParaHome, abrirGlossario, fecharGlossario, alternarGlossario } =
-  uiSlice.actions;
+export const {
+  irPara,
+  voltar,
+  irParaHome,
+  abrirBiblioteca,
+  fecharBiblioteca,
+  alternarBiblioteca,
+} = uiSlice.actions;
 export const uiReducer = uiSlice.reducer;
 
 type ComUi = { ui: UiState };
 export const selectRota = (s: ComUi): RotaId => s.ui.pilha[s.ui.pilha.length - 1];
 export const selectPodeVoltar = (s: ComUi) => s.ui.pilha.length > 1;
-export const selectGlossarioAberto = (s: ComUi) => s.ui.glossarioAberto;
+export const selectBibliotecaAberta = (s: ComUi) => s.ui.bibliotecaAberta;

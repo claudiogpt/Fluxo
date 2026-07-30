@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AtivoCard } from '../components/AtivoCard';
+import { LinhaHint } from '../components/biblioteca/LinhaHint';
 import { CarteiraCategorias } from '../components/CarteiraCategorias';
 import { CustosCard } from '../components/CustosCard';
 import { ImovelCard } from '../components/ImovelCard';
@@ -120,6 +121,9 @@ export function GameView() {
           <div className="jogo-atalhos" style={{ color: 'var(--texto-apagado)', fontSize: 10.5, textAlign: 'center' }}>
             [ESPAÇO] fecha o mês · [A] liga/desliga o auto — roda direto até o fim da simulação
           </div>
+          {/* O hint fica FORA da dica de atalhos porque no estreito aquela some
+              e este não pode sumir: é o único aviso daquela mecânica. */}
+          <LinhaHint />
         </div>
 
       </div>

@@ -65,11 +65,17 @@
    * const s = novoJogo({ dificuldade: 'hardcore', modo: 'classico' });
    */
   function novoJogo(props) {
-    const hard = ((props && props.dificuldade) ?? 'normal') === 'hardcore';
-    const dif = config.dificuldades[hard ? 'hardcore' : 'normal'];
     const modo = (props && props.modo) || 'classico';
+    // Tutorial roda sempre no normal: a primeira partida de alguém não é lugar
+    // de hardcore, e ele não escolheu dificuldade nenhuma pra chegar aqui.
+    const ehTutorial = modo === 'tutorial';
+    const hard = !ehTutorial && ((props && props.dificuldade) ?? 'normal') === 'hardcore';
+    const dif = config.dificuldades[hard ? 'hardcore' : 'normal'];
     const ehEmpresario = modo === 'empresario';
     const cenario = modo === 'cenarios' ? ((props && props.cenario) || 'aposentadoria') : null;
+    // Treino é um CENÁRIO: mesmo modo, mesmo board, mesma tela de setup. O que
+    // ele traz de diferente (posição inicial, roteiro, prazo) é tudo dado.
+    const treino = cenario ? (config.treinos || []).find(function (t) { return t.id === cenario; }) || null : null;
     const ehAposentadoria = cenario === 'aposentadoria';
     const ehImoveis = cenario === 'imoveis';
     const ehRealista = modo === 'realista';
@@ -84,14 +90,23 @@
       : ehImoveis ? cfgI.salario
       : ehRealista ? cfgR.salario
       : ((props && props.salarioInicial) ?? config.salarioDefault);
-    const salario = ehEmpresario ? 0 : salarioRef;
+    const salario = ehEmpresario ? 0 : (treino && treino.salario != null ? treino.salario : salarioRef);
     const capitalInicial = (props && props.capitalInicial) ?? null;
     const caixaBase = ehAposentadoria ? cfgAp.capitalInicial
       : ehImoveis ? cfgI.capitalInicial - (imoveisEscolha === 'comprar' ? entradaImovel : 0)
       : ehRealista ? cfgR.caixaInicial
+      : treino && treino.caixaInicial != null ? treino.caixaInicial
       : capitalInicial != null ? capitalInicial : dif.caixaInicial;
     // O modo realista tem catálogo próprio: 15 ativos em vez dos 5 de ativos.js.
     const defs = ehRealista ? catalogo.defs : ativos;
+    // Treino começa alocado — a posição difícil é o enunciado do exercício.
+    // Chave que não existe no modo é ignorada em vez de criar ativo fantasma.
+    const saldos = chavesZeradas(defs);
+    if (treino && treino.alocacaoInicial) {
+      for (const k in treino.alocacaoInicial) {
+        if (k in saldos) saldos[k] = treino.alocacaoInicial[k];
+      }
+    }
     return {
       tela: 'intro',
       dificuldade: hard ? 'hardcore' : 'normal',
@@ -140,7 +155,11 @@
       // No cenário imóveis o custo de vida EXCLUI moradia (a moradia é a decisão do cenário).
       custo: Math.round(salarioRef * (ehImoveis ? cfgI.custoFator : ehRealista ? cfgR.custoFator : dif.custoFator)),
       semSalario: 0,
-      ativos: chavesZeradas(defs),
+      // Prazo da partida (tutorial e treinos). null = joga até vencer ou quebrar.
+      desafio: ehTutorial ? { meses: config.tutorial.meses } : (treino && treino.desafio) || null,
+      // Eventos com hora marcada. Ver eventos.roteirar.
+      roteiro: (treino && treino.roteiro) || null,
+      ativos: saldos,
       varMes: chavesZeradas(defs),
       hist: [],
       log: [{ id: 0, mes: 'M00', texto: 'Sistema iniciado. Sobreviva. Diversifique. Não conte com sorte.', cor: '#6b7c8c' }],
@@ -486,6 +505,8 @@
       ap.esgotou = falta > 0.5;
       addLog(s, logs, '↓ Saque do mês: −' + fmt(W - falta) + (ap.esgotou ? ' — e o patrimônio ACABOU.' : '.'), ap.esgotou ? '#ff4d5e' : '#8fa1b2', s.mes);
     } else {
+      // roteiro do treino primeiro: a cena marcada acontece, e o acaso vem por cima
+      eventos.roteirar(s, logs, { rng, addLog });
       // evento aleatório
       eventos.sortear(s, logs, { rng, addLog });
       if (s.pendente) s.caixa -= s.pendente;
@@ -584,6 +605,19 @@
       s.fimTs = Date.now();
       s.auto = false;
       addLog(s, logs, '■ INDEPENDÊNCIA FINANCEIRA. Sua renda passiva paga sua vida.', '#22d47e', s.mes);
+    }
+
+    // Prazo do desafio (tutorial e treinos). Vem DEPOIS da cadeia: quebrar no
+    // último mês continua sendo quebrar, e quem venceu antes venceu de verdade.
+    if (!s.fim && s.desafio && s.mes >= s.desafio.meses) {
+      const bateu = s.desafio.meta == null || patrimonio(s) >= s.desafio.meta;
+      s.fim = bateu ? 'desafio_ok' : 'desafio_falhou';
+      s.fimTs = Date.now();
+      s.auto = false;
+      addLog(s, logs, bateu
+        ? '■ DESAFIO CUMPRIDO. Você atravessou os ' + s.desafio.meses + ' meses.'
+        : '■ PRAZO ENCERRADO. Os ' + s.desafio.meses + ' meses acabaram sem bater a meta.',
+        bateu ? '#22d47e' : '#ffc24b', s.mes);
     }
     return s;
   }

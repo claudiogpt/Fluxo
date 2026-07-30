@@ -21,6 +21,7 @@
     // Modos de jogo exibidos no menu. Novos modos entram aqui com disponivel: false
     // até a mecânica existir — a tela inicial os mostra como "EM BREVE".
     modos: [
+      { id: 'tutorial', nome: 'TUTORIAL · 6 MESES · ~4 MIN', descricao: 'As mecânicas na prática, com prazo declarado: aloca, fecha o mês, vê o que acontece. Acaba sozinho e não pontua.', disponivel: true },
       { id: 'classico', nome: 'CLÁSSICO', descricao: 'Do zero à liberdade — ou à falência. Sobreviva aos meses e construa renda passiva.', disponivel: true },
       { id: 'sandbox', nome: 'SANDBOX', descricao: 'Sem falência e sem pressa: escolha o capital inicial e teste estratégias à vontade.', disponivel: true },
       { id: 'empresario', nome: 'EMPRESÁRIO', descricao: 'Sem salário: viva do seu negócio. Reinvestir pra crescer ou sacar pra investir? PJ não é seu bolso.', disponivel: true },
@@ -44,6 +45,47 @@
 
     // Presets de capital inicial oferecidos no modo sandbox.
     sandbox: { capitais: [1000, 10000, 100000] },
+
+    // Modo tutorial: o clássico com prazo. Não tem regra própria — é um
+    // `desafio` de 6 meses na dificuldade normal, e por isso não pontua.
+    tutorial: { meses: 6 },
+
+    // TREINO: posições difíceis com objetivo fechado. Mecanicamente são
+    // CENÁRIOS (mesmo modo, mesmo board de placar, mesma tela de setup) — o
+    // que muda é que a partida já começa alocada, o roteiro é fixo (a mesma
+    // cena toda vez, senão não é exercício) e existe prazo.
+    //
+    // `alocacaoInicial` usa as chaves de engine/ativos.js; `roteiro` usa os
+    // ids de eventos.ROTEIRAVEIS; `desafio.meses` é o prazo a atravessar.
+    treinos: [
+      {
+        id: 'treino_crash',
+        nome: 'ATRAVESSAR UM CRASH',
+        descricao: 'Carteira montada, dois meses de reserva e a bolsa desabando no mês 2 — com a demissão logo atrás. Chegue ao mês 8 sem quebrar.',
+        disponivel: true,
+        caixaInicial: 0,
+        alocacaoInicial: { reserva: 6300, acoes: 24000 },
+        roteiro: [
+          { mes: 2, evento: 'crash' },
+          { mes: 3, evento: 'demissao' },
+          { mes: 5, evento: 'emergencia' },
+        ],
+        desafio: { meses: 8 },
+        estudo: 'liquidez-e-venda-forcada',
+      },
+      {
+        id: 'treino_saque',
+        nome: 'O PRIMEIRO ANO SEM SALÁRIO',
+        descricao: 'Sem renda do trabalho: o custo de vida sai do patrimônio todo mês, e o mercado desaba logo no começo. Atravesse 12 meses.',
+        disponivel: true,
+        salario: 0,
+        caixaInicial: 4000,
+        alocacaoInicial: { reserva: 12000, rendafixa: 30000, fiis: 20000, acoes: 40000 },
+        roteiro: [{ mes: 2, evento: 'crash' }],
+        desafio: { meses: 12 },
+        estudo: 'sequencia-de-retornos',
+      },
+    ],
 
     // Cenário aposentadoria. Números pensados pra playtest — todos ajustáveis aqui.
     aposentadoria: {

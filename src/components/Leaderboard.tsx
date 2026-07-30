@@ -2,9 +2,16 @@
 // portado 1:1 do Leaderboard do protótipo DC (git history); dados do placarSlice.
 import { useSelector } from 'react-redux';
 import { selectLeaderboard } from '../features/placar/placarSlice';
+import { selectGame } from '../features/game/selectors';
 
 export function Leaderboard() {
   const { lbLista, lbTitulo, lbTituloCor } = useSelector(selectLeaderboard);
+  // O tutorial não registra partida (o listener do placar o ignora), então o
+  // board dele seria uma vitrine permanentemente vazia convidando a competir
+  // numa corrida que não existe.
+  const modo = useSelector(selectGame).modo;
+  if (modo === 'tutorial') return null;
+
   return (
     <div style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', borderRadius: 6, overflow: 'hidden', color: 'var(--texto)', lineHeight: 1.5 }}>
       <div style={{ background: 'var(--superficie-2)', borderBottom: '1px solid var(--borda)', padding: '8px 14px', fontSize: 10, letterSpacing: 2, color: lbTituloCor }}>

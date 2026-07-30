@@ -93,11 +93,11 @@ describe('navegação do menu', () => {
     expect(screen.getByText('ESTRATÉGIA DE MORADIA')).toBeDefined();
   });
 
-  it('GLOSSÁRIO é uma página do menu, com o significado de Peculium', () => {
+  it('BIBLIOTECA é uma página do menu, com o significado de Peculium', () => {
     const store = montar();
-    clicar(/GLOSSÁRIO/);
-    expect(selectRota(store.getState())).toBe('glossario');
-    expect(store.getState().ui.glossarioAberto).toBe(false); // página, não overlay
+    clicar(/BIBLIOTECA/);
+    expect(selectRota(store.getState())).toBe('biblioteca');
+    expect(store.getState().ui.bibliotecaAberta).toBe(false); // página, não overlay
     expect(screen.getByText('Peculium')).toBeDefined();
     expect(screen.getByText(/direito romano/)).toBeDefined();
   });

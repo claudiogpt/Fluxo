@@ -4,9 +4,9 @@ import type { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 import { selectRota, type RotaId } from '../../features/ui/uiSlice';
 import { Home } from './Home';
+import { PaginaBiblioteca } from './PaginaBiblioteca';
 import { PaginaCenarios } from './PaginaCenarios';
 import { PaginaConfig } from './PaginaConfig';
-import { PaginaGlossario } from './PaginaGlossario';
 import { PaginaModos } from './PaginaModos';
 import { PaginaPerfil } from './PaginaPerfil';
 import { PaginaSetup } from './PaginaSetup';
@@ -16,7 +16,7 @@ const PAGINAS: Record<RotaId, ComponentType> = {
   modos: PaginaModos,
   cenarios: PaginaCenarios,
   setup: PaginaSetup,
-  glossario: PaginaGlossario,
+  biblioteca: PaginaBiblioteca,
   config: PaginaConfig,
   perfil: PaginaPerfil,
 };

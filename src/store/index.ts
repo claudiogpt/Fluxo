@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { bibliotecaReducer } from '../features/biblioteca';
 import { conceitosReducer } from '../features/conceitos/conceitosSlice';
 import { gameReducer } from '../features/game/gameSlice';
 import { placarReducer } from '../features/placar/placarSlice';
@@ -10,6 +11,7 @@ import { listener } from './listeners';
 export function makeStore() {
   return configureStore({
     reducer: {
+      biblioteca: bibliotecaReducer,
       conceitos: conceitosReducer,
       game: gameReducer,
       placar: placarReducer,
