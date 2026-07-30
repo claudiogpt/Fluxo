@@ -1,7 +1,15 @@
 // Leitura/escrita das preferências. Validação por lista branca, campo a campo:
 // um spread cego do JSON deixaria um {"tema":"roxo"} sobrevivente no storage
 // quebrar o CSS em silêncio (nenhuma regra casa, o tema some).
-import { ESCALAS, FONTES, PREFS_PADRAO, TEMAS, type PrefsState } from './tipos';
+import {
+  CONTRASTES,
+  ESCALAS,
+  FONTES,
+  PREFS_PADRAO,
+  TEMAS,
+  VISOES,
+  type PrefsState,
+} from './tipos';
 
 export const CHAVE_PREFS = 'fluxo_prefs_v1'; // convenção fluxo_*_vN do projeto
 
@@ -16,6 +24,8 @@ export function lerPrefs(): PrefsState {
       tema: valido(TEMAS, o.tema, PREFS_PADRAO.tema),
       fonte: valido(FONTES, o.fonte, PREFS_PADRAO.fonte),
       escala: valido(ESCALAS, o.escala, PREFS_PADRAO.escala),
+      contraste: valido(CONTRASTES, o.contraste, PREFS_PADRAO.contraste),
+      visao: valido(VISOES, o.visao, PREFS_PADRAO.visao),
     };
   } catch {
     return { ...PREFS_PADRAO }; // JSON corrompido ou sem storage

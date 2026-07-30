@@ -46,6 +46,22 @@ describe('CONFIGURAÇÕES', () => {
     expect(document.documentElement.dataset.fonte).toBe('sans');
   });
 
+  it('ALTO CONTRASTE e DALTÔNICO chegam no <html> e convivem', () => {
+    montarEmConfig();
+    clicar(/ALTO CONTRASTE/);
+    clicar(/DALTÔNICO/);
+    const d = document.documentElement.dataset;
+    expect([d.contraste, d.visao]).toEqual(['alto', 'daltonico']);
+    const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS)!);
+    expect([salvo.contraste, salvo.visao]).toEqual(['alto', 'daltonico']);
+  });
+
+  it('os eixos de acessibilidade não arrastam o tema junto', () => {
+    montarEmConfig();
+    clicar(/ALTO CONTRASTE/);
+    expect(document.documentElement.dataset.tema).toBe('escuro');
+  });
+
   it('o glossário não mora mais aqui — é botão da home', () => {
     montarEmConfig();
     expect(screen.queryByRole('button', { name: /GLOSSÁRIO/ })).toBeNull();
