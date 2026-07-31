@@ -25,15 +25,13 @@
   "23": "ConceitosApi",
   "24": "conceitos.js",
   "25": "cores.test.ts",
-  "26": "GameView.tsx",
+  "26": "catalogo.js",
   "27": "RegrasCard.tsx",
   "28": "StorageLike",
-  "29": "eventos.js",
   "30": "thunks.ts",
   "31": "ativos.js",
   "32": "config.js",
-  "33": "Glossario.test.tsx",
-  "34": "conceitosSlice.test.ts",
-  "35": "ControleAporte.tsx",
-  "36": "typedefs.jsdoc.js"
+  "36": "typedefs.jsdoc.js",
+  "37": "CatalogoApi",
+  "38": "realista.js"
 }

@@ -1,0 +1,552 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1784959263.841176,
+    "ast_hash": "be56342ff6ece5fc0e554d7433388d46",
+    "semantic_hash": ""
+  },
+  "engine/ativos.js": {
+    "mtime": 1785275449.0405612,
+    "ast_hash": "5ecaf398aa1e2f290e291cf482abd63a",
+    "semantic_hash": ""
+  },
+  "engine/conceitos.js": {
+    "mtime": 1785349133.6222396,
+    "ast_hash": "74aee019e39f702e3d9625d0ce5e1d6f",
+    "semantic_hash": ""
+  },
+  "engine/config.js": {
+    "mtime": 1785394236.0475125,
+    "ast_hash": "53f5bccb99015d351229be648066783e",
+    "semantic_hash": ""
+  },
+  "engine/eventos.js": {
+    "mtime": 1785394396.2227721,
+    "ast_hash": "2a7446b0bc69ebb53ac2bf76bdcb697a",
+    "semantic_hash": ""
+  },
+  "engine/formato.js": {
+    "mtime": 1785275449.0395613,
+    "ast_hash": "fb556ab74cb32b0a716d21ce1eebb7e1",
+    "semantic_hash": ""
+  },
+  "engine/placar.js": {
+    "mtime": 1785394340.4943333,
+    "ast_hash": "ac15ad33eb288214c13b8bf363c7d4ed",
+    "semantic_hash": ""
+  },
+  "engine/regras.js": {
+    "mtime": 1785394326.4422228,
+    "ast_hash": "dccd6d89a71ad1a5bbd5653d2c50f556",
+    "semantic_hash": ""
+  },
+  "tests/engine.test.js": {
+    "mtime": 1785394410.3818839,
+    "ast_hash": "a85c281d1a1170858b98b61886bb7805",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1785349333.9951594,
+    "ast_hash": "9c9f3f792526af45b311c6073c4854f8",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1783402317.5148194,
+    "ast_hash": "206940b8fcab0cd0c1987baaad8ee4bd",
+    "semantic_hash": "206940b8fcab0cd0c1987baaad8ee4bd"
+  },
+  "supabase/hardening.sql": {
+    "mtime": 1783968423.2978034,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  ".mcp.json": {
+    "mtime": 1784055612.8233137,
+    "ast_hash": "cf1754f5882211ffb899a3638b8db606",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1785276500.8867323,
+    "ast_hash": "17859e756e98c4e0b73127f3deb83db9",
+    "semantic_hash": ""
+  },
+  "supabase/.temp/linked-project.json": {
+    "mtime": 1784060612.3590157,
+    "ast_hash": "cb1f06f27899b5f22730ed48c6ddb6a8",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260714191050_hardening_placar.sql": {
+    "mtime": 1784056251.019951,
+    "ast_hash": "0e6d820ebbb09ef103d097fb12473102",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1784959237.477605,
+    "ast_hash": "95176b7a0a8527e4109af83ac4e85775",
+    "semantic_hash": ""
+  },
+  "vite.config.ts": {
+    "mtime": 1784959233.3876734,
+    "ast_hash": "0ec1abefb5fb32d262351c38ef0691bc",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1785132084.7207136,
+    "ast_hash": "ee28380231d56e716b651b10659d2a0d",
+    "semantic_hash": ""
+  },
+  "src/engine/types.ts": {
+    "mtime": 1785394720.4013333,
+    "ast_hash": "bf9118dc8e668b41e64b384e8951c33b",
+    "semantic_hash": ""
+  },
+  "src/engine/index.ts": {
+    "mtime": 1785305390.8816614,
+    "ast_hash": "cdf3c08990c45a441964177d281c4f22",
+    "semantic_hash": ""
+  },
+  "src/store/index.ts": {
+    "mtime": 1785394728.1093943,
+    "ast_hash": "74069e2c0468fe2f336c31db86f97b45",
+    "semantic_hash": ""
+  },
+  "src/main.tsx": {
+    "mtime": 1785125994.177231,
+    "ast_hash": "79f9770b058d9c37f0573e9406dde691",
+    "semantic_hash": ""
+  },
+  "src/App.tsx": {
+    "mtime": 1785445570.718056,
+    "ast_hash": "d2cec61fafebb52883a9b159e0099d03",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.ts": {
+    "mtime": 1785394641.233707,
+    "ast_hash": "84a4f7878fefdd6df57ce7e8f5780594",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/conceitosSlice.test.ts": {
+    "mtime": 1785445764.7642195,
+    "ast_hash": "2a03df06d2736d260c5290cf2ebd0271",
+    "semantic_hash": ""
+  },
+  "src/components/AtivoCard.tsx": {
+    "mtime": 1785309939.136181,
+    "ast_hash": "3944f28b5b52921432a05b488e9909c3",
+    "semantic_hash": ""
+  },
+  "src/components/ConceitoModal.tsx": {
+    "mtime": 1785125632.4188845,
+    "ast_hash": "271db1c5fa71e3c6f7e5c49018890ecd",
+    "semantic_hash": ""
+  },
+  "src/components/FimDeJogo.tsx": {
+    "mtime": 1785446368.2791414,
+    "ast_hash": "f8982341569946077b874d905a252f5e",
+    "semantic_hash": ""
+  },
+  "src/components/ImovelCard.tsx": {
+    "mtime": 1785125731.0878468,
+    "ast_hash": "ae5c46b15002c3e9e6f8dc8c0c0a0944",
+    "semantic_hash": ""
+  },
+  "src/components/Leaderboard.tsx": {
+    "mtime": 1785446375.115361,
+    "ast_hash": "ff2e487041bd3d4e2db7a9cc0f0ca463",
+    "semantic_hash": ""
+  },
+  "src/components/NegocioCard.tsx": {
+    "mtime": 1785125731.0878468,
+    "ast_hash": "05c97913992d5fc34c21f09969826831",
+    "semantic_hash": ""
+  },
+  "src/components/PainelStatus.tsx": {
+    "mtime": 1785445391.2192428,
+    "ast_hash": "0da44434851b4555ce144ac7d8ca0f53",
+    "semantic_hash": ""
+  },
+  "src/components/TerminalEventos.tsx": {
+    "mtime": 1785125757.639859,
+    "ast_hash": "722ec5741b609c6b4c6726ef0e31a6d7",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/efeitos.test.ts": {
+    "mtime": 1785266352.2804623,
+    "ast_hash": "1752c5010337933fcec7808f49d7dac7",
+    "semantic_hash": ""
+  },
+  "src/features/conceitos/thunks.ts": {
+    "mtime": 1785305855.2905614,
+    "ast_hash": "8cc07134d16aee297b9ffbc38c2ca377",
+    "semantic_hash": ""
+  },
+  "src/features/game/gameModos.test.ts": {
+    "mtime": 1785349174.751971,
+    "ast_hash": "4f3525ca1400bb45c0b1e6f799b7a93f",
+    "semantic_hash": ""
+  },
+  "src/features/game/gameSlice.test.ts": {
+    "mtime": 1785126305.5769377,
+    "ast_hash": "1b7ce6fce4a682e565a90845f173a6d6",
+    "semantic_hash": ""
+  },
+  "src/features/game/gameSlice.ts": {
+    "mtime": 1785349037.0967712,
+    "ast_hash": "a7536064861cb58e088ec827fa7e9a20",
+    "semantic_hash": ""
+  },
+  "src/features/game/selectors.ts": {
+    "mtime": 1785445508.1003995,
+    "ast_hash": "1f1e4a880402587a02397dc02a2332c5",
+    "semantic_hash": ""
+  },
+  "src/features/placar/placarSlice.ts": {
+    "mtime": 1785126930.93774,
+    "ast_hash": "13c081572775c6e395679564cf398755",
+    "semantic_hash": ""
+  },
+  "src/hooks/useAtalhos.ts": {
+    "mtime": 1785445657.964007,
+    "ast_hash": "5cd4c7905ee144991bd60a1c61f1bfe9",
+    "semantic_hash": ""
+  },
+  "src/hooks/useGameLoop.ts": {
+    "mtime": 1784955065.1633513,
+    "ast_hash": "c4745e98608352ef90eb86dab453b2de",
+    "semantic_hash": ""
+  },
+  "src/store/listeners.ts": {
+    "mtime": 1785446431.4831238,
+    "ast_hash": "0fd88cd1f6ab6644875c7ec9739e6a04",
+    "semantic_hash": ""
+  },
+  "src/views/GameView.tsx": {
+    "mtime": 1785445579.4371493,
+    "ast_hash": "6426851cddd99a7944a474823645b3c3",
+    "semantic_hash": ""
+  },
+  "src/features/game/cores.test.ts": {
+    "mtime": 1785125829.457928,
+    "ast_hash": "7fabbfd393a2a570805b65f83b71fc01",
+    "semantic_hash": ""
+  },
+  "src/features/game/cores.ts": {
+    "mtime": 1785125714.1458435,
+    "ast_hash": "a6887fc91989f4792b36d58874074d48",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/aplicar.ts": {
+    "mtime": 1785385550.2370687,
+    "ast_hash": "f7d9d5708cc0559f96d0f9c2cc633cf9",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/armazenamento.ts": {
+    "mtime": 1785385536.059155,
+    "ast_hash": "1def5e823e054e7e24bee7c4bc882b98",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/index.ts": {
+    "mtime": 1785385570.387944,
+    "ast_hash": "54813dc4a13489a30f41f1eb80513372",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/prefsSlice.test.ts": {
+    "mtime": 1785385637.4865124,
+    "ast_hash": "8016bde15bf0f439a70c8a80de3b95c4",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/prefsSlice.ts": {
+    "mtime": 1785385563.0339897,
+    "ast_hash": "05491516fd759e7a7aee830a035ce0eb",
+    "semantic_hash": ""
+  },
+  "src/features/prefs/tipos.ts": {
+    "mtime": 1785385515.6372771,
+    "ast_hash": "f044c87ad9910e333e7c3495046ba503",
+    "semantic_hash": ""
+  },
+  "src/hooks/usePrefs.ts": {
+    "mtime": 1785126083.8954518,
+    "ast_hash": "95ef1dded392102aee840ea88a4f1e5a",
+    "semantic_hash": ""
+  },
+  "src/features/ui/thunks.ts": {
+    "mtime": 1785445610.8604887,
+    "ast_hash": "f0cc1657b03f18180828df40f28359a9",
+    "semantic_hash": ""
+  },
+  "src/features/ui/uiSlice.test.ts": {
+    "mtime": 1785445772.0403037,
+    "ast_hash": "479ab76e7e99bb2a8c14477613ddff43",
+    "semantic_hash": ""
+  },
+  "src/features/ui/uiSlice.ts": {
+    "mtime": 1785394785.6088498,
+    "ast_hash": "df495dcc9c16cd68d84c3f638ef50935",
+    "semantic_hash": ""
+  },
+  "src/hooks/useAtalhos.test.tsx": {
+    "mtime": 1785445780.232399,
+    "ast_hash": "c16e821456fbb2779fadd22faf2b01dc",
+    "semantic_hash": ""
+  },
+  "src/components/menu/BotaoMenu.tsx": {
+    "mtime": 1785126456.8136837,
+    "ast_hash": "199a60ddee15a1c582e8c24f487e39e6",
+    "semantic_hash": ""
+  },
+  "src/components/menu/CartaoEscolha.tsx": {
+    "mtime": 1785126463.380753,
+    "ast_hash": "9bfcfde7728a09c964531f4859f940b2",
+    "semantic_hash": ""
+  },
+  "src/components/menu/GrupoOpcoes.tsx": {
+    "mtime": 1785126758.7024488,
+    "ast_hash": "f48ba16ffff4b903a3f523823f8854a3",
+    "semantic_hash": ""
+  },
+  "src/components/menu/Home.tsx": {
+    "mtime": 1785445674.031186,
+    "ast_hash": "2a421ee9cd948236a137954baec53863",
+    "semantic_hash": ""
+  },
+  "src/components/menu/MenuLayout.tsx": {
+    "mtime": 1785126447.2975824,
+    "ast_hash": "1f314947927de4f21b749e16c08380cd",
+    "semantic_hash": ""
+  },
+  "src/components/menu/MenuRouter.tsx": {
+    "mtime": 1785445336.1267338,
+    "ast_hash": "a27dd3d381cb1f9453fd280e215402ac",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaCenarios.tsx": {
+    "mtime": 1785445702.80451,
+    "ast_hash": "db194132b6abf5129762b6f68b0b588e",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaConfig.test.tsx": {
+    "mtime": 1785385647.0064495,
+    "ast_hash": "209e86e6d303013c122bd1dfa977b52d",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaConfig.tsx": {
+    "mtime": 1785385587.6208353,
+    "ast_hash": "dc4008409784c1749c4ea56e398e43eb",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaModos.tsx": {
+    "mtime": 1785126493.9900696,
+    "ast_hash": "eb3289a2a94d44568407e9241cb527b5",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaPerfil.tsx": {
+    "mtime": 1785126543.2095582,
+    "ast_hash": "0d2133ee61df04490873ab378f6a9ca2",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaSetup.tsx": {
+    "mtime": 1785445969.8313935,
+    "ast_hash": "9db6ab24dab41c1aa61072d6ce4be0a5",
+    "semantic_hash": ""
+  },
+  "src/components/menu/RegrasCard.tsx": {
+    "mtime": 1785126478.5349112,
+    "ast_hash": "ca89922870526a35d5a5ab797194032b",
+    "semantic_hash": ""
+  },
+  "src/components/menu/estilos.ts": {
+    "mtime": 1785126440.1335056,
+    "ast_hash": "d678cc4fde0864b2752354cb386cddeb",
+    "semantic_hash": ""
+  },
+  "src/components/menu/navegacao.test.tsx": {
+    "mtime": 1785445780.2313988,
+    "ast_hash": "be71d523f9a380e8a7fa3a72ca7e2c81",
+    "semantic_hash": ""
+  },
+  "src/features/game/selectorsMenu.ts": {
+    "mtime": 1785445691.7603853,
+    "ast_hash": "c1677c922865061c1a89e5f84729c434",
+    "semantic_hash": ""
+  },
+  "src/features/ui/menuItens.ts": {
+    "mtime": 1785445675.5752034,
+    "ast_hash": "047f2c77967ee71954bd250aed5796ea",
+    "semantic_hash": ""
+  },
+  "src/features/ui/textos.ts": {
+    "mtime": 1785209917.2463913,
+    "ast_hash": "883fed02297f3288e892ea296a8a0a2e",
+    "semantic_hash": ""
+  },
+  "src/views/GameView.test.tsx": {
+    "mtime": 1785349315.0335317,
+    "ast_hash": "ce9d2922685a1bd2cbeb3521606a1e23",
+    "semantic_hash": ""
+  },
+  "src/components/ControleAporte.tsx": {
+    "mtime": 1785309883.163352,
+    "ast_hash": "061f446e4ad1ffd7f36dd6523f6bba08",
+    "semantic_hash": ""
+  },
+  "src/features/game/percentual.test.ts": {
+    "mtime": 1785261710.9313486,
+    "ast_hash": "fc90dad5d37e6e6932ea0da01e1ea36d",
+    "semantic_hash": ""
+  },
+  "src/components/ControleAporte.test.tsx": {
+    "mtime": 1785266138.2108676,
+    "ast_hash": "e4eb7e6f64d3b04b78c99c5a63a4f890",
+    "semantic_hash": ""
+  },
+  "engine/typedefs.jsdoc.js": {
+    "mtime": 1785349455.3302093,
+    "ast_hash": "2a4b87537f46e91f856c1bbd840a0fc4",
+    "semantic_hash": ""
+  },
+  "docs/DOCSTYLE.md": {
+    "mtime": 1785275449.0405612,
+    "ast_hash": "5536ce8c2bc4003b7dd90b83ae798f92",
+    "semantic_hash": ""
+  },
+  "src/components/PainelStatus.test.tsx": {
+    "mtime": 1785447507.0341039,
+    "ast_hash": "cf89a07798b91b4c955c7222e143b7e9",
+    "semantic_hash": ""
+  },
+  "engine/catalogo.js": {
+    "mtime": 1785349133.636239,
+    "ast_hash": "a8751958176fe85c56838c7971dfacf9",
+    "semantic_hash": ""
+  },
+  "engine/realista.js": {
+    "mtime": 1785349019.9254897,
+    "ast_hash": "317a7d2141474ed133b087e2617ac656",
+    "semantic_hash": ""
+  },
+  "src/components/CarteiraCategorias.tsx": {
+    "mtime": 1785305805.4337258,
+    "ast_hash": "9affd81617cf5d3875ecf2f85854bc01",
+    "semantic_hash": ""
+  },
+  "src/components/MacroCard.tsx": {
+    "mtime": 1785308959.1996386,
+    "ast_hash": "50cc4f20d1d4b58f57af349deb548066",
+    "semantic_hash": ""
+  },
+  "src/components/CustosCard.tsx": {
+    "mtime": 1785309927.7908182,
+    "ast_hash": "b9f59f42539697daa4bb6762695e2176",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/Ajuda.tsx": {
+    "mtime": 1785445427.768594,
+    "ast_hash": "7d11c12c21a91e053bd056211f0c6ab9",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/BibliotecaConteudo.tsx": {
+    "mtime": 1785446510.2694585,
+    "ast_hash": "1f0bb2e03b7ad6a81dee982cb7ecbeac",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/LinhaHint.test.tsx": {
+    "mtime": 1785447496.2728937,
+    "ast_hash": "93818bc5225620b023b7b24e7224b789",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/LinhaHint.tsx": {
+    "mtime": 1785445436.370678,
+    "ast_hash": "2127f004f3a03f1b3156dd1a56f25552",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/Markdown.tsx": {
+    "mtime": 1785394888.0021274,
+    "ast_hash": "f82995c96f36f20cae7368012849d445",
+    "semantic_hash": ""
+  },
+  "src/components/biblioteca/OverlayBiblioteca.tsx": {
+    "mtime": 1785445320.6235955,
+    "ast_hash": "b9059c2a50f0ed89270049b5ffc69ba5",
+    "semantic_hash": ""
+  },
+  "src/components/menu/ConviteTutorial.tsx": {
+    "mtime": 1785445668.3541226,
+    "ast_hash": "55ee3b376b307a173862bb9db5b6b0d0",
+    "semantic_hash": ""
+  },
+  "src/components/menu/PaginaBiblioteca.tsx": {
+    "mtime": 1785445324.645631,
+    "ast_hash": "295d80da2810947f1599f78da0040146",
+    "semantic_hash": ""
+  },
+  "src/conteudo/conteudo.test.ts": {
+    "mtime": 1785393748.0267184,
+    "ast_hash": "61b4fa3df0783a1c2821198f1af7e897",
+    "semantic_hash": ""
+  },
+  "src/conteudo/diagnosticos.ts": {
+    "mtime": 1785394504.739628,
+    "ast_hash": "85de85418113a1a2d7c3c66038a57368",
+    "semantic_hash": ""
+  },
+  "src/conteudo/fundamentos.ts": {
+    "mtime": 1785393608.8306565,
+    "ast_hash": "38d0c69abc5a97bd7a45fdb8c7312bd1",
+    "semantic_hash": ""
+  },
+  "src/conteudo/gatilhos.ts": {
+    "mtime": 1785394473.3693805,
+    "ast_hash": "190bf78acef17fc08c402f328af1e1a9",
+    "semantic_hash": ""
+  },
+  "src/conteudo/index.ts": {
+    "mtime": 1785394518.6807382,
+    "ast_hash": "c8f3e730f496bf1eb7730b25feb06b30",
+    "semantic_hash": ""
+  },
+  "src/conteudo/manual.ts": {
+    "mtime": 1785445942.2510185,
+    "ast_hash": "74ba2b360544115bed6178f83b5a34c0",
+    "semantic_hash": ""
+  },
+  "src/conteudo/tipos.ts": {
+    "mtime": 1785394480.9834406,
+    "ast_hash": "6fbccd63ef7fc6928b81470da90324f2",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/armazenamento.ts": {
+    "mtime": 1785394570.2571456,
+    "ast_hash": "9ba308b9c934a1d7af0c5f9e2d0b1f2b",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/bibliotecaSlice.test.ts": {
+    "mtime": 1785446439.733375,
+    "ast_hash": "a6cfce2294c45389d887401f06e606c6",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/bibliotecaSlice.ts": {
+    "mtime": 1785446188.4548419,
+    "ast_hash": "129ca887e5555c2f381554625eb187d9",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/diagnostico.ts": {
+    "mtime": 1785445522.481548,
+    "ast_hash": "239c01be3421b67929507e530b463936",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/index.ts": {
+    "mtime": 1785445494.6252613,
+    "ast_hash": "f5ba61125f82eaff6c964c23c17182c1",
+    "semantic_hash": ""
+  },
+  "src/features/biblioteca/tipos.ts": {
+    "mtime": 1785394915.7953334,
+    "ast_hash": "6b5bf51c6da6a234b6e3865a5d557ace",
+    "semantic_hash": ""
+  },
+  "src/features/ui/ajuda.ts": {
+    "mtime": 1785445417.5154943,
+    "ast_hash": "60a453a020685afbe1e4a973c801b79b",
+    "semantic_hash": ""
+  }
+}

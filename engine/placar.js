@@ -17,7 +17,7 @@
   const CHAVE_NICK = 'fluxo_nick';
 
   // Resultados que valem "vitória" — dominam o ranking do board.
-  const VITORIAS = ['livre', 'marco', 'apos_sucesso', 'imoveis_fim'];
+  const VITORIAS = ['livre', 'marco', 'apos_sucesso', 'imoveis_fim', 'desafio_ok'];
 
   /** @returns {StorageLike|null} Browser localStorage or null if unavailable. */
   function storagePadrao() {
@@ -63,7 +63,7 @@
    * Calcula score único para ranking (maior = melhor dentro do mesmo board).
    *
    * Vitórias partem de 1e12; modos de tempo premiam menos meses;
-   * aposentadoria/imóveis premiam patrimônio final; derrotas rankeiam por meses sobrevividos.
+   * aposentadoria/imóveis/treinos premiam patrimônio final; derrotas rankeiam por meses sobrevividos.
    *
    * @param {string} modo - Board id.
    * @param {string} resultado - Outcome code (`livre`, `faliu`, `marco`, etc.).
@@ -74,7 +74,11 @@
    */
   function scoreDe(modo, resultado, meses, pat, tempo) {
     if (VITORIAS.indexOf(resultado) < 0) return meses;
-    if (modo === 'aposentadoria' || modo === 'imoveis') return 1e12 + Math.max(0, pat);
+    // Treino tem prazo fixo: todo mundo termina no mesmo mês, então ranquear
+    // por tempo não separaria ninguém — o que separa é com quanto se chegou.
+    if (modo === 'aposentadoria' || modo === 'imoveis' || modo.indexOf('treino_') === 0) {
+      return 1e12 + Math.max(0, pat);
+    }
     return 1e12 - meses * 1e6 - Math.min(Math.max(0, tempo), 999999);
   }
 

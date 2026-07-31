@@ -35,7 +35,15 @@ export interface ConceitosApi {
 
 export type AtivoKey = 'reserva' | 'rendafixa' | 'fiis' | 'acoes' | 'cripto';
 export type Dificuldade = 'normal' | 'hardcore';
-export type FimDeJogo = 'faliu' | 'livre' | 'apos_sucesso' | 'apos_faliu' | 'imoveis_fim';
+export type FimDeJogo =
+  | 'faliu'
+  | 'livre'
+  | 'apos_sucesso'
+  | 'apos_faliu'
+  | 'imoveis_fim'
+  /** prazo do tutorial/treino cumprido (e meta batida, quando havia) */
+  | 'desafio_ok'
+  | 'desafio_falhou';
 
 export interface LogItem {
   id: number;
@@ -126,6 +134,18 @@ export interface EstadoRealista {
   mesesSemIsencao: number;
 }
 
+/** Prazo da partida — tutorial e treinos. `meta` ausente = basta chegar ao fim. */
+export interface DesafioDef {
+  meses: number;
+  meta?: number;
+}
+
+/** Evento com hora marcada (ver engine/eventos.js: ROTEIRAVEIS). */
+export interface ItemRoteiro {
+  mes: number;
+  evento: string;
+}
+
 export interface GameState {
   tela: 'intro' | 'jogo';
   dificuldade: Dificuldade;
@@ -141,6 +161,9 @@ export interface GameState {
   salario: number;
   custo: number;
   semSalario: number;
+  /** null nas partidas sem prazo (todas, fora tutorial e treino) */
+  desafio: DesafioDef | null;
+  roteiro: ItemRoteiro[] | null;
   // `string` e não `AtivoKey`: no modo realista as chaves vêm do catálogo de 15
   // (`rf_selic`, `ac_blue`, …). `AtivoKey` continua valendo nas ACTIONS dos
   // modos clássicos — o que muda é só o armazenamento, que agora é aberto.
@@ -158,6 +181,8 @@ export interface GameState {
   // flags que o fecharMes pode criar depois do início
   marcoLivre?: boolean;
   liquidacaoNoMes?: boolean;
+  /** despesa que os eventos do mês cobraram (zerada a cada fecharMes) */
+  pendente?: number;
 }
 
 export interface NovoJogoProps {
@@ -287,11 +312,24 @@ export interface ModoDef {
   disponivel: boolean;
 }
 
+/** Um treino: cenário que já começa alocado, com roteiro e prazo. */
+export interface TreinoDef extends ModoDef {
+  caixaInicial?: number;
+  salario?: number;
+  alocacaoInicial?: Record<string, number>;
+  roteiro?: ItemRoteiro[];
+  desafio: DesafioDef;
+  /** id do estudo de FUNDAMENTOS que o treino exercita */
+  estudo: string;
+}
+
 export interface ConfigApi {
   salarioDefault: number;
   dificuldades: Record<Dificuldade, { caixaInicial: number; custoFator: number; chanceEvento: number; inflacaoBase: number }>;
   modos: ModoDef[];
   cenarios: ModoDef[];
+  treinos: TreinoDef[];
+  tutorial: { meses: number };
   sandbox: { capitais: number[] };
   aposentadoria: { capitalInicial: number; salario: number; turnosAcumulacao: number; turnosSaque: number; taxaSaque: number };
   empresario: { caixaInicial: number; receitaBase: number; custoFixo: number; volReceita: number; reinvestimentoPasso: number; impulsoReceita: number; decaimento: number; mesesFalencia: number };

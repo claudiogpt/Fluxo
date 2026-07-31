@@ -1,6 +1,8 @@
-// Atalhos globais — porta a cadeia de guards do orquestrador DC:
-// input/textarea → G (glossário) → ESC (fecha overlay / volta uma tela) →
-// Space/Enter (modal) → Space/A (jogo).
+// Atalhos globais — porta a cadeia de guards do orquestrador DC, agora com a
+// biblioteca no lugar do glossário:
+// input/textarea → ? (manual da tela) → G (biblioteca) → dentro da biblioteca
+// (1/2/3 e ESC) → L (ler o estudo oferecido) → T/X (convite do tutorial) →
+// Space/Enter (modal) → ESC (volta uma tela) → Space/A (jogo).
 // Sempre e.code OU e.key (eventos sintéticos/teclados não-QWERTY).
 import { useEffect } from 'react';
 import { useDispatch, useStore } from 'react-redux';
@@ -8,8 +10,20 @@ import type { AppDispatch, RootState } from '../store';
 import { fecharMes, toggleAuto } from '../features/game/gameSlice';
 import { cancelarModal, confirmarModal } from '../features/conceitos/thunks';
 import {
-  alternarGlossario,
-  fecharGlossario,
+  PRATELEIRAS,
+  abrirEstudo,
+  abrirPrateleira,
+  dispensarConvite,
+  fecharEstudo,
+  selectConviteTutorial,
+  selectDiagnostico,
+  selectHint,
+} from '../features/biblioteca';
+import { abrirAjuda } from '../features/ui/ajuda';
+import { jogarTutorial } from '../features/ui/thunks';
+import {
+  alternarBiblioteca,
+  fecharBiblioteca,
   irPara,
   selectRota,
   voltar,
@@ -25,24 +39,71 @@ export function useAtalhos() {
     const onKey = (e: KeyboardEvent) => {
       const alvo = e.target as HTMLElement | null;
       if (alvo && /^(INPUT|TEXTAREA)$/.test(alvo.tagName)) return;
-      const { game, conceitos, ui } = store.getState();
+      const estado = store.getState();
+      const { game, conceitos, ui, biblioteca } = estado;
 
-      // [G] leva ao glossário nos dois mundos, mas em formatos diferentes:
+      // [?] abre o manual na seção da tela atual, de qualquer lugar.
+      if (e.key === '?') {
+        e.preventDefault();
+        dispatch(abrirAjuda());
+        return;
+      }
+
+      // [G] leva à biblioteca nos dois mundos, mas em formatos diferentes:
       // overlay durante a partida, página no menu (onde apertar de novo volta).
       if (ehTecla(e, 'KeyG', 'g', 'G')) {
         e.preventDefault();
-        if (game.tela === 'jogo') dispatch(alternarGlossario());
-        else if (selectRota({ ui }) === 'glossario') dispatch(voltar());
-        else dispatch(irPara('glossario'));
+        if (game.tela === 'jogo') dispatch(alternarBiblioteca());
+        else if (selectRota({ ui }) === 'biblioteca') dispatch(voltar());
+        else dispatch(irPara('biblioteca'));
         return;
       }
-      if (ui.glossarioAberto) {
-        if (ehTecla(e, 'Escape', 'Escape')) {
+
+      // Dentro da biblioteca (overlay), o teclado é dela: os números são as
+      // prateleiras — a mesma numeração 01/02/03 que está na tela.
+      if (ui.bibliotecaAberta) {
+        const n = Number(e.key);
+        if (n >= 1 && n <= PRATELEIRAS.length) {
           e.preventDefault();
-          dispatch(fecharGlossario());
+          dispatch(abrirPrateleira(PRATELEIRAS[n - 1]));
+        } else if (ehTecla(e, 'Escape', 'Escape')) {
+          e.preventDefault();
+          // ESC volta um nível: do estudo pra lista, da lista pro jogo.
+          if (biblioteca.estudoAberto) dispatch(fecharEstudo());
+          else dispatch(fecharBiblioteca());
         }
         return;
       }
+
+      // [L] é sempre "ler o que está sendo oferecido AGORA": o hint do rodapé
+      // durante o mês, o diagnóstico depois da derrota. Uma tecla, dois
+      // momentos — nunca duas teclas pra mesma coisa.
+      if (ehTecla(e, 'KeyL', 'l', 'L')) {
+        const oferta = selectDiagnostico(estado)?.estudo ?? selectHint(estado)?.estudo;
+        if (oferta) {
+          e.preventDefault();
+          dispatch(abrirEstudo(oferta.id));
+          if (game.tela === 'jogo') dispatch(alternarBiblioteca());
+          else dispatch(irPara('biblioteca'));
+          return;
+        }
+      }
+
+      // O convite do tutorial vive só na home da primeira sessão. As teclas
+      // existem enquanto a linha existe — some a linha, somem as teclas.
+      if (game.tela !== 'jogo' && selectRota({ ui }) === 'home' && selectConviteTutorial(estado)) {
+        if (ehTecla(e, 'KeyT', 't', 'T')) {
+          e.preventDefault();
+          dispatch(jogarTutorial());
+          return;
+        }
+        if (ehTecla(e, 'KeyX', 'x', 'X')) {
+          e.preventDefault();
+          dispatch(dispensarConvite());
+          return;
+        }
+      }
+
       if (conceitos.modal) {
         if (ehTecla(e, 'Space', ' ') || ehTecla(e, 'Enter', 'Enter')) {
           e.preventDefault();

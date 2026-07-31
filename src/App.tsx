@@ -1,16 +1,17 @@
-// Shell do jogo: intro | jogo + overlays (fim, modal educacional, glossário).
+// Shell do jogo: intro | jogo + overlays (fim, modal educacional, biblioteca).
 // Porta a composição do orquestrador DC.
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Ajuda } from './components/biblioteca/Ajuda';
+import { OverlayBiblioteca } from './components/biblioteca/OverlayBiblioteca';
 import { ConceitoModal } from './components/ConceitoModal';
 import { FimDeJogo } from './components/FimDeJogo';
-import { Glossario } from './components/Glossario';
 import { MenuRouter } from './components/menu/MenuRouter';
 import { placar } from './engine';
-import { selectContador } from './features/conceitos/conceitosSlice';
+import { selectContadorGlossario } from './features/biblioteca';
 import { selectGame, selectTela } from './features/game/selectors';
 import { carregarPlacar } from './features/placar/placarSlice';
-import { alternarGlossario, fecharGlossario, selectGlossarioAberto } from './features/ui/uiSlice';
+import { alternarBiblioteca, fecharBiblioteca, selectBibliotecaAberta } from './features/ui/uiSlice';
 import { useAtalhos } from './hooks/useAtalhos';
 import { useGameLoop } from './hooks/useGameLoop';
 import { usePrefs } from './hooks/usePrefs';
@@ -20,9 +21,9 @@ import type { AppDispatch } from './store';
 export function App() {
   const tela = useSelector(selectTela);
   const game = useSelector(selectGame);
-  const contador = useSelector(selectContador);
+  const contador = useSelector(selectContadorGlossario);
   const dispatch = useDispatch<AppDispatch>();
-  const glossarioAberto = useSelector(selectGlossarioAberto);
+  const bibliotecaAberta = useSelector(selectBibliotecaAberta);
   const emJogo = tela === 'jogo';
 
   useGameLoop();
@@ -41,25 +42,27 @@ export function App() {
     <div style={{ minHeight: '100vh', background: 'var(--fundo)', color: 'var(--texto)', fontSize: 13, lineHeight: 1.5 }}>
       {tela === 'intro' ? <MenuRouter /> : <GameView />}
 
-      {/* O glossário flutuante existe só DURANTE a partida: é consulta rápida
-          sem sair da mesa. No menu ele é uma página (rota 'glossario').
-          Em tela estreita o tema.css esconde este botão — lá o glossário fica
-          no cabeçalho, ao lado do MENU (PainelStatus), pra não pairar sobre o
+      {/* A biblioteca flutuante existe só DURANTE a partida: é consulta rápida
+          sem sair da mesa. No menu ela é uma página (rota 'biblioteca').
+          Em tela estreita o tema.css esconde este botão — lá ela fica no
+          cabeçalho, ao lado do MENU (PainelStatus), pra não pairar sobre o
           jogo. O `[G]` continua abrindo nos dois casos, é a mesma action. */}
       {emJogo && (
-        <div className="glossario-flutuante" style={{ position: 'fixed', right: 16, zIndex: 70 }}>
+        <div className="biblioteca-flutuante" style={{ position: 'fixed', right: 16, zIndex: 70 }}>
           <button
-            onClick={() => dispatch(alternarGlossario())}
+            onClick={() => dispatch(alternarBiblioteca())}
             style={{ background: 'var(--superficie)', border: '1px solid var(--borda)', color: 'var(--texto-fraco)', fontSize: 11, fontWeight: 600, letterSpacing: 0.5, padding: '8px 14px', borderRadius: 20, cursor: 'pointer', boxShadow: 'var(--sombra-flutuante)' }}
           >
-            📖 {contador} [G]
+            📚 {contador} [G]
           </button>
         </div>
       )}
 
-      {emJogo && glossarioAberto && <Glossario fechar={() => dispatch(fecharGlossario())} />}
+      {emJogo && bibliotecaAberta && <OverlayBiblioteca fechar={() => dispatch(fecharBiblioteca())} />}
       <ConceitoModal />
       <FimDeJogo />
+      {/* O `?` é global: toda tela tem uma seção de manual que responde por ela. */}
+      <Ajuda />
     </div>
   );
 }

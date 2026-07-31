@@ -62,58 +62,241 @@ html[data-tema='escuro'] {
   --foco: #4bb7ff;
 }
 
-/* Tema claro: mesma rampa invertida, mesmos matizes. Os acentos escurecem até
-   passar 4.5:1 sobre --fundo — verde/âmbar neon sobre branco é ilegível.
-   --texto-apagado recebe o valor de --texto-rotulo: no escuro ele é quase
-   decorativo, mas carrega conteúdo real (as dicas do menu). */
+/* Tema claro "Riqueza": papel quente, laca quase preta e dois acentos
+   saturados — nada de cinza lavado. Todo texto passa de 4.5:1 sobre --fundo, e
+   a rampa inteira passa de 5:1.
+
+   Uma escolha deliberada contra o design de origem: a paleta nasceu com a
+   convenção da bolsa chinesa (alta em vermelho, baixa em jade). Aqui vale a
+   ocidental — --sucesso é jade, --perigo é vermelho — porque o jogo ensina
+   finanças a brasileiros e trocar o significado da cor entre os dois temas
+   ensinaria o contrário do mercado onde o jogador investe de verdade.
+
+   O vermelho fica então só com o papel de perda, e a ação primária
+   (--sucesso-solido) vira laca com texto em ouro, que é como o design desenha
+   os botões sobre fundo escuro. Regra de ouro da paleta: OURO NUNCA É TEXTO
+   SOBRE PAPEL — #c99a2e serve pra preenchimento e borda; texto dourado usa
+   #8a5e0a.
+
+   --texto-apagado continua recebendo o valor de --texto-rotulo: no escuro ele
+   é quase decorativo, mas carrega conteúdo real (as dicas do menu), e o tom
+   apagado da paleta (#8a7350) para em 3.8:1. */
 html[data-tema='claro'] {
   color-scheme: light;
 
-  --fundo: #f4f7fa;
-  --superficie: #ffffff;
-  --superficie-2: #eef3f8;
-  --borda: #cfdae5;
-  --borda-suave: #e2e9f0;
+  /* Papel pouco tingido: é a maior área da tela, então é aqui que "agressivo"
+     vira cansaço de vista. A saturação do bege caiu pela metade; o punch ficou
+     concentrado onde carrega informação. */
+  --fundo: #f7f1e6;
+  --superficie: #fffdf9;
+  --superficie-2: #fbf6ec;
+  --borda: #d6c49c;
+  --borda-suave: #e9dfc9;
 
-  --texto-forte: #0b0f14;
-  --texto: #1e2833;
-  --texto-fraco: #46586a;
-  --texto-rotulo: #5d6d7d;
-  --texto-apagado: #5d6d7d;
+  /* --texto-forte é laca cheia de propósito: título e número são o que o
+     jogador varre, e foi justamente onde o contraste alto funcionou. Quem
+     recuou foi a rampa de apoio, que aparece em blocos longos de leitura. */
+  --texto-forte: #14100a;
+  --texto: #221a0e;
+  --texto-fraco: #54452c;
+  --texto-rotulo: #6c5a3c;
+  --texto-apagado: #6c5a3c;
 
-  --sucesso: #0b7a43;
-  --sucesso-suave: #3f7a2e;
-  --aviso: #8a5a00;
-  --alerta: #a54a06;
-  --perigo: #c0182b;
-  --info: #1160a8;
+  /* Acentos: praticamente intocados. Eles marcam dinheiro entrando e saindo —
+     é o único lugar onde saturação alta paga o preço que cobra. */
+  --sucesso: #05563f;
+  --sucesso-suave: #17703a;
+  --aviso: #7f5504;
+  --alerta: #a04405;
+  --perigo: #af0d24;
+  --info: #0a5384;
 
-  --sucesso-solido: #0b7a43;
-  --sobre-sucesso: #ffffff;
+  /* laca + ouro: o par de maior contraste da paleta (11.0:1) */
+  --sucesso-solido: #14100a;
+  --sobre-sucesso: #eec155;
 
-  --tint-sucesso: rgba(11, 122, 67, 0.1);
-  --tint-sucesso-fraco: rgba(11, 122, 67, 0.06);
-  --tint-perigo: rgba(192, 24, 43, 0.09);
-  --tint-aviso: rgba(138, 90, 0, 0.1);
-  --tint-info: rgba(17, 96, 168, 0.1);
+  --tint-sucesso: rgba(5, 86, 63, 0.13);
+  --tint-sucesso-fraco: rgba(5, 86, 63, 0.07);
+  --tint-perigo: rgba(175, 13, 36, 0.11);
+  --tint-aviso: rgba(127, 85, 4, 0.14);
+  --tint-info: rgba(10, 83, 132, 0.12);
 
-  --sucesso-fundo: #eaf7f0;
-  --sucesso-borda: #b9dfc9;
-  --perigo-fundo: #fdeef0;
-  --perigo-borda: #f0c2c8;
-  --aviso-fundo: #fdf6e6;
-  --aviso-fundo-2: #fbf1d9;
-  --aviso-borda: #e6d6a8;
-  --aviso-borda-2: #d9bc72;
-  --aviso-borda-suave: #efe3c4;
-  --info-fundo: #eaf2fb;
-  --info-borda: #b8d3ee;
-  --info-borda-suave: #d5e5f6;
+  /* Os pares fundo+borda dos botões de aporte/resgate — mantidos no talo. A
+     borda é o que faz o botão existir contra o papel: em 1px, um tom lavado
+     some, então ela é a versão MÉDIA do matiz, não a clara. */
+  --sucesso-fundo: #b5e3d6;
+  --sucesso-borda: #259374;
+  --perigo-fundo: #f4c8ce;
+  --perigo-borda: #cc2138;
 
-  --overlay: rgba(20, 28, 36, 0.55);
-  --overlay-forte: rgba(20, 28, 36, 0.7);
-  --sombra-flutuante: 0 4px 16px rgba(11, 15, 20, 0.18);
-  --foco: #1160a8;
+  /* Estes, ao contrário, cobrem áreas grandes (cards de evento, painéis) e
+     seguem o papel: tingidos de leve. */
+  --aviso-fundo: #fdf6e2;
+  --aviso-fundo-2: #faecc6;
+  --aviso-borda: #e6cf9c;
+  --aviso-borda-2: #cf9a1c;
+  --aviso-borda-suave: #ebe0c4;
+  --info-fundo: #e7f0f8;
+  --info-borda: #a8c6dd;
+  --info-borda-suave: #d1e0ee;
+
+  /* Véu da cor do FUNDO, não da tinta. O escuro escurece porque o fundo dele é
+     escuro; o claro tem que clarear pelo mesmo motivo — FimDeJogo escreve
+     `color: var(--texto)` direto sobre o overlay, sem caixa própria, então um
+     véu escuro aqui deixava o desfecho ilegível no tema claro. */
+  --overlay: rgba(247, 241, 230, 0.9);
+  --overlay-forte: rgba(247, 241, 230, 0.96);
+  --sombra-flutuante: 0 4px 16px rgba(20, 16, 10, 0.2);
+  /* laca: 16:1 sobre papel e sem semântica de dado — foco em vermelho leria
+     como erro agora que vermelho é perda */
+  --foco: #14100a;
+}
+
+/* ---- acessibilidade ----
+   Duas preferências ORTOGONAIS ao tema, cada uma num atributo próprio do
+   <html>: `data-contraste` mexe na intensidade, `data-visao` mexe no matiz.
+   Por isso são 4 blocos e não 2 — cada tema tem sua versão de cada eixo.
+
+   A ordem importa e é intencional: daltônico vem DEPOIS de alto contraste. Com
+   os dois ligados, a estrutura (papel, bordas, rampa de texto) vem do alto
+   contraste e os acentos vêm do daltônico, que é a divisão certa — por isso os
+   acentos daltônicos abaixo já nascem contrastados o bastante pra sustentar a
+   combinação sozinhos. */
+
+/* Escuro reforçado: texto até o branco puro, bordas que param de sumir e
+   acentos mais luminosos. */
+html[data-tema='escuro'][data-contraste='alto'] {
+  --superficie: #0f151d;
+  --superficie-2: #161e28;
+  --borda: #3d5162;
+  --borda-suave: #2b3846;
+
+  --texto-forte: #ffffff;
+  --texto: #eef4fa;
+  --texto-fraco: #b6c6d4;
+  --texto-rotulo: #9aabbb;
+  --texto-apagado: #9aabbb;
+
+  --sucesso: #3ff09a;
+  --sucesso-suave: #a8e894;
+  --aviso: #ffd166;
+  --alerta: #ffb066;
+  --perigo: #ff707f;
+  --info: #6fc7ff;
+
+  --sucesso-solido: #3ff09a;
+  --sobre-sucesso: #04120a;
+
+  --sucesso-borda: #2f7a55;
+  --perigo-borda: #7a3040;
+  --aviso-borda: #6b5a2e;
+  --aviso-borda-2: #a07a1e;
+  --info-borda: #2f5c80;
+
+  --foco: #8fd4ff;
+}
+
+/* Claro reforçado: é a paleta antes de recuar — papel mais tingido, bordas
+   médias, rampa de apoio mais escura. Fica guardada aqui em vez de perdida. */
+html[data-tema='claro'][data-contraste='alto'] {
+  --fundo: #f1e5cb;
+  --superficie: #fffdf6;
+  --superficie-2: #fbf1da;
+  --borda: #c4a768;
+  --borda-suave: #ddc9a0;
+
+  --texto: #1a1209;
+  --texto-fraco: #46341c;
+  --texto-rotulo: #5f4b2c;
+  --texto-apagado: #5f4b2c;
+
+  --sucesso: #04543e;
+  --sucesso-suave: #147133;
+  --aviso: #7a5000;
+  --alerta: #9e3f00;
+  --perigo: #ad0520;
+  --info: #034f81;
+
+  --sobre-sucesso: #f0c24a;
+
+  --tint-sucesso: rgba(4, 84, 62, 0.16);
+  --tint-sucesso-fraco: rgba(4, 84, 62, 0.09);
+  --tint-perigo: rgba(173, 5, 32, 0.14);
+  --tint-aviso: rgba(122, 80, 0, 0.18);
+  --tint-info: rgba(3, 79, 129, 0.15);
+
+  --aviso-fundo: #fbeec8;
+  --aviso-fundo-2: #f6e3ac;
+  --aviso-borda: #dcc07e;
+  --aviso-borda-2: #d49a11;
+  --aviso-borda-suave: #e6d5ae;
+  --info-fundo: #dce8f2;
+  --info-borda: #94b7d4;
+  --info-borda-suave: #c3d8ea;
+
+  --overlay: rgba(241, 229, 203, 0.9);
+  --overlay-forte: rgba(241, 229, 203, 0.96);
+  --sombra-flutuante: 0 4px 16px rgba(20, 16, 10, 0.26);
+}
+
+/* Visão daltônica. Jade e carmim caem no mesmo ponto para quem tem
+   deuteranopia ou protanopia (~8% dos homens), e no jogo esse par carrega
+   dinheiro entrando e saindo — o erro mais caro possível.
+
+   A troca é para AZUL (ganho) e VERMELHO-ALARANJADO (perda), o eixo que
+   sobrevive aos dois tipos, com os matizes vindos da paleta Okabe-Ito. --info
+   vira roxo e --alerta vira rosa-arroxeado só pra não recaírem em cima do azul
+   e do laranja recém-ocupados.
+
+   O sinal de cor nunca anda sozinho aqui: os valores já vêm com + / − e as
+   variações com ▲ / ▼, então a leitura continua de pé mesmo sem cor nenhuma. */
+html[data-tema='escuro'][data-visao='daltonico'] {
+  --sucesso: #4ea6ff;
+  --sucesso-suave: #86c8ff;
+  --aviso: #ffc24b;
+  --alerta: #ff9ec4;
+  --perigo: #ff8f3d;
+  --info: #b39dff;
+
+  --sucesso-solido: #4ea6ff;
+  --sobre-sucesso: #04121e;
+
+  --tint-sucesso: rgba(78, 166, 255, 0.14);
+  --tint-sucesso-fraco: rgba(78, 166, 255, 0.09);
+  --tint-perigo: rgba(255, 143, 61, 0.14);
+  --tint-info: rgba(179, 157, 255, 0.14);
+
+  --sucesso-fundo: #0a1826;
+  --sucesso-borda: #1e4a72;
+  --perigo-fundo: #1e1408;
+  --perigo-borda: #5c3a12;
+  --info-fundo: #14102a;
+  --info-borda: #3a3060;
+  --info-borda-suave: #241e40;
+
+  --foco: #86c8ff;
+}
+
+html[data-tema='claro'][data-visao='daltonico'] {
+  --sucesso: #00558a;
+  --sucesso-suave: #1e6d9e;
+  --aviso: #7f5504;
+  --alerta: #94406e;
+  --perigo: #9c4400;
+  --info: #5b3f96;
+
+  --tint-sucesso: rgba(0, 85, 138, 0.13);
+  --tint-sucesso-fraco: rgba(0, 85, 138, 0.07);
+  --tint-perigo: rgba(156, 68, 0, 0.12);
+  --tint-info: rgba(91, 63, 150, 0.12);
+
+  --sucesso-fundo: #cfe2f2;
+  --sucesso-borda: #2a7cb5;
+  --perigo-fundo: #fadfc7;
+  --perigo-borda: #b85405;
+  --info-fundo: #ebe6f5;
+  --info-borda: #b3a3d4;
+  --info-borda-suave: #dcd4ec;
 }
 
 /* fontes: a família vem por herança do body — é por isso que os componentes
@@ -219,7 +402,7 @@ textarea {
   display: grid;
 }
 
-.glossario-flutuante {
+.biblioteca-flutuante {
   bottom: 16px;
 }
 
@@ -230,7 +413,7 @@ textarea {
 .acoes-topo {
   display: contents;
 }
-.glossario-topo {
+.biblioteca-topo {
   display: none;
 }
 
@@ -269,7 +452,7 @@ textarea {
   }
   /* A ação principal fica ancorada no rodapé da janela. `fixed` e não
      `sticky`: com sticky a barra desce pro fluxo quando a página é curta (aba
-     PLACAR, por exemplo) e o botão flutuante do glossário caía em cima dela.
+     PLACAR, por exemplo) e o botão flutuante da biblioteca caía em cima dela.
      Fixo, a posição é sempre a mesma e o flutuante tem um alvo previsível. */
   .jogo-rodape {
     position: fixed;
@@ -289,11 +472,11 @@ textarea {
   .jogo-atalhos {
     display: none;
   }
-  /* No estreito o glossário sai de cima do jogo e vira botão de cabeçalho, ao
+  /* No estreito a biblioteca sai de cima do jogo e vira botão de cabeçalho, ao
      lado do MENU: a tela é pequena demais pra ter um elemento pairando sobre o
      conteúdo. Isso também aposenta o antigo `bottom: 152px`, número mágico que
      existia só pra desviar da barra de ação fixa. */
-  .glossario-flutuante {
+  .biblioteca-flutuante {
     display: none;
   }
   .acoes-topo {
@@ -302,7 +485,7 @@ textarea {
     justify-content: center;
     gap: 8px;
   }
-  .glossario-topo {
+  .biblioteca-topo {
     display: inline-flex;
   }
   /* uma linha só, e o rótulo sem quebrar dentro do botão — é o que mantém a

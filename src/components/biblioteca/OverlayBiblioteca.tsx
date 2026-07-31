@@ -1,9 +1,8 @@
-// Glossário flutuante — usado SÓ durante a partida, pra consultar um termo sem
-// sair do jogo. No menu o glossário é uma página (components/menu/PaginaGlossario).
+// A BIBLIOTECA sobre a mesa, durante a partida: consulta sem sair do jogo.
+// No menu ela é uma página (menu/PaginaBiblioteca) — mesmo conteúdo, casca
+// diferente. O jogo não pausa por causa disto: é overlay, não modal de regra.
 import type { CSSProperties } from 'react';
-import { useSelector } from 'react-redux';
-import { selectContador } from '../features/conceitos/conceitosSlice';
-import { RODAPE_GLOSSARIO, TermosGlossario } from './TermosGlossario';
+import { BibliotecaConteudo } from './BibliotecaConteudo';
 
 const estilos = {
   overlay: {
@@ -38,11 +37,11 @@ const estilos = {
     background: 'var(--superficie-2)',
   },
   titulo: { fontWeight: 700, letterSpacing: 1, color: 'var(--texto-forte)' },
-  contador: { color: 'var(--sucesso)', fontSize: 11, marginLeft: 10 },
   fechar: {
     background: 'transparent',
     border: '1px solid var(--texto-apagado)',
     color: 'var(--texto-fraco)',
+    fontFamily: 'inherit',
     fontSize: 11,
     fontWeight: 600,
     letterSpacing: 1,
@@ -50,34 +49,22 @@ const estilos = {
     borderRadius: 3,
     cursor: 'pointer',
   },
-  lista: { padding: '14px 20px', overflowY: 'auto', display: 'grid', gap: 10 },
-  rodape: {
-    padding: '10px 20px',
-    borderTop: '1px solid var(--borda)',
-    color: 'var(--texto-apagado)',
-    fontSize: 10.5,
-  },
+  corpo: { padding: '14px 20px', overflowY: 'auto' },
 } satisfies Record<string, CSSProperties>;
 
-export function Glossario({ fechar }: { fechar: () => void }) {
-  const contador = useSelector(selectContador);
-
+export function OverlayBiblioteca({ fechar }: { fechar: () => void }) {
   return (
     <div style={estilos.overlay}>
       <div style={estilos.painel}>
         <div style={estilos.cabecalho}>
-          <div>
-            <span style={estilos.titulo}>📖 GLOSSÁRIO</span>
-            <span style={estilos.contador}>{contador}</span>
-          </div>
+          <span style={estilos.titulo}>📚 BIBLIOTECA</span>
           <button style={estilos.fechar} onClick={fechar}>
             FECHAR [ESC]
           </button>
         </div>
-        <div style={estilos.lista}>
-          <TermosGlossario />
+        <div style={estilos.corpo}>
+          <BibliotecaConteudo />
         </div>
-        <div style={estilos.rodape}>{RODAPE_GLOSSARIO}</div>
       </div>
     </div>
   );

@@ -4,12 +4,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectPrefs,
+  setContraste,
   setEscala,
   setFonte,
   setTema,
+  setVisao,
+  type ContrasteId,
   type EscalaId,
   type FonteFamiliaId,
   type TemaId,
+  type VisaoId,
 } from '../../features/prefs';
 import { irPara } from '../../features/ui/uiSlice';
 import type { AppDispatch } from '../../store';
@@ -61,6 +65,32 @@ export function PaginaConfig() {
           dica: 'escala a interface inteira, não só a letra',
         }}
         aoEscolher={(id) => dispatch(setEscala(id as EscalaId))}
+      />
+
+      <GrupoOpcoes
+        titulo="CONTRASTE"
+        grupo={{
+          valor: prefs.contraste,
+          opcoes: [
+            { id: 'normal', rotulo: 'NORMAL' },
+            { id: 'alto', rotulo: '◐ ALTO CONTRASTE' },
+          ],
+          dica: 'escurece o texto de apoio e reforça bordas e fundos',
+        }}
+        aoEscolher={(id) => dispatch(setContraste(id as ContrasteId))}
+      />
+
+      <GrupoOpcoes
+        titulo="VISÃO DE CORES"
+        grupo={{
+          valor: prefs.visao,
+          opcoes: [
+            { id: 'padrao', rotulo: 'PADRÃO' },
+            { id: 'daltonico', rotulo: '👁 DALTÔNICO' },
+          ],
+          dica: 'troca ganho e perda por azul e laranja, que não se confundem',
+        }}
+        aoEscolher={(id) => dispatch(setVisao(id as VisaoId))}
       />
 
       <div style={{ display: 'grid', gap: 10, marginTop: 10 }}>

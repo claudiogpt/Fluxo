@@ -57,9 +57,9 @@ test('novoJogo registra dificuldade e modo no estado', () => {
   assert.equal(regras.novoJogo({}).modo, 'classico');
 });
 
-test('config.modos: os cinco modos jogáveis, nesta ordem', () => {
+test('config.modos: os modos jogáveis, nesta ordem — tutorial primeiro', () => {
   const disponiveis = config.modos.filter(m => m.disponivel);
-  assert.deepEqual(disponiveis.map(m => m.id), ['classico', 'sandbox', 'empresario', 'cenarios', 'realista']);
+  assert.deepEqual(disponiveis.map(m => m.id), ['tutorial', 'classico', 'sandbox', 'empresario', 'cenarios', 'realista']);
 });
 
 // ---------- modo sandbox ----------
@@ -1417,4 +1417,103 @@ test('realista: COPOM não corta juro com a inflação apertando o juro real', (
     s.realista.macro.ipca = s.realista.macro.selicAlvo + 0.04;
   }
   assert.ok(viuManter, 'em 500 sorteios devia ter saído ao menos um COPOM MANTÉM');
+});
+
+// ---------- desafio: tutorial e treinos ----------
+
+test('tutorial nasce com prazo de 6 meses e sempre no normal', () => {
+  const s = regras.novoJogo({ modo: 'tutorial', dificuldade: 'hardcore' });
+  assert.equal(s.desafio.meses, config.tutorial.meses);
+  assert.equal(s.hard, false, 'tutorial não aceita hardcore');
+  assert.equal(s.dificuldade, 'normal');
+  assert.equal(s.roteiro, null);
+});
+
+test('tutorial encerra ao chegar no prazo, sem depender de vitória', () => {
+  let s = jogoEmAndamento({ modo: 'tutorial' });
+  for (let i = 0; i < config.tutorial.meses; i++) {
+    assert.equal(s.fim, null, 'não pode acabar antes do mês ' + config.tutorial.meses);
+    s = regras.fecharMes(s, { rng: rngNeutro() });
+  }
+  assert.equal(s.fim, 'desafio_ok');
+  assert.equal(s.mes, config.tutorial.meses);
+  assert.equal(s.auto, false);
+});
+
+test('quebrar dentro do prazo continua sendo FALIU, não desafio cumprido', () => {
+  let s = jogoEmAndamento({ modo: 'tutorial' });
+  s.caixa = 0;
+  s.salario = 0; // sem renda: o custo de vida come o mês e não há o que vender
+  s = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s.fim, 'faliu');
+});
+
+test('partida normal não ganha prazo nenhum', () => {
+  const s = regras.novoJogo({ modo: 'classico' });
+  assert.equal(s.desafio, null);
+  assert.equal(s.roteiro, null);
+});
+
+test('treino é um cenário: começa alocado, com roteiro e prazo', () => {
+  const def = config.treinos[0];
+  const s = regras.novoJogo({ modo: 'cenarios', cenario: def.id });
+  assert.equal(s.cenario, def.id);
+  assert.equal(s.caixa, def.caixaInicial);
+  assert.equal(s.desafio.meses, def.desafio.meses);
+  assert.deepEqual(s.roteiro, def.roteiro);
+  for (const k in def.alocacaoInicial) assert.equal(s.ativos[k], def.alocacaoInicial[k]);
+  // e o board do placar é o do próprio treino
+  assert.equal(placar.boardDe(s), def.id);
+});
+
+test('alocação inicial ignora chave que não existe no modo', () => {
+  // proteção contra ativo fantasma: um saldo em chave desconhecida viraria
+  // NaN na primeira soma de patrimônio.
+  const s = regras.novoJogo({ modo: 'cenarios', cenario: config.treinos[0].id });
+  assert.ok(Object.keys(s.ativos).every((k) => ativos.some((d) => d.key === k)));
+  assert.ok(Number.isFinite(regras.patrimonio(s)));
+});
+
+test('roteiro dispara o evento no mês marcado, e só nele', () => {
+  const s = jogoEmAndamento({ modo: 'cenarios', cenario: 'treino_crash' });
+  s.roteiro = [{ mes: 2, evento: 'crash' }];
+  const m1 = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.ok(!m1.log.some((l) => /CRASH DA BOLSA/.test(l.texto)), 'mês 1 não tem crash marcado');
+  const antes = m1.ativos.acoes;
+  const m2 = regras.fecharMes(m1, { rng: rngNeutro() });
+  assert.ok(m2.log.some((l) => /CRASH DA BOLSA/.test(l.texto)), 'mês 2 tem crash marcado');
+  assert.ok(m2.ativos.acoes < antes * 0.85, 'o crash tinha que derrubar as ações');
+});
+
+test('roteiro é opcional: sem ele, roteirar é no-op', () => {
+  const s = jogoEmAndamento({ modo: 'classico' });
+  assert.doesNotThrow(() => eventos.roteirar(s, s.log, { rng: () => 0.5, addLog: () => {} }));
+});
+
+test('evento roteirado e evento sorteado são o mesmo evento', () => {
+  // A tabela de pesos delega pros ROTEIRAVEIS: se alguém editar o texto num
+  // lugar só, este teste não pega — mas se alguém RECRIAR o efeito, pega.
+  const s = jogoEmAndamento({ modo: 'classico' });
+  s.ativos.acoes = 1000;
+  const logs = [];
+  eventos.ROTEIRAVEIS.crash(s, logs, { rng: () => 0.5, addLog: regras.addLog });
+  assert.equal(s.ativos.acoes, 700);
+  assert.match(logs[0].texto, /CRASH DA BOLSA/);
+});
+
+test('meta de patrimônio separa cumprido de falhado', () => {
+  let s = jogoEmAndamento({ modo: 'classico' });
+  s.desafio = { meses: 1, meta: 1e9 }; // meta impossível
+  s = regras.fecharMes(s, { rng: rngNeutro() });
+  assert.equal(s.fim, 'desafio_falhou');
+});
+
+test('placar: desafio cumprido é vitória e treino ranqueia por patrimônio', () => {
+  assert.equal(placar.vitoria('desafio_ok'), true);
+  assert.equal(placar.vitoria('desafio_falhou'), false);
+  const s = jogoEmAndamento({ modo: 'cenarios', cenario: 'treino_crash' });
+  s.fim = 'desafio_ok';
+  const rico = placar.registro(s, 90000, 'A');
+  const pobre = placar.registro(s, 10000, 'B');
+  assert.ok(rico.score > pobre.score, 'no treino, quem chega com mais patrimônio vence');
 });

@@ -58,6 +58,14 @@ export const selectCenariosLista = createSelector([selectCenario], (cenario) =>
   config.cenarios.map((c) => cartao(c, c.id === cenario))
 );
 
+/** TREINO é uma faixa separada dentro de CENÁRIOS, não uma tela nova:
+ *  mecanicamente drill e cenário são a mesma coisa (o engine trata os dois como
+ *  `cenario` do modo 'cenarios'). O que muda é a promessa — posição difícil,
+ *  objetivo fechado, prazo curto. */
+export const selectTreinosLista = createSelector([selectCenario], (cenario) =>
+  config.treinos.map((t) => cartao(t, t.id === cenario))
+);
+
 /** Ajustes da partida + resumo, pra tela de setup do modo/cenário escolhido. */
 export const selectSetupPagina = createSelector([(s: ComGame) => s.game], (s) => {
   const ap = s.aposentadoria;
@@ -66,14 +74,21 @@ export const selectSetupPagina = createSelector([(s: ComGame) => s.game], (s) =>
   const comprando = im?.escolha === 'comprar';
   const saqueFixo = ap?.saqueModo === 'fixo';
   const ehCenario = s.modo === PSEUDO_MODO_CENARIOS;
-  const def = (ehCenario ? config.cenarios : config.modos).find(
+  // Treino é um cenário pro engine, então a busca do rótulo tem que olhar as
+  // duas listas — senão o setup de um treino cai no fallback em CAIXA ALTA.
+  const def = (ehCenario ? [...config.cenarios, ...config.treinos] : config.modos).find(
     (d) => d.id === (ehCenario ? s.cenario : s.modo)
   );
+  const treino = ehCenario ? config.treinos.find((t) => t.id === s.cenario) : null;
 
   return {
     titulo: def?.nome ?? s.modo.toUpperCase(),
     descricao: def?.descricao ?? '',
     ehCenario,
+    /** O treino aponta pro estudo que ele treina — a outra ponta da ligação
+     *  bidirecional. Só o id: quem decide se aquilo já está aberto pra leitura
+     *  é a biblioteca, não o menu. */
+    treino: treino ? { objetivo: treino.desafio.meses + ' meses pra atravessar', estudo: treino.estudo } : null,
     dificuldade: {
       valor: s.dificuldade,
       opcoes: [

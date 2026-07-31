@@ -19,22 +19,24 @@ export const ITENS_HOME: readonly ItemMenu[] = [
     id: 'modos',
     icone: '▸',
     rotulo: 'MODOS DE JOGO',
-    descricao: 'clássico, realista, sandbox e empresário',
+    descricao: 'tutorial, clássico, realista, sandbox e empresário',
     disponivel: true,
   },
   {
     id: 'cenarios',
     icone: '◈',
     rotulo: 'CENÁRIOS',
-    descricao: 'situações reais pra atravessar com as decisões certas',
+    descricao: 'situações reais · treino',
     disponivel: true,
   },
   {
-    id: 'glossario',
-    icone: '📖',
-    // a Home troca esta descrição pelo contador de termos (ex.: "1/9")
-    rotulo: 'GLOSSÁRIO',
-    descricao: 'os termos que o jogo já te ensinou',
+    id: 'biblioteca',
+    icone: '📚',
+    // a Home troca esta descrição pelo selectSubtituloBiblioteca, que conta os
+    // termos e só então acrescenta "· N estudos novos" — o único elemento de
+    // descoberta do menu, e ele some quando não há nada novo pra ler.
+    rotulo: 'BIBLIOTECA',
+    descricao: 'glossário, manual e fundamentos',
     disponivel: true,
   },
   {

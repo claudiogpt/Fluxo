@@ -8,4 +8,6 @@ export function aplicarPrefs(p: PrefsState): void {
   el.dataset.tema = p.tema;
   el.dataset.fonte = p.fonte;
   el.dataset.escala = p.escala;
+  el.dataset.contraste = p.contraste;
+  el.dataset.visao = p.visao;
 }

@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Provider } from 'react-redux';
 import { comecar } from '../features/game/gameSlice';
-import { abrirGlossario, irPara, selectRota } from '../features/ui/uiSlice';
+import { abrirBiblioteca, irPara, selectRota } from '../features/ui/uiSlice';
 import { makeStore } from '../store';
 import { useAtalhos } from './useAtalhos';
 
@@ -38,11 +38,11 @@ describe('useAtalhos', () => {
     document.body.innerHTML = '';
   });
 
-  it('G no menu abre a PÁGINA do glossário, e de novo volta', () => {
+  it('G no menu abre a PÁGINA da biblioteca, e de novo volta', () => {
     const store = montar();
     tecla({ code: 'KeyG', key: 'g' });
-    expect(selectRota(store.getState())).toBe('glossario');
-    expect(store.getState().ui.glossarioAberto).toBe(false); // sem overlay no menu
+    expect(selectRota(store.getState())).toBe('biblioteca');
+    expect(store.getState().ui.bibliotecaAberta).toBe(false); // sem overlay no menu
     tecla({ code: 'KeyG', key: 'g' });
     expect(selectRota(store.getState())).toBe('home');
   });
@@ -51,10 +51,10 @@ describe('useAtalhos', () => {
     const store = montar();
     store.dispatch(comecar());
     tecla({ code: 'KeyG', key: 'g' });
-    expect(store.getState().ui.glossarioAberto).toBe(true);
+    expect(store.getState().ui.bibliotecaAberta).toBe(true);
     expect(selectRota(store.getState())).toBe('home'); // não navegou
     tecla({ code: 'KeyG', key: 'g' });
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    expect(store.getState().ui.bibliotecaAberta).toBe(false);
   });
 
   it('digitar num input não dispara atalho', () => {
@@ -68,9 +68,9 @@ describe('useAtalhos', () => {
     const store = montar();
     store.dispatch(comecar());
     store.dispatch(irPara('config'));
-    store.dispatch(abrirGlossario());
+    store.dispatch(abrirBiblioteca());
     tecla({ code: 'Escape', key: 'Escape' });
-    expect(store.getState().ui.glossarioAberto).toBe(false);
+    expect(store.getState().ui.bibliotecaAberta).toBe(false);
     expect(selectRota(store.getState())).toBe('config'); // não voltou junto
   });
 
@@ -107,6 +107,6 @@ describe('useAtalhos', () => {
   it('reconhece a tecla só por e.key (teclado não-QWERTY)', () => {
     const store = montar();
     tecla({ key: 'G' });
-    expect(selectRota(store.getState())).toBe('glossario');
+    expect(selectRota(store.getState())).toBe('biblioteca');
   });
 });

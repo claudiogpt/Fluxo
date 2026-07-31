@@ -3,7 +3,14 @@
 // é persistente e nunca — misturar as duas convida um reset a apagar o tema.
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { lerPrefs } from './armazenamento';
-import type { EscalaId, FonteFamiliaId, PrefsState, TemaId } from './tipos';
+import type {
+  ContrasteId,
+  EscalaId,
+  FonteFamiliaId,
+  PrefsState,
+  TemaId,
+  VisaoId,
+} from './tipos';
 
 const prefsSlice = createSlice({
   name: 'prefs',
@@ -18,10 +25,16 @@ const prefsSlice = createSlice({
     setEscala(state, action: PayloadAction<EscalaId>) {
       state.escala = action.payload;
     },
+    setContraste(state, action: PayloadAction<ContrasteId>) {
+      state.contraste = action.payload;
+    },
+    setVisao(state, action: PayloadAction<VisaoId>) {
+      state.visao = action.payload;
+    },
   },
 });
 
-export const { setTema, setFonte, setEscala } = prefsSlice.actions;
+export const { setTema, setFonte, setEscala, setContraste, setVisao } = prefsSlice.actions;
 export const prefsReducer = prefsSlice.reducer;
 
 type ComPrefs = { prefs: PrefsState };

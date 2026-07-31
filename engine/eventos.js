@@ -50,6 +50,56 @@
   }
 
   /**
+   * Eventos ROTEIRÁVEIS: os que um treino precisa marcar hora pra acontecer.
+   *
+   * Um exercício de "atravessar o crash" não pode depender de sorteio — a cena
+   * tem que ser a mesma toda partida. São os mesmos eventos da tabela de pesos
+   * abaixo, que passou a delegar pra cá: o texto e o efeito moram num lugar só,
+   * e a única diferença entre sorteado e roteirado é quem decide o mês.
+   *
+   * @type {Record<string, (s: GameState, logs: LogItem[], ctx: Object) => void>}
+   */
+  const ROTEIRAVEIS = {
+    crash: function (s, logs, ctx) {
+      choque(s, 'acoes', 0.7);
+      choque(s, 'fiis', 0.88);
+      ctx.addLog(s, logs, '▼ CRASH DA BOLSA. Ações −30%, FIIs −12%. Quem vende no pânico realiza o prejuízo.', '#ff4d5e', s.mes);
+    },
+    invernoCripto: function (s, logs, ctx) {
+      choque(s, 'cripto', 0.55);
+      ctx.addLog(s, logs, '▼ INVERNO CRIPTO. −45% num mês. Era o dinheiro do aluguel?', '#ff4d5e', s.mes);
+    },
+    demissao: function (s, logs, ctx) {
+      s.semSalario = s.mes < 18 ? 1 : 2;
+      ctx.addLog(s, logs, '✖ DEMISSÃO. ' + (s.mes < 18 ? '1 mês' : '2 meses') + ' sem salário. Renda passiva e reserva seguram as pontas?', '#ff4d5e', s.mes);
+    },
+    emergencia: function (s, logs, ctx) {
+      const c = Math.round(s.custo * (0.8 + ctx.rng() * 1.4) * Math.min(1, s.mes / 12));
+      s.pendente = (s.pendente || 0) + c;
+      ctx.addLog(s, logs, '✚ EMERGÊNCIA MÉDICA: −' + fmt(c) + '. É pra isso que existe reserva.', '#ff9d4b', s.mes);
+    },
+  };
+
+  /**
+   * Aplica os eventos que o roteiro da partida marcou para o mês atual.
+   *
+   * Roda ANTES do sorteio: a posição difícil é dada, e o acaso vem por cima.
+   * Partida sem `roteiro` (todas, fora os treinos) sai no primeiro if.
+   *
+   * @param {GameState} s - Working copy of game state (mutated in place).
+   * @param {LogItem[]} logs - Log array for event messages.
+   * @param {Object} ctx - `{ rng, addLog }`, injetado pelo fecharMes.
+   */
+  function roteirar(s, logs, ctx) {
+    if (!s.roteiro || !s.roteiro.length) return;
+    for (const item of s.roteiro) {
+      if (item.mes !== s.mes) continue;
+      const run = ROTEIRAVEIS[item.evento];
+      if (run) run(s, logs, ctx);
+    }
+  }
+
+  /**
    * Sorteia e aplica um evento aleatório no turno atual.
    *
    * Respeita `config.mesMinimoEvento`, chance por dificuldade e filtros
@@ -66,14 +116,17 @@
     const addLog = ctx.addLog;
     const dif = config.dificuldades[s.hard ? 'hardcore' : 'normal'];
     if (rng() > dif.chanceEvento || s.mes < config.mesMinimoEvento) return;
+    // Os quatro roteiráveis entram por delegação: o efeito e o texto deles
+    // moram em ROTEIRAVEIS, e aqui só se decide o peso no sorteio.
+    const ctxRot = { rng: rng, addLog: addLog };
     const eventos = [
-      { p: 16, run: () => { choque(s, 'acoes', 0.7); choque(s, 'fiis', 0.88); addLog(s, logs, '▼ CRASH DA BOLSA. Ações −30%, FIIs −12%. Quem vende no pânico realiza o prejuízo.', '#ff4d5e', s.mes); } },
-      { p: 12, run: () => { choque(s, 'cripto', 0.55); addLog(s, logs, '▼ INVERNO CRIPTO. −45% num mês. Era o dinheiro do aluguel?', '#ff4d5e', s.mes); } },
+      { p: 16, run: () => ROTEIRAVEIS.crash(s, logs, ctxRot) },
+      { p: 12, run: () => ROTEIRAVEIS.invernoCripto(s, logs, ctxRot) },
       { p: 10, run: () => { choque(s, 'cripto', 1.6); addLog(s, logs, '▲ BULL RUN CRIPTO. +60%. Cuidado: euforia não é estratégia.', '#22d47e', s.mes); } },
-      { p: 16, run: () => { const c = Math.round(s.custo * (0.8 + rng() * 1.4) * Math.min(1, s.mes / 12)); s.pendente = (s.pendente || 0) + c; addLog(s, logs, '✚ EMERGÊNCIA MÉDICA: −' + fmt(c) + '. É pra isso que existe reserva.', '#ff9d4b', s.mes); } },
+      { p: 16, run: () => ROTEIRAVEIS.emergencia(s, logs, ctxRot) },
       { p: 12, run: () => { const c = Math.round(s.custo * (0.35 + rng() * 0.55) * Math.min(1, s.mes / 12)); s.pendente = (s.pendente || 0) + c; addLog(s, logs, '✚ IMPREVISTO (carro/casa): −' + fmt(c) + '.', '#ff9d4b', s.mes); } },
       { p: 12, run: () => { s.custo = Math.round(s.custo * 1.04); addLog(s, logs, '▲ INFLAÇÃO ALTA. Custo de vida +4%. Seu dinheiro parado vale menos.', '#ffc24b', s.mes); } },
-      { p: 8, modos: ['classico', 'sandbox', 'realista'], run: () => { s.semSalario = s.mes < 18 ? 1 : 2; addLog(s, logs, '✖ DEMISSÃO. ' + (s.mes < 18 ? '1 mês' : '2 meses') + ' sem salário. Renda passiva e reserva seguram as pontas?', '#ff4d5e', s.mes); } },
+      { p: 8, modos: ['classico', 'sandbox', 'realista'], run: () => ROTEIRAVEIS.demissao(s, logs, ctxRot) },
       { p: 8, modos: ['classico', 'sandbox', 'realista'], run: () => { s.salario = Math.round(s.salario * 1.08); addLog(s, logs, '▲ PROMOÇÃO. Salário +8%. Aumentar aporte > aumentar padrão de vida.', '#22d47e', s.mes); } },
       { p: 6, modos: ['classico', 'sandbox', 'realista'], run: () => { s.caixa += s.salario; addLog(s, logs, '▲ 13º / BÔNUS: +' + fmt(s.salario) + ' no caixa. Investe ou torra?', '#22d47e', s.mes); } },
       { p: 5, run: () => { const g = Math.round(s.custo * (3 + rng() * 4)); s.caixa += g; addLog(s, logs, '▲ GRANA INESPERADA (herança/restituição): +' + fmt(g) + '. Torrar ou acelerar a liberdade?', '#22d47e', s.mes); } },
@@ -124,5 +177,5 @@
     for (const e of disponiveis) { r -= e.p; if (r <= 0) { e.run(); break; } }
   }
 
-  return { sortear };
+  return { sortear, roteirar, ROTEIRAVEIS };
 });

@@ -301,7 +301,7 @@ export const selectPainel = createSelector([selectGame], (s) => {
   };
 });
 
-// ---- fim de jogo (5 desfechos) ----
+// ---- fim de jogo (7 desfechos) ----
 
 export const selectFimInfo = createSelector([selectGame], (s) => {
   if (!s.fim) return null;
@@ -334,6 +334,25 @@ export const selectFimInfo = createSelector([selectGame], (s) => {
       cor: tijoloVenceu === comprando ? 'var(--sucesso)' : 'var(--aviso)',
       resumo: '🏠 COMPRAR: imóvel quitado valendo ' + fmt(tijolo) + '  ·  📈 ALUGAR+INVESTIR: carteira em ' + fmt(carteira) + '. Você escolheu ' + (comprando ? 'COMPRAR' : 'ALUGAR') + ' e fechou com patrimônio total de ' + fmt(pat) + '.',
       licao: 'Lição: custo de oportunidade — cada real na entrada e nas parcelas é um real que não compôs juros na carteira (e vice-versa). Não há resposta universal: juros do financiamento, valorização do imóvel e disciplina de investir a diferença decidem a corrida.',
+    };
+  }
+  // Desafio fechado: tutorial e treinos. O tutorial termina e pronto — não
+  // reoferece, não parabeniza demais e não vira ranking (o listener do placar
+  // já ignora o modo). O treino, sim, tem meta a bater.
+  if (s.fim === 'desafio_ok' || s.fim === 'desafio_falhou') {
+    const bateu = s.fim === 'desafio_ok';
+    const tutorial = s.modo === 'tutorial';
+    return {
+      titulo: tutorial ? 'FIM DO TUTORIAL' : bateu ? 'OBJETIVO CUMPRIDO' : 'NÃO DEU',
+      cor: bateu ? 'var(--sucesso)' : 'var(--aviso)',
+      resumo: tutorial
+        ? 'Foram ' + s.mes + ' meses. Agora as mesmas mecânicas valem por uma partida inteira.'
+        : 'Você fechou ' + s.mes + ' meses com patrimônio de ' + fmt(pat) + '.',
+      licao: tutorial
+        ? 'Daqui pra frente nada é explicado antes da hora: o que aparecer novo vira uma linha no rodapé e um termo na biblioteca.'
+        : bateu
+          ? 'Posição difícil atravessada. O que decidiu não foi o retorno médio — foi ter caixa quando a conta venceu.'
+          : 'Treino é pra isso: a posição era ruim de propósito. Vale repetir sabendo onde apertou.',
     };
   }
   if (s.fim === 'faliu') {

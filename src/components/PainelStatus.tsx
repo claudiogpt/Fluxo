@@ -2,8 +2,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPainel } from '../features/game/selectors';
 import { voltarMenu } from '../features/game/gameSlice';
-import { selectContadorCurto } from '../features/conceitos/conceitosSlice';
-import { alternarGlossario } from '../features/ui/uiSlice';
+import { selectContadorGlossario } from '../features/biblioteca';
+import { alternarBiblioteca } from '../features/ui/uiSlice';
 import type { AppDispatch } from '../store';
 
 const card = {
@@ -28,7 +28,7 @@ const botaoTopo = {
 
 export function PainelStatus() {
   const p = useSelector(selectPainel);
-  const glossarioCurto = useSelector(selectContadorCurto);
+  const termos = useSelector(selectContadorGlossario);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
@@ -55,19 +55,19 @@ export function PainelStatus() {
         </svg>
         {/* No largo `.acoes-topo` é `display: contents` — o wrapper some do
             layout e o MENU segue solto na linha, como antes. No estreito ele
-            vira uma faixa própria, centralizada, com o glossário ao lado (e aí
+            vira uma faixa própria, centralizada, com a biblioteca ao lado (e aí
             o botão flutuante some, em vez de pairar sobre o jogo). */}
         <div className="acoes-topo">
           <button onClick={() => dispatch(voltarMenu())} style={botaoTopo}>
             ◂ MENU
           </button>
           <button
-            className="glossario-topo"
-            onClick={() => dispatch(alternarGlossario())}
+            className="biblioteca-topo"
+            onClick={() => dispatch(alternarBiblioteca())}
             style={{ ...botaoTopo, alignItems: 'center', gap: 6 }}
-            aria-label="Abrir glossário"
+            aria-label="Abrir biblioteca"
           >
-            📖 {glossarioCurto}
+            📚 {termos}
           </button>
         </div>
         <div style={{ marginLeft: 'auto', textAlign: 'right' }}>

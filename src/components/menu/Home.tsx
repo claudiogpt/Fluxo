@@ -1,17 +1,18 @@
 // Landing: recebe o jogador, explica o clássico e oferece os caminhos.
 // Os botões vêm de ITENS_HOME — acrescentar um é editar aquela lista.
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContador } from '../../features/conceitos/conceitosSlice';
+import { selectSubtituloBiblioteca } from '../../features/biblioteca';
 import { ITENS_HOME } from '../../features/ui/menuItens';
 import { irPara } from '../../features/ui/uiSlice';
 import type { AppDispatch } from '../../store';
 import { BotaoMenu } from './BotaoMenu';
+import { ConviteTutorial } from './ConviteTutorial';
 import { MenuLayout } from './MenuLayout';
 import { RegrasCard } from './RegrasCard';
 
 export function Home() {
   const dispatch = useDispatch<AppDispatch>();
-  const contador = useSelector(selectContador);
+  const subtituloBiblioteca = useSelector(selectSubtituloBiblioteca);
 
   return (
     <MenuLayout>
@@ -57,12 +58,15 @@ export function Home() {
 
       <RegrasCard />
 
+      <ConviteTutorial />
+
       <nav style={{ display: 'grid', gap: 10 }} aria-label="Menu principal">
         {ITENS_HOME.map((item) => (
           <BotaoMenu
             key={item.id}
-            // o glossário mostra o progresso no lugar da descrição fixa
-            item={item.id === 'glossario' ? { ...item, descricao: contador } : item}
+            // a biblioteca mostra o progresso no lugar da descrição fixa — e é
+            // só ali que aparece o "· N estudos novos", quando há o que ler
+            item={item.id === 'biblioteca' ? { ...item, descricao: subtituloBiblioteca } : item}
             aoClicar={() => dispatch(irPara(item.id))}
           />
         ))}
