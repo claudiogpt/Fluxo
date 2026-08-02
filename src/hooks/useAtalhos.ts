@@ -59,6 +59,19 @@ export function useAtalhos() {
         return;
       }
 
+      // Na PÁGINA da biblioteca os números também valem: o fichário mostra as
+      // mesmas abas 01/02/03, e a numeração na tela é o atalho. O ESC não
+      // entra aqui — quem cuida dele no menu é o `voltar` lá embaixo.
+      // (O campo de busca está a salvo: a guarda de INPUT já saiu no topo.)
+      if (game.tela !== 'jogo' && selectRota({ ui }) === 'biblioteca') {
+        const n = Number(e.key);
+        if (n >= 1 && n <= PRATELEIRAS.length) {
+          e.preventDefault();
+          dispatch(abrirPrateleira(PRATELEIRAS[n - 1]));
+          return;
+        }
+      }
+
       // Dentro da biblioteca (overlay), o teclado é dela: os números são as
       // prateleiras — a mesma numeração 01/02/03 que está na tela.
       if (ui.bibliotecaAberta) {

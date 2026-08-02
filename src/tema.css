@@ -60,6 +60,22 @@ html[data-tema='escuro'] {
   --overlay-forte: rgba(5, 8, 11, 0.94);
   --sombra-flutuante: 0 4px 16px rgba(0, 0, 0, 0.5);
   --foco: #4bb7ff;
+
+  /* ---- fichário da BIBLIOTECA ----
+     A lateral é escura NOS DOIS TEMAS — é o que dá o ar de estante: o papel
+     muda, a estante não. Por isso ela tem rampa PRÓPRIA: --texto-* segue o
+     tema, e no claro viraria tinta escura sobre laca quase preta. */
+  --biblio-lateral: #080c11;
+  --biblio-lateral-linha: #1e2833;
+  --biblio-lateral-campo: #050809;
+  --biblio-lateral-forte: #d7e1ea;
+  --biblio-lateral-texto: #8fa1b2;
+  --biblio-lateral-rotulo: #6b7c8c;
+
+  /* Ouro de PREENCHIMENTO, separado de --aviso porque no claro os dois papéis
+     divergem: --aviso é o ouro escuro que pode ser texto sobre papel, este é o
+     ouro cheio que só preenche (a barra de progresso). */
+  --aviso-cheio: #ffc24b;
 }
 
 /* Tema claro "Riqueza": papel quente, laca quase preta e dois acentos
@@ -150,6 +166,19 @@ html[data-tema='claro'] {
   /* laca: 16:1 sobre papel e sem semântica de dado — foco em vermelho leria
      como erro agora que vermelho é perda */
   --foco: #14100a;
+
+  /* A estante em laca e ouro velho, direto do design. O rótulo (#8a7350) é o
+     piso da rampa: sobre papel ele parava em 3.8:1, mas aqui o fundo é laca
+     quase preta e ele sobra contraste. */
+  --biblio-lateral: #14100a;
+  --biblio-lateral-linha: #3a2e1c;
+  --biblio-lateral-campo: #0d0a06;
+  --biblio-lateral-forte: #e8d5a8;
+  --biblio-lateral-texto: #c9b893;
+  --biblio-lateral-rotulo: #8a7350;
+
+  /* o ouro CHEIO, o que só preenche — texto dourado continua sendo --aviso */
+  --aviso-cheio: #c99a2e;
 }
 
 /* ---- acessibilidade ----
@@ -194,6 +223,11 @@ html[data-tema='escuro'][data-contraste='alto'] {
   --info-borda: #2f5c80;
 
   --foco: #8fd4ff;
+
+  --biblio-lateral-linha: #3d5162;
+  --biblio-lateral-forte: #ffffff;
+  --biblio-lateral-texto: #b6c6d4;
+  --biblio-lateral-rotulo: #9aabbb;
 }
 
 /* Claro reforçado: é a paleta antes de recuar — papel mais tingido, bordas
@@ -237,6 +271,11 @@ html[data-tema='claro'][data-contraste='alto'] {
   --overlay: rgba(241, 229, 203, 0.9);
   --overlay-forte: rgba(241, 229, 203, 0.96);
   --sombra-flutuante: 0 4px 16px rgba(20, 16, 10, 0.26);
+
+  --biblio-lateral-linha: #52402a;
+  --biblio-lateral-forte: #f6e8c6;
+  --biblio-lateral-texto: #ddcaa4;
+  --biblio-lateral-rotulo: #ab9470;
 }
 
 /* Visão daltônica. Jade e carmim caem no mesmo ponto para quem tem
@@ -308,6 +347,10 @@ html[data-tema='claro'][data-visao='daltonico'] {
   /* capitular romana do título — não segue a preferência de família do
      jogador de propósito: é identidade, não corpo de texto */
   --fonte-titulo: 'Cinzel', Georgia, 'Times New Roman', serif;
+  /* Serifada da BIBLIOTECA. É o que separa EXPLICAÇÃO de DADO: prosa em
+     Newsreader, rótulo/número/tabela em mono. Como o título, não segue
+     data-fonte — a distinção some se a prosa puder virar mono. */
+  --fonte-prosa: 'Newsreader', Georgia, 'Times New Roman', serif;
   --escala: 1;
 }
 
@@ -506,6 +549,100 @@ textarea {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+}
+
+/* ---- fichário da BIBLIOTECA ----
+   Segunda (e última) media query do projeto, no MESMO breakpoint de 900px do
+   jogo. Mora aqui pelo mesmo motivo que a do jogo: estilo inline venceria a
+   media query, e o que muda no estreito é justamente o layout. */
+
+/* Áreas nomeadas, e não aninhamento, porque a ORDEM muda no estreito: no
+   largo as abas ficam à direita, sobre o painel; no estreito elas sobem pro
+   topo da tela inteira, acima do índice. Com um wrapper as abas seriam
+   arrastadas junto com o painel pro fim da coluna. */
+.biblio-fichario {
+  min-height: 100vh;
+  display: grid;
+  /* minmax(0,1fr) e não 1fr: sem isso um verbete com linha longa empurra a
+     estante pra fora em vez de rolar dentro do painel. */
+  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'lateral abas'
+    'lateral painel';
+}
+
+.biblio-lateral {
+  grid-area: lateral;
+  background: var(--biblio-lateral);
+  border-right: 1px solid var(--biblio-lateral-linha);
+  padding-bottom: 24px;
+  min-width: 0;
+}
+
+.biblio-abas {
+  grid-area: abas;
+  padding: 26px 38px 0;
+  min-width: 0;
+}
+
+/* O respiro entre as abas vive aqui, e não inline no componente, porque muda
+   no estreito — e inline venceria a media query. */
+.biblio-abas [role='tablist'] {
+  gap: 26px;
+}
+
+.biblio-painel {
+  grid-area: painel;
+  min-width: 0;
+  padding: 0 38px 40px;
+}
+
+/* No largo não existe drill-down: os dois lados estão sempre na tela, e o
+   botão de voltar ao índice não tem razão de ser. */
+.biblio-ao-indice {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .biblio-fichario {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    /* as abas sobem pro topo; índice e painel se revezam abaixo delas */
+    grid-template-areas:
+      'abas'
+      'lateral'
+      'painel';
+  }
+  .biblio-abas {
+    padding: 16px 16px 0;
+  }
+  /* as três abas têm que caber numa linha só; o VOLTAR desce sozinho */
+  .biblio-abas [role='tablist'] {
+    gap: 14px;
+  }
+  .biblio-painel {
+    padding: 20px 16px 32px;
+  }
+  /* Com o painel escondido, a estante ocupa o resto da tela — senão sobra uma
+     faixa da cor do papel embaixo dela, como se a lista tivesse acabado no
+     meio de um fundo que não é dela. */
+  .biblio-fichario[data-vista='indice'] .biblio-lateral {
+    grid-row: 2 / -1;
+  }
+  .biblio-ao-indice {
+    display: inline-flex;
+  }
+  /* Uma coisa por vez: a lateral é o índice, e escolher um verbete leva a
+     tela inteira pro painel. `data-vista` é escrito pelo React. */
+  .biblio-fichario[data-vista='verbete'] .biblio-lateral,
+  .biblio-fichario[data-vista='indice'] .biblio-painel {
+    display: none;
+  }
+  .biblio-lateral {
+    border-right: none;
+    border-bottom: 1px solid var(--biblio-lateral-linha);
   }
 }
 

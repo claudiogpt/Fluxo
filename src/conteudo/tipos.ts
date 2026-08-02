@@ -56,6 +56,21 @@ export interface Estudo {
   ondeApareceNoJogo: string;
 }
 
+/** Uma linha do par ENTRA/SAI: chave à esquerda, número à direita. O `tom`
+ *  é semântico, não decorativo — quem escolhe a cor é a UI (--sucesso para
+ *  dinheiro que entra, --perigo para o que sai), nunca este arquivo. */
+export interface Numero {
+  rotulo: string;
+  valor: string;
+  tom?: 'alta' | 'baixa' | 'neutro';
+}
+
+/** As duas saídas do jogo, quando a seção tem saída. */
+export interface Desfecho {
+  palavra: string;
+  texto: string;
+}
+
 export interface SecaoManual {
   id: string;
   titulo: string;
@@ -63,5 +78,12 @@ export interface SecaoManual {
   resumo: string;
   /** telas em que o `?` abre direto nesta seção */
   contextos: ContextoAjuda[];
+  /** frase de abertura do verbete, em prosa — o que a seção resolve.
+   *  Opcional: sem ela o verbete começa direto no corpo. */
+  chamada?: string;
+  /** os números do capítulo ANTES de qualquer prosa. Opcional porque nem toda
+   *  seção é sobre dinheiro entrando e saindo (ATALHOS não é). */
+  numeros?: { entra: Numero[]; sai: Numero[] };
+  desfechos?: { derrota: Desfecho; vitoria: Desfecho };
   corpo: string;
 }

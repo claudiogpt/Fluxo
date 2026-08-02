@@ -104,4 +104,27 @@ describe('manual', () => {
   it('ids únicos', () => {
     expect(new Set(MANUAL.map((s) => s.id)).size).toBe(MANUAL.length);
   });
+
+  // Os campos do fichário são OPCIONAIS de propósito — nem toda seção é sobre
+  // dinheiro entrando e saindo. O que não pode é meio preenchido: um card
+  // ENTRA sem o SAI ao lado sai torto na tela.
+  it('seção que declara números declara os dois lados, com conteúdo', () => {
+    for (const s of MANUAL) {
+      if (!s.numeros) continue;
+      expect(s.numeros.entra.length, s.id).toBeGreaterThan(0);
+      expect(s.numeros.sai.length, s.id).toBeGreaterThan(0);
+      for (const n of [...s.numeros.entra, ...s.numeros.sai]) {
+        expect(n.rotulo.trim(), s.id).not.toBe('');
+        expect(n.valor.trim(), s.id).not.toBe('');
+      }
+    }
+  });
+
+  it('as duas saídas vivem no dado, não na prosa — em um lugar só', () => {
+    const regras = MANUAL.find((s) => s.id === 'regras')!;
+    expect(regras.desfechos?.derrota.palavra).toBe('FALIU');
+    expect(regras.desfechos?.vitoria.palavra).toBe('LIVRE');
+    // se voltarem pro corpo, o verbete passa a dizer a mesma coisa duas vezes
+    for (const s of MANUAL) expect(s.corpo, s.id).not.toMatch(/\*\*(FALIU|LIVRE)\*\*/);
+  });
 });

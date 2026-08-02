@@ -14,6 +14,9 @@ import { CHAVE_BIBLIOTECA } from './armazenamento';
 import {
   abrirEstudo,
   abrirPrateleira,
+  abrirSecao,
+  abrirTermo,
+  buscar,
   dispensarConvite,
   marcarLido,
   selectConviteTutorial,
@@ -22,7 +25,12 @@ import {
   selectFundamentosLista,
   selectGlossarioLista,
   selectHint,
+  selectIndice,
+  selectProgresso,
   selectSubtituloBiblioteca,
+  selectVerbeteAberto,
+  selectVerbeteId,
+  selectVizinhos,
   viveu,
 } from './bibliotecaSlice';
 import { selectDiagnostico } from './diagnostico';
@@ -183,6 +191,131 @@ describe('diagnóstico da derrota (etapa F)', () => {
   it('sem derrota, sem diagnóstico — e vitória não inventa causa', () => {
     expect(selectDiagnostico(estadoFinal({}))).toBeNull();
     expect(selectDiagnostico(estadoFinal({ fim: 'livre' }))).toBeNull();
+  });
+});
+
+// O fichário só existe porque as três prateleiras viram a MESMA forma. Estes
+// testes defendem essa uniformidade: se um dia glossário e fundamentos
+// divergirem de novo, a lateral e o painel precisariam saber em qual estão.
+describe('fichário — o índice uniforme', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('as três prateleiras devolvem a mesma forma de índice', () => {
+    const store = makeStore();
+    // o tooltip da liquidação forçada destrava o termo `marginCall` (regra do
+    // engine) E o estudo que tem esse gatilho — as três prateleiras com carga
+    store.dispatch(marcarVisto('liquidacaoForcada'));
+
+    for (const p of ['glossario', 'manual', 'fundamentos'] as const) {
+      store.dispatch(abrirPrateleira(p));
+      const indice = selectIndice(store.getState());
+      expect(indice.length, p).toBeGreaterThan(0);
+      for (const item of indice) {
+        expect(typeof item.id).toBe('string');
+        expect(typeof item.titulo).toBe('string');
+        expect(typeof item.ativo).toBe('boolean');
+      }
+      // exatamente um ativo, sempre — o painel mostra um verbete por vez
+      expect(indice.filter((i) => i.ativo)).toHaveLength(1);
+    }
+  });
+
+  it('sem seleção guardada, o primeiro item do índice é o aberto', () => {
+    const store = makeStore();
+    store.dispatch(abrirPrateleira('manual'));
+    expect(store.getState().biblioteca.secaoAberta).toBeNull();
+    expect(selectVerbeteId(store.getState())).toBe('regras');
+    expect(selectVerbeteAberto(store.getState())?.titulo).toBe('COMO O MÊS FECHA');
+  });
+
+  it('a seleção guardada vence o primeiro item', () => {
+    const store = makeStore();
+    store.dispatch(abrirSecao('atalhos'));
+    expect(selectVerbeteId(store.getState())).toBe('atalhos');
+  });
+
+  it('a busca filtra sem acento e sem caixa, e o aberto acompanha o filtro', () => {
+    const store = makeStore();
+    store.dispatch(abrirPrateleira('manual'));
+    store.dispatch(abrirSecao('regras'));
+    store.dispatch(buscar('ATALHO'));
+
+    const indice = selectIndice(store.getState());
+    expect(indice.map((i) => i.id)).toEqual(['atalhos']);
+    // 'regras' saiu do índice, então não pode continuar aberto no painel —
+    // senão a estante listaria uma coisa e o painel mostraria outra
+    expect(selectVerbeteId(store.getState())).toBe('atalhos');
+  });
+
+  it('busca sem resultado esvazia o índice e não deixa verbete aberto', () => {
+    const store = makeStore();
+    store.dispatch(abrirPrateleira('manual'));
+    store.dispatch(buscar('zzzz'));
+    expect(selectIndice(store.getState())).toEqual([]);
+    expect(selectVerbeteAberto(store.getState())).toBeNull();
+  });
+
+  it('trocar de prateleira limpa a busca', () => {
+    const store = makeStore();
+    store.dispatch(buscar('juro'));
+    store.dispatch(abrirPrateleira('manual'));
+    expect(store.getState().biblioteca.busca).toBe('');
+  });
+
+  it('os vizinhos param nas pontas', () => {
+    const store = makeStore();
+    store.dispatch(abrirSecao('regras')); // primeiro do manual
+    expect(selectVizinhos(store.getState()).anterior).toBeNull();
+    expect(selectVizinhos(store.getState()).proximo?.id).toBe('modos');
+
+    store.dispatch(abrirSecao('atalhos')); // último
+    expect(selectVizinhos(store.getState()).proximo).toBeNull();
+    expect(selectVizinhos(store.getState()).anterior?.id).toBe('cenarios');
+  });
+
+  it('o verbete do glossário traz a definição como prosa, e o estudo como convite', () => {
+    const store = makeStore();
+    store.dispatch(marcarVisto('liquidacaoForcada'));
+    store.dispatch(abrirTermo('marginCall'));
+    const v = selectVerbeteAberto(store.getState());
+    expect(v?.titulo).toBe('Margin call');
+    expect(v?.chamada).toBeTruthy();
+    expect(v?.corpo).toBeUndefined(); // a definição já é o conteúdo
+    expect(v?.estudo?.id).toBe('liquidez-e-venda-forcada');
+  });
+
+  it('o convite [L] só aparece quando o estudo também está aberto', () => {
+    const store = makeStore();
+    // peculium vem destravado de fábrica e não tem estudo nenhum atrás dele
+    expect(selectVerbeteAberto(store.getState())?.titulo).toBe('Peculium');
+    expect(selectVerbeteAberto(store.getState())?.estudo).toBeUndefined();
+  });
+
+  it('o progresso conta por prateleira, e o manual não tem barra', () => {
+    const store = makeStore();
+    store.dispatch(abrirPrateleira('manual'));
+    expect(selectProgresso(store.getState())).toBeNull();
+
+    store.dispatch(abrirPrateleira('glossario'));
+    const g = selectProgresso(store.getState());
+    expect(g?.total).toBeGreaterThan(0);
+    expect(g?.feitos).toBeLessThanOrEqual(g!.total);
+
+    store.dispatch(marcarVisto('liquidacaoForcada'));
+    store.dispatch(abrirEstudo('liquidez-e-venda-forcada')); // abrir É ler
+    store.dispatch(abrirPrateleira('fundamentos'));
+    expect(selectProgresso(store.getState())?.feitos).toBe(1);
+  });
+
+  it('fundamentos marca NOVO só no que ainda não foi lido', () => {
+    const store = makeStore();
+    store.dispatch(marcarVisto('liquidacaoForcada'));
+    store.dispatch(abrirPrateleira('fundamentos'));
+    expect(selectIndice(store.getState())[0].marca).toBe('NOVO');
+
+    store.dispatch(marcarLido('liquidez-e-venda-forcada'));
+    store.dispatch(abrirPrateleira('fundamentos'));
+    expect(selectIndice(store.getState())[0].marca).toBeUndefined();
   });
 });
 

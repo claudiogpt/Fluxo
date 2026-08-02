@@ -14,6 +14,37 @@ export const MANUAL: readonly SecaoManual[] = [
     titulo: 'COMO O MÊS FECHA',
     resumo: 'o loop do turno, a derrota e a vitória',
     contextos: ['jogo', 'menu'],
+    chamada:
+      'Sete passos, sempre na mesma ordem. Você só decide o passo zero: onde o dinheiro está.',
+    // Os únicos números de ENTRA/SAI do manual, porque é a única seção que
+    // descreve mesmo dinheiro entrando e saindo todo mês. As porcentagens são
+    // as do `normal` em engine/config.js — mudou balanceamento, muda aqui.
+    numeros: {
+      entra: [
+        { rotulo: 'Salário', valor: '+10% a cada 12 meses', tom: 'alta' },
+        { rotulo: 'Retorno dos ativos', valor: 'varia por classe' },
+        { rotulo: 'Renda passiva', valor: 'só quem paga' },
+      ],
+      sai: [
+        { rotulo: 'Custo de vida', valor: '+0,4%/mês', tom: 'baixa' },
+        { rotulo: 'Eventos', valor: '42% dos meses', tom: 'baixa' },
+        { rotulo: 'Deságio de liquidação', valor: 'por classe', tom: 'baixa' },
+      ],
+    },
+    // As duas saídas saíram da prosa e viraram DADO: eram dois parágrafos em
+    // negrito no corpo, e mantê-los nos dois lugares faria o verbete dizer a
+    // mesma coisa duas vezes na mesma tela.
+    desfechos: {
+      derrota: {
+        palavra: 'FALIU',
+        texto: 'O caixa fechou negativo e não havia mais nada pra vender.',
+      },
+      vitoria: {
+        palavra: 'LIVRE',
+        texto:
+          'Renda passiva mensal ≥ custo de vida. É renda passiva, não patrimônio: ativo grande parado que não paga nada não te liberta.',
+      },
+    },
     corpo: `Cada turno é um mês. Fechar o mês executa sempre a mesma sequência, nesta ordem.
 
 - **Salário entra, custo de vida sai.** O que sobra vira caixa parado — caixa
@@ -31,14 +62,6 @@ export const MANUAL: readonly SecaoManual[] = [
   na ordem reserva → renda fixa → FIIs → ações → cripto, cada uma com seu
   deságio.
 
-## As duas saídas
-
-**FALIU** — o caixa fechou negativo e não havia mais nada pra vender.
-
-**LIVRE** — sua renda passiva mensal ficou maior ou igual ao seu custo de vida.
-Note que é renda passiva, não patrimônio: patrimônio grande parado em ativo que
-não paga nada não vence o jogo.
-
 O custo de vida sobe todo mês. A meta se move junto — é de propósito.`,
   },
 
@@ -47,6 +70,8 @@ O custo de vida sobe todo mês. A meta se move junto — é de propósito.`,
     titulo: 'MODOS DE JOGO',
     resumo: 'o que muda entre tutorial, clássico, sandbox, empresário e realista',
     contextos: ['modos', 'setup'],
+    chamada:
+      'As regras acima valem em todos. O que muda de modo pra modo é quanta margem você tem pra errar.',
     corpo: `## TUTORIAL
 
 Seis meses, prazo declarado, sem derrota possível. É o clássico com as arestas
@@ -106,6 +131,8 @@ O carro-chefe, e o que mais muda de regra:
     titulo: 'CENÁRIOS',
     resumo: 'situações fechadas, com começo e fim definidos',
     contextos: ['cenarios'],
+    chamada:
+      'Uma pergunta de cada vez, com prazo e critério de fim — e sem resposta universal no fim dela.',
     corpo: `Cenário não é modo: é uma situação com enunciado, duração e critério de fim.
 
 ## APOSENTADORIA
@@ -150,6 +177,7 @@ treina.`,
     titulo: 'ATALHOS DE TECLADO',
     resumo: 'jogar sem tirar a mão do teclado',
     contextos: ['jogo', 'menu', 'biblioteca', 'config'],
+    chamada: 'Nenhum atalho é obrigatório: tudo aqui também tem botão ou linha clicável.',
     corpo: `## Em qualquer tela
 
 - **?** — abre este manual na seção que responde pela tela em que você está

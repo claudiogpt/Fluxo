@@ -98,7 +98,9 @@ describe('navegação do menu', () => {
     clicar(/BIBLIOTECA/);
     expect(selectRota(store.getState())).toBe('biblioteca');
     expect(store.getState().ui.bibliotecaAberta).toBe(false); // página, não overlay
-    expect(screen.getByText('Peculium')).toBeDefined();
+    // No fichário o termo aparece duas vezes — no índice da estante e como
+    // título do verbete aberto. É o título que carrega a definição.
+    expect(screen.getByRole('heading', { name: 'Peculium' })).toBeDefined();
     expect(screen.getByText(/direito romano/)).toBeDefined();
   });
 
