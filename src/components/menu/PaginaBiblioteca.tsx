@@ -1,21 +1,14 @@
-// BIBLIOTECA como página do menu. Durante a partida ela vira overlay
-// (components/biblioteca/OverlayBiblioteca) pra não tirar o jogador da mesa.
-import { useSelector } from 'react-redux';
-import { BibliotecaConteudo } from '../biblioteca/BibliotecaConteudo';
-import { selectSubtituloBiblioteca } from '../../features/biblioteca';
-import { MenuLayout } from './MenuLayout';
-import { dica } from './estilos';
+// BIBLIOTECA como página do menu: o fichário inteiro, estante e tudo.
+//
+// Sem MenuLayout de propósito, e é a única página que abre mão dele: o layout
+// de menu é uma coluna de 640px com VOLTAR em cima, e o fichário precisa da
+// tela toda e já tem o próprio VOLTAR na régua das abas — dois VOLTAR na mesma
+// tela seriam dois lugares dizendo a mesma coisa.
+//
+// Durante a partida ela vira overlay (components/biblioteca/OverlayBiblioteca),
+// que continua compacto: lá a biblioteca é consulta rápida sobre a mesa.
+import { Fichario } from '../biblioteca/Fichario';
 
 export function PaginaBiblioteca() {
-  const subtitulo = useSelector(selectSubtituloBiblioteca);
-
-  return (
-    <MenuLayout titulo="BIBLIOTECA" descricao={subtitulo}>
-      <BibliotecaConteudo />
-      <div style={{ ...dica, marginTop: 16 }}>
-        nada aqui se compra com navegação: termos e estudos abrem quando aquilo acontece com você
-        numa partida.
-      </div>
-    </MenuLayout>
-  );
+  return <Fichario />;
 }

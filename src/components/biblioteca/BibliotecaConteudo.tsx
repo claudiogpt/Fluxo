@@ -24,6 +24,7 @@ import {
 } from '../../features/biblioteca';
 import { PRATELEIRAS, type Prateleira } from '../../features/biblioteca';
 import type { AppDispatch } from '../../store';
+import { Desfechos } from './Desfechos';
 import { Markdown } from './Markdown';
 
 const NOMES: Record<Prateleira, string> = {
@@ -166,7 +167,12 @@ function Manual() {
             </div>
             <div style={estilos.definicao}>{s.resumo}</div>
           </button>
-          {s.aberta && <Markdown corpo={s.corpo} />}
+          {s.aberta && (
+            <>
+              <Markdown corpo={s.corpo} />
+              {s.desfechos && <Desfechos {...s.desfechos} compacto />}
+            </>
+          )}
         </div>
       ))}
     </div>

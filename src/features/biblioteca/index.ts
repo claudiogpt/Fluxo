@@ -1,18 +1,27 @@
 export { CHAVE_BIBLIOTECA, lerProgresso, salvarProgresso } from './armazenamento';
 export { selectDiagnostico } from './diagnostico';
 export {
+  ABRIR_VERBETE,
   abrirEstudo,
   abrirPrateleira,
   abrirSecao,
   abrirTermo,
   alternarSecao,
   bibliotecaReducer,
+  buscar,
   comoDestravar,
   dispensarConvite,
   fecharEstudo,
   fecharHint,
   marcarLido,
   selectBiblioteca,
+  selectBusca,
+  selectIndice,
+  selectProgresso,
+  selectTrancados,
+  selectVerbeteAberto,
+  selectVerbeteId,
+  selectVizinhos,
   selectConceitosDesbloqueados,
   selectContadorGlossario,
   selectContadorLongo,
@@ -35,4 +44,14 @@ export {
   selectVividos,
   viveu,
 } from './bibliotecaSlice';
-export { BIBLIOTECA_INICIAL, PRATELEIRAS, type BibliotecaState, type Prateleira } from './tipos';
+export {
+  BIBLIOTECA_INICIAL,
+  PRATELEIRAS,
+  type BibliotecaState,
+  type DesfechoVerbete,
+  type ItemIndice,
+  type NumeroVerbete,
+  type Prateleira,
+  type Progresso,
+  type VerbeteAberto,
+} from './tipos';

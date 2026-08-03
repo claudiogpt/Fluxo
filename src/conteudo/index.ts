@@ -22,7 +22,7 @@ export { ESTUDOS, estudo } from './fundamentos';
 export { GATILHOS, GATILHOS_COM_LICAO, gatilho, type GatilhoId } from './gatilhos';
 export { MANUAL, secaoManual } from './manual';
 export { CONTEXTOS } from './tipos';
-export type { ContextoAjuda, Estudo, Gatilho, SecaoManual } from './tipos';
+export type { ContextoAjuda, Desfecho, Estudo, Gatilho, Numero, SecaoManual } from './tipos';
 
 /** Todos os termos do glossário, do dicionário central. */
 export const TERMOS: Record<string, Termo> = conceitos.termos;

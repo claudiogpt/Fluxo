@@ -14,13 +14,21 @@ import {
   estudosDoGatilho,
   gatilho,
   gatilhosDoConceito,
+  secaoManual,
   termosDeGatilhos,
 } from '../../conteudo';
 import { selectTermosDesbloqueados } from '../conceitos/conceitosSlice';
 import type { ConceitosState } from '../conceitos/conceitosSlice';
 import { fecharMes, voltarMenu } from '../game/gameSlice';
 import { lerProgresso } from './armazenamento';
-import { BIBLIOTECA_INICIAL, type BibliotecaState, type Prateleira } from './tipos';
+import {
+  BIBLIOTECA_INICIAL,
+  type BibliotecaState,
+  type ItemIndice,
+  type Prateleira,
+  type Progresso,
+  type VerbeteAberto,
+} from './tipos';
 
 const bibliotecaSlice = createSlice({
   name: 'biblioteca',
@@ -45,6 +53,12 @@ const bibliotecaSlice = createSlice({
       state.prateleiraAtiva = action.payload;
       state.estudoAberto = null;
       state.termoFoco = null;
+      // A busca é da prateleira, não da biblioteca: mantê-la ao trocar de aba
+      // faria a prateleira nova parecer vazia.
+      state.busca = '';
+    },
+    buscar(state, action: PayloadAction<string>) {
+      state.busca = action.payload;
     },
     abrirEstudo(state, action: PayloadAction<string>) {
       state.prateleiraAtiva = 'fundamentos';
@@ -97,6 +111,7 @@ export const {
   viveu,
   fecharHint,
   marcarLido,
+  buscar,
   abrirPrateleira,
   abrirEstudo,
   fecharEstudo,
@@ -217,7 +232,16 @@ export const selectEstudoEmLeitura = createSelector(
 );
 
 export const selectManualSecoes = createSelector([selectSecaoAberta], (aberta) =>
-  MANUAL.map((s) => ({ id: s.id, titulo: s.titulo, resumo: s.resumo, corpo: s.corpo, aberta: s.id === aberta }))
+  MANUAL.map((s) => ({
+    id: s.id,
+    titulo: s.titulo,
+    resumo: s.resumo,
+    corpo: s.corpo,
+    // as duas saídas viajam junto: elas saíram do corpo em markdown e viraram
+    // dado, então quem renderiza a seção precisa recebê-las por aqui
+    desfechos: s.desfechos,
+    aberta: s.id === aberta,
+  }))
 );
 
 /** Subtítulo do botão da home. O sufixo condicional é o ÚNICO elemento de
@@ -243,3 +267,165 @@ export const selectConviteTutorial = createSelector(
  *  que falta fazer sem listar o conteúdo trancado. */
 export const comoDestravar = (conceitoId: string): string =>
   gatilhosDoConceito(conceitoId)[0]?.descricao ?? 'jogando';
+
+// ---- o FICHÁRIO ----
+// Daqui pra baixo é a tradução das três prateleiras para as duas formas
+// uniformes de tipos.ts. É o que permite uma lateral e um painel só.
+//
+// Nenhum campo novo de seleção foi criado: qual verbete está aberto continua
+// morando onde já morava (termoFoco / secaoAberta / estudoAberto). Quando o
+// campo está null — logo depois de trocar de aba, por exemplo — o selector cai
+// no primeiro item do índice, em vez de exigir que o reducer adivinhe.
+
+export const selectBusca = (s: ComBiblioteca) => s.biblioteca.busca;
+
+/** A ação que abre um verbete, por prateleira. A UI despacha por aqui e
+ *  continua sem saber em qual prateleira está. */
+export const ABRIR_VERBETE = {
+  glossario: abrirTermo,
+  manual: abrirSecao,
+  fundamentos: abrirEstudo,
+} as const satisfies Record<Prateleira, unknown>;
+
+const normalizar = (t: string) =>
+  t
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '');
+
+/** O índice da prateleira ativa, ainda sem filtro e sem marca de ativo. */
+const selectListaBruta = createSelector(
+  [selectPrateleira, selectGlossarioLista, selectManualSecoes, selectFundamentosLista],
+  (prateleira, glossario, manual, fundamentos): Omit<ItemIndice, 'ativo'>[] => {
+    if (prateleira === 'glossario') return glossario.abertos.map((t) => ({ id: t.id, titulo: t.nome }));
+    if (prateleira === 'manual') return manual.map((s) => ({ id: s.id, titulo: s.titulo }));
+    return fundamentos.abertos.map((e) => ({
+      id: e.id,
+      titulo: e.titulo,
+      marca: e.novo ? 'NOVO' : undefined,
+    }));
+  }
+);
+
+/** Busca sem acento e sem caixa: quem procura "juro real" acha "Juro real",
+ *  e quem procura "inflacao" acha "inflação". */
+const selectListaFiltrada = createSelector([selectListaBruta, selectBusca], (lista, busca) => {
+  const alvo = normalizar(busca.trim());
+  return alvo ? lista.filter((i) => normalizar(i.titulo).includes(alvo)) : lista;
+});
+
+/** O id aberto AGORA. A seleção guardada só vale se ainda estiver no índice
+ *  visível — senão o painel mostraria um verbete que a lateral não lista. */
+export const selectVerbeteId = createSelector(
+  [selectPrateleira, selectListaFiltrada, selectTermoFoco, selectSecaoAberta, selectEstudoAberto],
+  (prateleira, lista, termo, secao, estudo) => {
+    const guardado = { glossario: termo, manual: secao, fundamentos: estudo }[prateleira];
+    if (guardado && lista.some((i) => i.id === guardado)) return guardado;
+    return lista[0]?.id ?? null;
+  }
+);
+
+export const selectIndice = createSelector(
+  [selectListaFiltrada, selectVerbeteId],
+  (lista, ativo): ItemIndice[] => lista.map((i) => ({ ...i, ativo: i.id === ativo }))
+);
+
+/** Quanto ainda está trancado na prateleira — a linha "+N trancados" da
+ *  lateral. O manual não tranca nada. */
+export const selectTrancados = createSelector(
+  [selectPrateleira, selectGlossarioLista, selectFundamentosLista],
+  (prateleira, glossario, fundamentos) => {
+    if (prateleira === 'glossario') return glossario.trancados;
+    if (prateleira === 'fundamentos') return fundamentos.trancados;
+    return 0;
+  }
+);
+
+export const selectVizinhos = createSelector(
+  [selectIndice],
+  (indice): { anterior: ItemIndice | null; proximo: ItemIndice | null } => {
+    const i = indice.findIndex((x) => x.ativo);
+    return {
+      anterior: i > 0 ? indice[i - 1] : null,
+      proximo: i >= 0 && i < indice.length - 1 ? indice[i + 1] : null,
+    };
+  }
+);
+
+export const selectProgresso = createSelector(
+  [selectPrateleira, selectConceitosDesbloqueados, selectEstudosDesbloqueados, selectEstudosLidos],
+  (prateleira, termos, estudos, lidos): Progresso | null => {
+    if (prateleira === 'glossario') {
+      return {
+        feitos: termos.length,
+        total: TOTAL_TERMOS,
+        texto: `${termos.length} de ${TOTAL_TERMOS} termos abertos`,
+      };
+    }
+    if (prateleira === 'fundamentos') {
+      const feitos = estudos.filter((id) => lidos.includes(id)).length;
+      return {
+        feitos,
+        total: ESTUDOS.length,
+        texto: `${feitos} de ${ESTUDOS.length} estudos lidos`,
+      };
+    }
+    return null;
+  }
+);
+
+/** O verbete aberto, na forma uniforme. É aqui que os três formatos de
+ *  conteúdo viram um só — e o único lugar que ainda conhece os três. */
+export const selectVerbeteAberto = createSelector(
+  [selectPrateleira, selectVerbeteId, selectConceitosDesbloqueados, selectEstudosDesbloqueados],
+  (prateleira, id, termosAbertos, estudosAbertos): VerbeteAberto | null => {
+    if (!id) return null;
+
+    if (prateleira === 'glossario') {
+      const t = TERMOS[id];
+      if (!t) return null;
+      const e = estudoDoConceito(id);
+      return {
+        id,
+        rotulo: 'VERBETE',
+        titulo: t.nome,
+        // A definição É a prosa do verbete: repeti-la abaixo como corpo seria
+        // dizer a mesma coisa duas vezes na mesma tela.
+        chamada: t.definicao,
+        relacionados: [],
+        estudo:
+          e && estudosAbertos.includes(e.id)
+            ? { id: e.id, titulo: e.titulo, tempoLeituraMin: e.tempoLeituraMin }
+            : undefined,
+      };
+    }
+
+    if (prateleira === 'manual') {
+      const s = secaoManual(id);
+      if (!s) return null;
+      return {
+        id,
+        rotulo: s.resumo.toUpperCase(),
+        titulo: s.titulo,
+        chamada: s.chamada,
+        numeros: s.numeros,
+        desfechos: s.desfechos,
+        corpo: s.corpo,
+        relacionados: [],
+      };
+    }
+
+    const e = ESTUDOS.find((x) => x.id === id);
+    if (!e) return null;
+    return {
+      id,
+      rotulo: `${e.tempoLeituraMin} MIN · DESTRAVADO POR ${comoDestravar(e.conceitoPrincipal).toUpperCase()}`,
+      titulo: e.titulo,
+      corpo: e.corpo,
+      ondeApareceNoJogo: e.ondeApareceNoJogo,
+      // Só os termos JÁ destravados: link pra verbete que ainda não existe é
+      // beco sem saída, e ler não pode ser atalho pra pular a partida.
+      relacionados: conceitosDoEstudo(e).filter((c) => termosAbertos.includes(c.id)),
+    };
+  }
+);
