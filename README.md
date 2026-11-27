@@ -1,26 +1,59 @@
 # Peculium — Fluxo Financeiro
 
-Jogo de educação financeira por turnos: cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir. Os dois desfechos que dão o tom seguem sendo **FALIU** e **LIVRE**.
+[![CI](https://github.com/claudiogpt/Fluxo/actions/workflows/ci.yml/badge.svg)](https://github.com/claudiogpt/Fluxo/actions/workflows/ci.yml)
+[![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
+
+Jogo de educação financeira por turnos, open source, que roda inteiro no navegador. Cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir. Os dois desfechos que dão o tom são **FALIU** e **LIVRE**.
+
+![Partida no modo realista](docs/screenshots/03-partida-realista.png)
 
 > **peculium** (latim, de *pecus*, "gado"): no direito romano, o patrimônio que alguém sob o poder de outro podia acumular e administrar — e com o qual uma pessoa escravizada podia comprar a própria alforria. Juntar, administrar e converter em liberdade: é o jogo inteiro numa palavra. A versão completa é o primeiro termo do glossário.
+
+## Jogar em 1 minuto
+
+```bash
+git clone https://github.com/claudiogpt/Fluxo.git
+cd Fluxo
+npm install
+npm run dev        # abre em http://localhost:5173
+```
+
+Não precisa de conta, chave nem backend: o placar fica salvo no próprio navegador. Para gerar uma versão estática (qualquer hospedagem de arquivos serve), rode `npm run build` e sirva a pasta `dist/` (`npm run preview` faz isso localmente).
+
+## Telas
+
+| | |
+|:--:|:--:|
+| ![Tela inicial](docs/screenshots/01-inicio.png) | ![Modos de jogo](docs/screenshots/02-modos.png) |
+| **Tela inicial**: as regras em três linhas | **Modos de jogo**: tutorial, clássico, sandbox, empresário e realista |
+| ![Carteira por categoria](docs/screenshots/04-carteira-por-categoria.png) | ![Conceito desbloqueado](docs/screenshots/05-conceito-desbloqueado.png) |
+| **Carteira do modo realista**: cada ativo com risco, tributação e aporte | **Ensino no momento certo**: o primeiro aporte num ativo explica o conceito antes de confirmar |
+| ![Biblioteca](docs/screenshots/06-biblioteca.png) | ![Fim de jogo](docs/screenshots/07-fim-de-jogo.png) |
+| **Biblioteca**: glossário que se desbloqueia jogando, manual e fundamentos | **Fim de partida**: LIVRE ou FALIU, com a lição da partida e o placar local |
+
+## O projeto em 30 segundos
+
+Projeto pessoal de portfólio: **React 18 + TypeScript + Redux Toolkit sobre um engine de regras em JavaScript puro**, com 6 modos de jogo, um modo "realista" com 15 ativos, Selic e IPCA móveis, IR na venda e custos, e um glossário educacional que se desbloqueia jogando.
+
+Decisões técnicas que valem olhar:
+
+- **Engine puro e testável.** Toda regra do jogo vive em `engine/`, sem UI. A aleatoriedade entra por parâmetro (`rng`), nunca por `Math.random` fixo, então cada mecânica tem teste determinístico (`tests/engine.test.js`).
+- **A UI não calcula nada.** Reducers embrulham o engine (clone → call → merge), selectors montam o view-model e efeitos colaterais só existem em thunks e listeners.
+- **Tema verificado por teste.** Toda cor é um token em `src/tema.css`; um teste reprova o commit se aparecer cor literal no `src/` ou se o engine emitir uma cor sem token.
+- **Placar online opcional e à prova de fraude.** Se você ligar o Supabase, o score é recalculado no servidor por trigger, com RLS: o cliente não consegue gravar recorde forjado.
+
+O que aprendi construindo: separar regra de apresentação cedo é o que permitiu migrar o protótipo inteiro para React sem reescrever o jogo, e injetar a aleatoriedade é o que transformou "o jogo parece desbalanceado" em teste que dá para rodar.
 
 ## Propósito do jogo (nesta ordem)
 
 1. **Ensinar finanças** — prioritário. Cada mecânica e evento deve deixar uma lição real de finanças pessoais/investimentos.
 2. **Simulação** — secundário. A tendência é simular cada vez mais a realidade de investimentos, com decisões mais intricadas de tipos de investimento.
-3. **Speedrun** — diversão/monetização. Timer e placar global em **todos os modos**. Sem seed compartilhada, de propósito: o jogo é não determinístico e a sorte (e jogar de novo) faz parte da corrida.
-
-## Como rodar
-
-```bash
-npm install
-npm run dev        # Vite em http://localhost:5173
-```
+3. **Speedrun** — diversão. Timer e placar em **todos os modos**. Sem seed compartilhada, de propósito: o jogo é não determinístico e a sorte (e jogar de novo) faz parte da corrida.
 
 ## Como testar
 
 ```bash
-node --test        # engine (regras do jogo) — zero dependências, rng injetado
+node --test tests/*.test.js # engine (regras do jogo) — zero dependências, rng injetado
 npx vitest run     # app React (slices, efeitos, componentes, integração por modo)
 npx tsc --noEmit   # type-check
 ```
@@ -45,7 +78,7 @@ Funções puras sobre um objeto de estado plano. UMD: `window.Fluxo.*` no browse
 | `eventos.js` | Tabela de eventos aleatórios com pesos + sorteio (filtros por modo). |
 | `regras.js` | O coração: `novoJogo`, `fecharMes`, `mover`, `cobrir`, mecânicas de empresário/aposentadoria/imóveis. |
 | `formato.js` | `fmt` (R$), `fmtCompacto`, `fmtTempo`, `sparkline`. |
-| `placar.js` | Placar global: um board por modo, Supabase via REST, fallback localStorage. |
+| `placar.js` | Placar: um board por modo, em localStorage; Supabase via REST quando configurado. |
 | `conceitos.js` | Dicionário central educacional: termos do glossário + tooltips e a regra de desbloqueio. |
 | `catalogo.js` | Catálogo do modo **realista**: 15 ativos em 5 categorias, com indexador, prazo, tributação e custos de cada papel. |
 | `realista.js` | Mecânicas do modo realista: macro viva, IR na venda, carência/vencimento e custos. `regras.js` delega pra cá quando `s.realista` existe. |
@@ -80,11 +113,11 @@ Detalhe que morde: **`cenarios` é um MODO no engine** (`regras.js` só monta o 
 
 Toda cor vive em `src/tema.css`, em ~38 tokens semânticos; tema, fonte e escala são atributos no `<html>` (`data-tema`, `data-fonte`, `data-escala`). Nenhum outro arquivo do `src/` pode ter cor literal — **há um teste que reprova o commit se tiver** (`features/game/cores.test.ts`), inclusive checando que toda cor emitida pelo engine tem token correspondente.
 
-## Placar global (Supabase)
+## Placar online (opcional)
 
-Um board por modo; sem chaves em `config.placarOnline` cai no placar local do dispositivo. Setup: crie um projeto free em supabase.com, rode a migração `supabase/migrations/*_hardening_placar.sql` (schema + RLS + trigger anti-score-forjado) e cole URL + publishable key no `config.js`. A publishable key é pública por design; a segurança é o RLS + trigger (score recalculado no servidor). Segredos de tooling (token do CLI, senha do banco) ficam no `.env` (gitignorado — ver `.env.example`).
+Por padrão o placar é local, por dispositivo. Para ter um ranking compartilhado com seus amigos: crie um projeto gratuito em supabase.com, rode a migração `supabase/migrations/*_hardening_placar.sql` (schema + RLS + trigger que recalcula o score no servidor) e preencha `url` e `anonKey` em `placarOnline`, no `engine/config.js`. A publishable key é pública por design; a segurança é o RLS + trigger. Segredos de tooling (token do CLI, senha do banco) ficam no `.env` (gitignorado — ver `.env.example`).
 
-Nota do free tier: o projeto **pausa após ~7 dias sem uso** (o jogo cai graciosamente pro placar local). Restaure no painel ou via Management API.
+Nota do free tier: o projeto Supabase **pausa após ~7 dias sem uso**. O jogo cai sozinho para o placar local, sem quebrar.
 
 ## Receitas rápidas
 
@@ -98,3 +131,11 @@ Nota do free tier: o projeto **pausa após ~7 dias sem uso** (o jogo cai gracios
 - **Adicionar um evento**: item com peso `p` e `run` em `engine/eventos.js` (use `modos:` pra restringir).
 - **Nova regra de turno**: `engine/regras.js` (`fecharMes`) + teste em `tests/engine.test.js`; exponha na UI via selector.
 - **Mexer no visual**: o componente correspondente em `src/components/` (estilos inline).
+
+## Contribuindo
+
+Issues e PRs são bem-vindos. Antes de abrir um PR, rode `npm test` e `npx tsc --noEmit`; o CI roda os dois.
+
+## Licença
+
+[MIT](LICENSE) © 2026 Cláudio Augusto
