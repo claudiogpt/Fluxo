@@ -3,6 +3,8 @@
 [![CI](https://github.com/claudiogpt/Fluxo/actions/workflows/ci.yml/badge.svg)](https://github.com/claudiogpt/Fluxo/actions/workflows/ci.yml)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
 
+**[▶ Jogar agora no navegador](https://peculium-fluxo-financeiro.hundun.workers.dev/)**
+
 Jogo de educação financeira por turnos, open source, que roda inteiro no navegador. Cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir. Os dois desfechos que dão o tom são **FALIU** e **LIVRE**.
 
 ![Partida no modo realista](docs/screenshots/03-partida-realista.png)
