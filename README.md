@@ -5,7 +5,7 @@
 
 Jogo de educação financeira por turnos, open source, que roda inteiro no navegador. Cada turno é um mês, o custo de vida drena o caixa, e o objetivo é fazer a renda passiva superar o custo de vida antes de falir. Os dois desfechos que dão o tom são **FALIU** e **LIVRE**.
 
-<!-- TODO: GIF de uma partida aqui (docs/demo.gif) -->
+![Partida no modo realista](docs/screenshots/03-partida-realista.png)
 
 > **peculium** (latim, de *pecus*, "gado"): no direito romano, o patrimônio que alguém sob o poder de outro podia acumular e administrar — e com o qual uma pessoa escravizada podia comprar a própria alforria. Juntar, administrar e converter em liberdade: é o jogo inteiro numa palavra. A versão completa é o primeiro termo do glossário.
 
@@ -19,6 +19,17 @@ npm run dev        # abre em http://localhost:5173
 ```
 
 Não precisa de conta, chave nem backend: o placar fica salvo no próprio navegador. Para gerar uma versão estática (qualquer hospedagem de arquivos serve), rode `npm run build` e sirva a pasta `dist/` (`npm run preview` faz isso localmente).
+
+## Telas
+
+| | |
+|:--:|:--:|
+| ![Tela inicial](docs/screenshots/01-inicio.png) | ![Modos de jogo](docs/screenshots/02-modos.png) |
+| **Tela inicial**: as regras em três linhas | **Modos de jogo**: tutorial, clássico, sandbox, empresário e realista |
+| ![Carteira por categoria](docs/screenshots/04-carteira-por-categoria.png) | ![Conceito desbloqueado](docs/screenshots/05-conceito-desbloqueado.png) |
+| **Carteira do modo realista**: cada ativo com risco, tributação e aporte | **Ensino no momento certo**: o primeiro aporte num ativo explica o conceito antes de confirmar |
+| ![Biblioteca](docs/screenshots/06-biblioteca.png) | ![Fim de jogo](docs/screenshots/07-fim-de-jogo.png) |
+| **Biblioteca**: glossário que se desbloqueia jogando, manual e fundamentos | **Fim de partida**: LIVRE ou FALIU, com a lição da partida e o placar local |
 
 ## O projeto em 30 segundos
 
