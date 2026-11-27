@@ -125,7 +125,7 @@ export function PaginaSetup() {
         >
           {nick || 'ANÔNIMO'}
         </button>{' '}
-        — o placar é global em todos os modos
+        — todos os modos têm placar
       </div>
     </MenuLayout>
   );

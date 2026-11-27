@@ -12,7 +12,7 @@ export function PaginaModos() {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <MenuLayout titulo="MODOS DE JOGO" descricao="Escolha como quer jogar. Cada modo tem seu próprio placar global.">
+    <MenuLayout titulo="MODOS DE JOGO" descricao="Escolha como quer jogar. Cada modo tem seu próprio placar.">
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 8 }}>
         {modos.map((m) => (
           <CartaoEscolha key={m.id} item={m} aoEscolher={(id) => dispatch(abrirSetupDeModo(id))} />

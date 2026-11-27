@@ -29,11 +29,12 @@
       { id: 'realista', nome: 'REALISTA', descricao: 'A carteira completa: 15 ativos em 5 categorias, com imposto, liquidez, custos e a Selic se movendo embaixo de você.', disponivel: true },
     ],
 
-    // Placar global (Supabase). Preencha url e anonKey pra ligar o online;
-    // vazio = placar local por dispositivo. A anonKey é pública por design (RLS).
+    // Placar online (Supabase), OPCIONAL. Vazio = placar local por dispositivo,
+    // que é o padrão: o jogo roda inteiro no navegador, sem backend.
+    // Pra ligar um placar seu, veja "Placar online (opcional)" no README.
     placarOnline: {
-      url: 'https://cxzotdgpjizmkecqrxuo.supabase.co/rest/v1/',      // ex.: 'https://xxxx.supabase.co'
-      anonKey: 'sb_publishable_Ml1CcZxzZaYdbdGa1ZSZLw_8Wxzn41P',
+      url: '',      // ex.: 'https://xxxx.supabase.co'
+      anonKey: '',  // publishable key — pública por design (a segurança é o RLS)
       tabela: 'placar',
     },
 

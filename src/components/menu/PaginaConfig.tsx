@@ -99,7 +99,7 @@ export function PaginaConfig() {
             id: 'perfil',
             icone: '👤',
             rotulo: 'PERFIL',
-            descricao: 'seu nome no placar global',
+            descricao: 'seu nome no placar',
             disponivel: true,
           }}
           aoClicar={() => dispatch(irPara('perfil'))}
